@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <UserSecretsId>dotnet-CandlesWorker-19B6DFA7-CA07-427F-B135-667545983758</UserSecretsId>
+    <NullableContextOptions>disable</NullableContextOptions>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Binance.Net" Version="4.3.1" />
+    <PackageReference Include="Dapper" Version="2.0.4" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0-rc1.19456.10" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.0.0-rc1.19456.10" />
+    <PackageReference Include="MyNatsClient" Version="0.13.0" />
+    <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.13.0" />
+    <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
+    <PackageReference Include="Npgsql" Version="4.1.0-preview2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\core\core.csproj" />
+  </ItemGroup>
+</Project>
