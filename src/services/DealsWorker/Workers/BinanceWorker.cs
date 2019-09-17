@@ -53,7 +53,7 @@ namespace TradesWorker.Workers
 							successKline = client.SubscribeToTradesStream(pair.Symbol, async (data) =>
 							{
 								Trade trade = data.ToEntity();
-								long? id = await _tradesProcessor.Create(trade);
+								long id = await _tradesProcessor.Create(trade);
 
 								if (natsClient.IsConnected)
 								{

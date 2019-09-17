@@ -23,18 +23,20 @@ namespace OrdersProcessor.Workers
 		private ExchangeConfigProcessor _exchangeConfigProcessor;
 		private OrderProcessor _orderProcessor;
 		private BalanceProcessor _balanceProcessor;
+		private DealProcessor _dealProcessor;
 
 		public BinanceOrdersMonitor (
 			ILogger<Worker> logger,
 			ExchangeConfigProcessor exchangeConfigProcessor,
 			OrderProcessor orderProcessor,
-			BalanceProcessor balanceProcessor
-			) : base(logger, exchangeConfigProcessor)
+			BalanceProcessor balanceProcessor,
+			DealProcessor dealProcessor) : base(logger, exchangeConfigProcessor)
 		{
 			_logger = logger;
 			_exchangeConfigProcessor = exchangeConfigProcessor;
 			_orderProcessor = orderProcessor;
 			_balanceProcessor = balanceProcessor;
+			_dealProcessor = dealProcessor;
 		}
 
 		public override IExchangeCode Exchange { get; } = ExchangeCode.BINANCE;
@@ -60,10 +62,20 @@ namespace OrdersProcessor.Workers
 						{
 							// Process Account info changes there if required
 						}, 
-						orderData =>
+						async orderData =>
 						{
-							// TODO: Remove order checking from OrderProcessor
-							// Update Deal, update Order
+							Order order = orderData.ToOrder();
+
+							await _orderProcessor.Update(order);
+							if(order.OrderSideCode == OrderSideCode.SELL.Code)
+							{
+								Deal deal = await _dealProcessor.Get(order.DealId.Value);
+								deal.AvgClosePrice = order.Price;
+								deal.EstimatedFee += order.Price * order.Amount * (decimal)config.ExchangeFeeSell;
+								deal.StatusCode = DealStatusCode.CLOSE.Code;
+
+								await _dealProcessor.Update(deal);
+							}
 						},
 						ocoOrderData =>
 						{

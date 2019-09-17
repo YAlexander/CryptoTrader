@@ -19,11 +19,11 @@ namespace core.Infrastructure.BL
 			_candleManager = candleManager;
 		}
 
-		public async Task<long?> Create(Candle candle)
+		public Task<long> Create(Candle candle)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _candleManager.Create(candle, connection, transaction);
+				return _candleManager.Create(candle, connection, transaction);
 			});
 		}
 	}

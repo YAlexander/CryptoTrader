@@ -8,7 +8,7 @@ namespace core.Abstractions.Database
 	{
 		Task<ExchangeOrder> List (long orderId);
 
-		Task<long?> Create (Order order);
+		Task<long> Create (Order order);
 
 		public Task<Order> Update (Order order);
 

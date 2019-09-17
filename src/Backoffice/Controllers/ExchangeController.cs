@@ -29,7 +29,7 @@ namespace Backoffice.Controllers
 		[HttpGet]
 		public async Task<IActionResult> Index ()
 		{
-			List<ExchangeConfig> configs = await _exchangeConfigProcessor.GetExchangeConfigs();
+			IEnumerable<ExchangeConfig> configs = await _exchangeConfigProcessor.GetExchangeConfigs();
 			return View(configs.Select(item => item.ToModel()).OrderBy(x => x.ExchangeName).ToList());
 		}
 

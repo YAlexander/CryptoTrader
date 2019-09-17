@@ -20,19 +20,19 @@ namespace core.Infrastructure.BL
 			_tradesManager = tradesManager;
 		}
 
-		public async Task<long?> Create(Trade trade)
+		public Task<long> Create(Trade trade)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _tradesManager.Create(trade, connection, transaction);
+				return _tradesManager.Create(trade, connection, transaction);
 			});
 		}
 
-		public async Task<Trade> GetLastTrade (IExchangeCode exchangeCode, string symbol)
+		public Task<Trade> GetLastTrade (IExchangeCode exchangeCode, string symbol)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _tradesManager.GetLast(exchangeCode.Code, symbol, connection, transaction);
+				return _tradesManager.GetLast(exchangeCode.Code, symbol, connection, transaction);
 			});
 		}
 	}
