@@ -19,3 +19,5 @@ src/Backoffice/bin/
 src/Backoffice/obj/
 src/services/DealsWorker/bin/
 src/services/DealsWorker/obj/
+src/Tests/bin/
+src/Tests/obj/
