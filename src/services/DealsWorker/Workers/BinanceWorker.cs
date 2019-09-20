@@ -53,7 +53,11 @@ namespace TradesWorker.Workers
 							successKline = client.SubscribeToTradesStream(pair.Symbol, async (data) =>
 							{
 								Trade trade = data.ToEntity();
-								long id = await _tradesProcessor.Create(trade);
+
+								if (!_settings.Value.DisadleDealsSaving)
+								{
+									long id = await _tradesProcessor.Create(trade);
+								}
 
 								await natsClient.PubAsJsonAsync(_settings.Value.TradesQueueName, new Notification<Trade>() { Code = ActionCode.CREATED.Code, Payload = trade });
 							});

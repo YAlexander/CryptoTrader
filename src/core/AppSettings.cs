@@ -10,5 +10,6 @@
 		public string TelegramChatId { get; set; }
 		public string TelegramKey { get; set; }
 		public bool SendTelegramNotifacation { get; set; }
+		public bool DisadleDealsSaving { get; set; }
 	}
 }
