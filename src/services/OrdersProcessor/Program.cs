@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 using OrdersProcessor.Workers;
 
 namespace OrdersProcessor
@@ -21,6 +22,7 @@ namespace OrdersProcessor
 				.ConfigureServices((hostContext, services) =>
 				{
 					services.AddHostedService<OrdersProcessingWorker>();
-				});
+				})
+				.UseNLog();
 	}
 }

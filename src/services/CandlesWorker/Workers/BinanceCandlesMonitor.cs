@@ -34,7 +34,7 @@ namespace CandlesWorker.Workers
 		}
 
 		public override IExchangeCode Exchange { get; } = ExchangeCode.BINANCE;
-		protected override IPeriodCode DefaultCandleInterval { get; } = PeriodCode.MINUTE;
+		protected override IPeriodCode DefaultCandleInterval { get; } = PeriodCode.HOUR;
 
 		protected override async Task DoWork (PairConfig config, CancellationToken stoppingToken)
 		{

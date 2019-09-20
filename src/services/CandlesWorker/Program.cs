@@ -8,6 +8,7 @@ using core.Infrastructure.Database.Managers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 
 namespace CandlesWorker
 {
@@ -41,6 +42,7 @@ namespace CandlesWorker
 
 					services.AddHostedService<BinanceWorker>();
 					services.AddHostedService<BinanceCandlesMonitor>();
-				});
+				})
+				.UseNLog();
 	}
 }

@@ -7,6 +7,7 @@ using core.Infrastructure.Notifications.Telegram;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 using TradingProcessor.Workers;
 
 namespace TradingProcessor
@@ -44,6 +45,7 @@ namespace TradingProcessor
 					services.AddSingleton<TradingContextBuilder>();
 
 					services.AddHostedService<ForecastProcessor>();
-				});
+				})
+				.UseNLog();
 	}
 }

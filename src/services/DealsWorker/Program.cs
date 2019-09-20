@@ -6,6 +6,7 @@ using core.Infrastructure.Database.Managers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 using TradesWorker.Workers;
 
 namespace TradesWorker
@@ -39,6 +40,7 @@ namespace TradesWorker
 					services.AddSingleton<TradesProcessor>();
 
 					services.AddHostedService<BinanceWorker>();
-				});
+				})
+				.UseNLog();
 	}
 }
