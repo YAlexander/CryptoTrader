@@ -58,13 +58,19 @@ namespace core.Infrastructure.Database.Managers
 
 		public Task<IEnumerable<Asset>> GetAll (IDbConnection connection, IDbTransaction transaction)
 		{
-			const string query = @"select * from Assets";
-			return connection.QueryAsync<Asset>(query, new { }, transaction);
+			const string query = @"select * from Assets where isDeleted = false";
+			return connection.QueryAsync<Asset>(query, null, transaction);
 		}
 
 		public Task<Asset> Update (Asset entity, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			throw new NotImplementedException();
+		}
+
+		public Task<Asset> Enable (long id, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			const string query = @"update Assets set isEnabled = not isEnabled where id = @id returning *;";
+			return connection.QuerySingleAsync<Asset>(query, new { id = id }, transaction);
 		}
 	}
 }

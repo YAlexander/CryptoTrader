@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using core.Infrastructure.Database.Entities;
 using core.TypeCodes;
 
 
@@ -15,6 +16,6 @@ namespace Backoffice.Models
 		public string ApiKey { get; set; }
 		public string ApiSecret { get; set; }
 
-		public IEnumerable<PairConfigModel> Pairs { get; set; } = new List<PairConfigModel>();
+		public IEnumerable<PairConfig> Pairs { get; set; } = new List<PairConfig>();
 	}
 }

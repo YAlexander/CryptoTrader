@@ -38,5 +38,11 @@ namespace Backoffice.Controllers
 
 			return View(asset);
 		}
+
+		public async Task<IActionResult> Enable(long id)
+		{
+			await _assetProcessor.Enable(id);
+			return RedirectToAction("Index");
+		}
 	}
 }

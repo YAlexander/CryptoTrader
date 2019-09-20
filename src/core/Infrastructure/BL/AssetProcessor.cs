@@ -27,5 +27,10 @@ namespace core.Infrastructure.BL
 		{
 			return WithConnection((connection, transaction) => _assetManager.Create(entity, connection, transaction));
 		}
+
+		public Task<Asset> Enable(long id)
+		{
+			return WithConnection((connection, transaction) => _assetManager.Enable(id, connection, transaction));
+		}
 	}
 }

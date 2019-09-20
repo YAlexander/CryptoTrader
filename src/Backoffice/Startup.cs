@@ -39,6 +39,7 @@ namespace Backoffice
 			services.AddTransient<ExchangeConfigProcessor>();
 			services.AddTransient<StrategyProcessor>();
 			services.AddTransient<AssetProcessor>();
+			services.AddTransient<PairConfigProcessor>();
 
 			services.AddControllersWithViews();
 		}

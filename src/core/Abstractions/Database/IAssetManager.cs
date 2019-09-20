@@ -7,6 +7,7 @@ namespace core.Abstractions.Database
 {
 	public interface IAssetManager : IDatabaseManager<Asset>
 	{
-		Task<IEnumerable<Asset>> GetAll (IDbConnection connection, IDbTransaction transaction);
+		Task<IEnumerable<Asset>> GetAll (IDbConnection connection, IDbTransaction transaction = null);
+		Task<Asset> Enable (long id, IDbConnection connection, IDbTransaction transaction = null);
 	}
 }
