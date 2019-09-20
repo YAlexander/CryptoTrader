@@ -55,6 +55,7 @@ namespace CandlesWorker.Workers
 							CallResult<UpdateSubscription> successKline = client.SubscribeToKlineStream(pair.Symbol, candlePeriod.ToPeriodCode(), async (data) =>
 							{
 								await SaveCandle(data.Data, natsClient);
+								_logger.LogTrace($"Saved candle from {Exchange.Description} - {pair.Symbol}");
 							});
 
 							successKline.Data.ConnectionLost += () => { _logger.LogError($"Connection to {Exchange} is lost"); };

@@ -8,6 +8,7 @@ using core.Infrastructure.Database.Managers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using NLog.Web;
 
 namespace CandlesWorker
@@ -21,6 +22,12 @@ namespace CandlesWorker
 
 		public static IHostBuilder CreateHostBuilder (string[] args) =>
 			Host.CreateDefaultBuilder(args)
+				.ConfigureLogging(logging =>
+				{
+					logging.ClearProviders();
+					logging.AddConsole();
+					logging.SetMinimumLevel(LogLevel.Trace);
+				})
 				.UseSystemd()
 				.ConfigureServices(services =>
 				{
