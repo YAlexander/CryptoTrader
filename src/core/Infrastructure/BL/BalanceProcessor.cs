@@ -27,17 +27,17 @@ namespace core.Infrastructure.BL
 				}
 				else
 				{
-					long? id = await _balanceManager.Create(balance, connection, transaction);
-					return await _balanceManager.Get(id.Value, connection, transaction);
+					long id = await _balanceManager.Create(balance, connection, transaction);
+					return await _balanceManager.Get(id, connection, transaction);
 				}
 			});
 		}
 
-		public async Task<Balance> Get(long id)
+		public Task<Balance> Get(long id)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _balanceManager.Get(id, connection, transaction);
+				return _balanceManager.Get(id, connection, transaction);
 			});
 		}
 	}

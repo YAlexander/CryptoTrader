@@ -29,7 +29,7 @@ namespace Backoffice.Models.Mappers
 			model.IsEnabled = entity.IsEnabled;
 			model.ApiKey = entity.ApiKey;
 			model.ApiSecret = entity.ApiSecret;
-			model.Pairs = entity.Pairs.Select(x => x.ToModel());
+			model.Pairs = entity.Pairs;
 			return model;
 		}
 	}

@@ -34,7 +34,7 @@ namespace core.Trading.Strategies
 
 			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
 
-			MacdItem macd = candles.Macd(preset?.MacdFast ?? 24, preset?.MacdSlow ?? 52, preset?.MacdSignal ?? 18);
+			MacdItem macd = candles.Macd(preset?.MacdFast ?? 12, preset?.MacdSlow ?? 26, preset?.MacdSignal ?? 9);
 			List<decimal?> rsi = candles.Rsi(preset?.Rsi ?? 14);
 
 			for (int i = 0; i < candles.Count(); i++)
@@ -52,6 +52,11 @@ namespace core.Trading.Strategies
 					result.Add(TradingAdviceCode.HOLD);
 				}
 			}
+
+			var tmp = result.LastOrDefault();
+			var rsil = rsi.LastOrDefault();
+			var macdl = macd.Macd.LastOrDefault();
+			var macds = macd.Signal.LastOrDefault();
 
 			return result.LastOrDefault();
 		}

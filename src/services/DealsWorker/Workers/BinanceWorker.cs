@@ -53,12 +53,13 @@ namespace TradesWorker.Workers
 							successKline = client.SubscribeToTradesStream(pair.Symbol, async (data) =>
 							{
 								Trade trade = data.ToEntity();
-								long? id = await _tradesProcessor.Create(trade);
 
-								if (natsClient.IsConnected)
+								if (!_settings.Value.DisadleDealsSaving)
 								{
-									await natsClient.PubAsJsonAsync(_settings.Value.TradesQueueName, new Notification<Trade>() { Code = ActionCode.CREATED.Code, Payload = trade });
+									long id = await _tradesProcessor.Create(trade);
 								}
+
+								await natsClient.PubAsJsonAsync(_settings.Value.TradesQueueName, new Notification<Trade>() { Code = ActionCode.CREATED.Code, Payload = trade });
 							});
 
 							successKline.Data.ConnectionLost += () => { _logger.LogError($"Connection to {Exchange} is lost"); };

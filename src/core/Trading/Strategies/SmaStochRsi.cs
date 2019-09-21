@@ -36,7 +36,7 @@ namespace core.Trading.Strategies
 			List<decimal> price = candles.Select(x => x.Close).ToList();
 
 			StochItem stoch = candles.Stoch(preset?.Stoch ?? 8);
-			List<decimal?> sma150 = candles.Sma(preset?.Sma ?? 150);
+			List<decimal?> sma = candles.Sma(preset?.Sma ?? 150);
 			List<decimal?> rsi = candles.Rsi(preset?.Rsi ?? 3);
 
 			for (int i = 0; i < candles.Count(); i++)
@@ -47,11 +47,11 @@ namespace core.Trading.Strategies
 				}
 				else
 				{
-					if (price[i] > sma150[i] && stoch.K[i] > 70 && rsi[i] < 20 && stoch.K[i] > stoch.D[i])
+					if (price[i] > sma[i] && stoch.K[i] > 70 && rsi[i] < 20 && stoch.K[i] > stoch.D[i])
 					{
 						result.Add(TradingAdviceCode.BUY);
 					}
-					else if (price[i] < sma150[i] && stoch.K[i] > 70 && rsi[i] > 80 && stoch.K[i] < stoch.D[i])
+					else if (price[i] < sma[i] && stoch.K[i] > 70 && rsi[i] > 80 && stoch.K[i] < stoch.D[i])
 					{
 						result.Add(TradingAdviceCode.SELL);
 					}

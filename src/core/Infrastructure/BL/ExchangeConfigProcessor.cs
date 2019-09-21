@@ -6,8 +6,6 @@ using Npgsql;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Dapper;
-using System.Linq;
 using core.Infrastructure.Database.Managers;
 using Microsoft.Extensions.Logging;
 
@@ -43,11 +41,11 @@ namespace core.Infrastructure.BL
 			});
 		}
 
-		public async Task<List<ExchangeConfig>> GetExchangeConfigs ()
+		public Task<IEnumerable<ExchangeConfig>> GetExchangeConfigs ()
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return (List<ExchangeConfig>)await _exchangeConfigManager.GetAll(connection, transaction);
+				return _exchangeConfigManager.GetAll(connection, transaction);
 			});
 		}
 	}

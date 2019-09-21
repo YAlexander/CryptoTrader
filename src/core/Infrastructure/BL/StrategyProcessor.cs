@@ -25,19 +25,19 @@ namespace core.Infrastructure.BL
 			_strategyManager = strategyManager;
 		}
 
-		public async Task<IEnumerable<Strategy>> GetAll ()
+		public Task<IEnumerable<Strategy>> GetAll ()
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _strategyManager.GetAll(connection, transaction);
+				return _strategyManager.GetAll(connection, transaction);
 			});
 		}
 
-		public async Task<bool> Enable(long id)
+		public Task<bool> Enable(long id)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _strategyManager.Enable(id, connection, transaction);
+				return _strategyManager.Enable(id, connection, transaction);
 			});
 		}
 	}

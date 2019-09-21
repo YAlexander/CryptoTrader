@@ -1,3 +1,4 @@
+using System;
 using System.IO;
 using core;
 using core.Abstractions.Database;
@@ -6,7 +7,9 @@ using core.Infrastructure.Database.Managers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 using TradesWorker.Workers;
+using Microsoft.Extensions.Logging;
 
 namespace TradesWorker
 {
@@ -19,6 +22,12 @@ namespace TradesWorker
 
 		public static IHostBuilder CreateHostBuilder (string[] args) =>
 			Host.CreateDefaultBuilder(args)
+				.ConfigureLogging(logging =>
+				{
+					logging.ClearProviders();
+					logging.AddConsole();
+					logging.SetMinimumLevel(LogLevel.Trace);
+				})
 				.UseSystemd()
 				.ConfigureServices((hostContext, services) =>
 				{
@@ -39,6 +48,7 @@ namespace TradesWorker
 					services.AddSingleton<TradesProcessor>();
 
 					services.AddHostedService<BinanceWorker>();
-				});
+				})
+				.UseNLog();
 	}
 }

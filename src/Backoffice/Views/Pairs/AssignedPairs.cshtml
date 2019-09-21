@@ -1,0 +1,104 @@
+﻿@model PairConfigsModel
+
+@{
+	ViewData["Title"] = "AssignedPairs";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>@Model.ExchangeName - AssignedPairs</h1>
+
+<p>
+	<a asp-action="Create" asp-route-id="@Model.ExchangeCode">Create New</a>
+</p>
+
+<table class="table">
+	<thead>
+		<tr>
+			<th>
+				SYMBOL
+			</th>
+			<th>
+				ASSET 1
+			</th>
+			<th>
+				ASSET 2
+			</th>
+			<th>
+				STRATEGY
+			</th>
+			<th>
+				TIMEFRAME
+			</th>
+			<th>
+				BUY FEE
+			</th>
+			<th>
+				SELL FEE
+			</th>
+			<th>
+				STOP LOSS (%)
+			</th>
+			<th>
+				TAKE PROFIT (%)
+			</th>
+			<th>
+				MAX ORDER AMOUNT
+			</th>
+			<th>
+				IS AMOUNT PERCENT
+			</th>
+			<th>
+				TEST MODE
+			</th>
+			<th>
+				IS ENABLED
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var item in Model.Configs)
+		{
+		<tr>
+			<td>
+				@Html.DisplayFor(modelItem => item.Symbol)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.AssetOne)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.AssetTwo)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.StrategyId)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.Timeframe)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ExchangeFeeBuy)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.ExchangeFeeSell)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.DefaultStopLossPercent)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.DefaultTakeProfitPercent)
+			</td>
+			<td>
+				@Html.DisplayFor(modelItem => item.MaxOrderAmount)
+			</td>
+			<td>
+				@Html.CheckBoxFor(modelItem => item.isMaxAmountPercent)
+			</td>
+			<td>
+				@Html.CheckBoxFor(modelItem => item.IsTestMode)
+			</td>
+			<td>
+				@Html.CheckBoxFor(modelItem => item.IsEnabled)
+			</td>
+		</tr>
+		}
+	</tbody>
+</table>

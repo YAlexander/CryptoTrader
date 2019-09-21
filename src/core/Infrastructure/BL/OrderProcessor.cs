@@ -37,19 +37,19 @@ namespace core.Infrastructure.BL.OrderProcessors
 			}
 		}
 
-		public async Task<Order> Update (Order order)
+		public Task<Order> Update (Order order)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return  WithConnection((connection, transaction) =>
 			{
-				return await _orderManager.Update(order, connection, transaction);
+				return _orderManager.Update(order, connection, transaction);
 			});
 		}
 
-		public async Task<Order> Update (ExchangeOrder order)
+		public Task<Order> Update (ExchangeOrder order)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _orderManager.Update(order, connection, transaction);
+				return _orderManager.Update(order, connection, transaction);
 			});
 		}
 
@@ -73,11 +73,11 @@ namespace core.Infrastructure.BL.OrderProcessors
 			return await sender?.Invoke(order, config);
 		}
 
-		public async Task<long?> Create (Order order)
+		public Task<long> Create (Order order)
 		{
-			return await WithConnection(async (connection, transaction) =>
+			return WithConnection((connection, transaction) =>
 			{
-				return await _orderManager.Create(order, connection, transaction);
+				return _orderManager.Create(order, connection, transaction);
 			});
 		}
 	}

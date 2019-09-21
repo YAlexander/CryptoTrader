@@ -74,10 +74,10 @@ namespace core.Infrastructure.Database.Managers
 				}, transaction);
 		}
 
-		public async Task Delete (long id, IDbConnection connection, IDbTransaction transaction = null)
+		public Task Delete (long id, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			string query = @"update PairConfigs set isDeleted = true where id = id;";
-			await connection.ExecuteAsync(query, new { id = id }, transaction);
+			return connection.ExecuteAsync(query, new { id = id }, transaction);
 		}
 
 		public async Task<PairConfig> Get (long id, IDbConnection connection, IDbTransaction transaction = null)

@@ -51,10 +51,6 @@ CREATE TABLE Trades (
 GRANT ALL PRIVILEGES ON TABLE Trades to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE trades_id_seq TO trader;
 
-
-INSERT INTO Pairs (id, created, symbolFirst, symbolSecond, description, isEnabled, isDeleted) VALUES (default, now(), 'BTC', 'USDT', 'Bitcoin/Tether', true, false);
-
-
 CREATE TABLE ExchangeConfigs (
 	id BIGSERIAL PRIMARY KEY,
 	created timestamp NOT NULL,
@@ -78,9 +74,9 @@ CREATE TABLE Balances (
 	updated timestamp NULL,
 	isDeleted boolean NOT NULL,
 	exchangeCode INT NOT NULL,
-	asset text NULL NOT NULL,
+	asset text NOT NULL,
 	total decimal null,
-	available decimal null,
+	available decimal null
 );
 
 GRANT ALL PRIVILEGES ON TABLE Balances to trader;
@@ -133,7 +129,7 @@ CREATE TABLE Deals (
 	takeProfit decimal null
 );
 
-GRANT ALL PRIVILEGES ON TABLE Deas to trader;
+GRANT ALL PRIVILEGES ON TABLE Deals to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE deals_id_seq TO trader;
 
 CREATE TABLE Fills (
@@ -159,8 +155,9 @@ CREATE TABLE PairConfigs (
 	isDeleted boolean NOT NULL,
 	exchangeCode int not null REFERENCES ExchangeConfigs(exchangeCode),
 	symbol varchar(16) NOT NULL,
-	assetOne
-	strategyId int null,
+	assetOne varchar(8) not null,
+	assetTwo varchar(8) not null,
+	strategyId integer null,
 	defaultStopLossPercent real null,
 	defaultTakeProfitPercent real null,
 	isTestMode boolean not null,
@@ -174,8 +171,8 @@ CREATE TABLE PairConfigs (
 GRANT ALL PRIVILEGES ON TABLE PairConfigs to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE pairConfigs_id_seq TO trader;
 
-INSERT INTO PairConfigs (id, pairId, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, isMaxAmountPercent, maxOrderAmount, assetOne, assetTwo)
-		VALUES (default, 1, now(), null, true, false, 1, 'BTCUSDT', null, null, null, false, null, null, null, false, 100, 'BTC', 'USDT');
+INSERT INTO PairConfigs (id, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, isMaxAmountPercent, maxOrderAmount, assetOne, assetTwo)
+		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 'BTC', 'USDT');
 
 
 CREATE TABLE Strategies (
@@ -383,3 +380,6 @@ VALUES (default, now(), 'Wvf Ema Crossover', 15, 40, 'core.Trading.Strategies.Wv
 
 INSERT INTO Strategies (id, created, name, optimalTimeframe, numberOfCandles, typeName, version, description, isEnabled, isDeleted, preset) 
 VALUES (default, now(), 'Williams Vix Fix (Extended)', 60, 40, 'core.Trading.Strategies.WvfExtended, core', 1, '', true, false, null);
+
+INSERT INTO Strategies (id, created, name, optimalTimeframe, numberOfCandles, typeName, version, description, isEnabled, isDeleted, preset) 
+VALUES (default, now(), 'MACD Stoch RSI', 60, 99, 'core.Trading.Strategies.StochRsiMacd, core', 1, '', true, false, null);

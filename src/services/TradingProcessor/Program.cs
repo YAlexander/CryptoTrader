@@ -7,7 +7,9 @@ using core.Infrastructure.Notifications.Telegram;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using NLog.Web;
 using TradingProcessor.Workers;
+using Microsoft.Extensions.Logging;
 
 namespace TradingProcessor
 {
@@ -20,6 +22,12 @@ namespace TradingProcessor
 
 		public static IHostBuilder CreateHostBuilder (string[] args) =>
 			Host.CreateDefaultBuilder(args)
+				.ConfigureLogging(logging =>
+				{
+					logging.ClearProviders();
+					logging.AddConsole();
+					logging.SetMinimumLevel(LogLevel.Trace);
+				})
 				.UseSystemd()
 				.ConfigureServices((hostContext, services) =>
 				{
@@ -44,6 +52,7 @@ namespace TradingProcessor
 					services.AddSingleton<TradingContextBuilder>();
 
 					services.AddHostedService<ForecastProcessor>();
-				});
+				})
+				.UseNLog();
 	}
 }

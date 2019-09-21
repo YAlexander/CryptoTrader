@@ -49,7 +49,8 @@
 				</td>
 				<td>
 					@Html.ActionLink(item.IsEnabled ? "Enable" : "Disable", "Exchange", new { id = item.Id }) |
-					@Html.ActionLink("Edit", "Edit", new { id = item.ExchangeCodeId })
+					@Html.ActionLink("Edit", "Edit", new { id = item.ExchangeCodeId }) |
+					@Html.ActionLink("All Pairs", "AssignedPairs", "Pairs", new { id = item.ExchangeCodeId })
 				</td>
 			</tr>
 		}

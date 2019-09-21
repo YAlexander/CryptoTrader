@@ -1,9 +1,7 @@
 ﻿using core;
-using core.Abstractions.TypeCodes;
 using core.Infrastructure.BL;
 using core.Infrastructure.Database.Entities;
 using core.Infrastructure.Notifications;
-using core.TypeCodes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -13,7 +11,6 @@ using MyNatsClient.Extensions;
 using MyNatsClient.Ops;
 using Newtonsoft.Json;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -93,7 +90,7 @@ namespace OrdersProcessor.Workers
 
 			Trade trade = response.Payload;
 			ExchangeConfig config = await _exchangeConfigProcessor.GetExchangeConfig(trade.ExchangeCode);
-			PairConfig pairConfig = config.Pairs.FirstOrDefault(x => x.ExchangeCode == trade.ExchangeCode && x.Symbol.Equals(trade.Symbol));
+			PairConfig pairConfig = config.Pairs.Single(x => x.ExchangeCode == trade.ExchangeCode && x.Symbol.Equals(trade.Symbol));
 
 			await _autoTradingProcessor.StopLoss(trade, pairConfig);
 			await _autoTradingProcessor.TakeProfit(trade, pairConfig);
