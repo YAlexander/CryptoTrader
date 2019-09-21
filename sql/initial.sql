@@ -172,7 +172,7 @@ GRANT ALL PRIVILEGES ON TABLE PairConfigs to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE pairConfigs_id_seq TO trader;
 
 INSERT INTO PairConfigs (id, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, isMaxAmountPercent, maxOrderAmount, assetOne, assetTwo)
-		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', null, null, null, false, null, null, null, false, 100, 'BTC', 'USDT');
+		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 'BTC', 'USDT');
 
 
 CREATE TABLE Strategies (
@@ -380,3 +380,6 @@ VALUES (default, now(), 'Wvf Ema Crossover', 15, 40, 'core.Trading.Strategies.Wv
 
 INSERT INTO Strategies (id, created, name, optimalTimeframe, numberOfCandles, typeName, version, description, isEnabled, isDeleted, preset) 
 VALUES (default, now(), 'Williams Vix Fix (Extended)', 60, 40, 'core.Trading.Strategies.WvfExtended, core', 1, '', true, false, null);
+
+INSERT INTO Strategies (id, created, name, optimalTimeframe, numberOfCandles, typeName, version, description, isEnabled, isDeleted, preset) 
+VALUES (default, now(), 'MACD Stoch RSI', 60, 99, 'core.Trading.Strategies.StochRsiMacd, core', 1, '', true, false, null);

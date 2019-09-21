@@ -1,23 +1,21 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using core.Abstractions;
 using core.Abstractions.TypeCodes;
 using core.Trading.Extensions;
 using core.Trading.Models;
-using core.Trading.Strategies.Presets;
 using core.TypeCodes;
-using TinyJson;
 
 namespace core.Trading.Strategies
 {
-	public class RsiMacd : BaseStrategy
+	public class StochRsiMacd : BaseStrategy
 	{
-		public override string Name { get; } = "RSI MACD";
+		public override string Name { get; } = "STOCH RSI MACD";
 
 		public override IPeriodCode OptimalTimeframe { get; } = PeriodCode.HOUR;
 
-		public override int MinNumberOfCandles { get; } = 52;
+		public override int MinNumberOfCandles { get; } = 99;
 
 		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
 		{
@@ -26,24 +24,18 @@ namespace core.Trading.Strategies
 				throw new Exception("Number of candles less then expected");
 			}
 
-			RsiMacdPreset preset = null;
-			if (!string.IsNullOrWhiteSpace(Preset))
-			{
-				preset = JSONParser.FromJson<RsiMacdPreset>(Preset);
-			}
-
 			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
 
-			MacdItem macd = candles.Macd(preset?.MacdFast ?? 12, preset?.MacdSlow ?? 26, preset?.MacdSignal ?? 9);
-			List<decimal?> rsi = candles.Rsi(preset?.Rsi ?? 14);
+			MacdItem macd = candles.Macd(12, 26, 9);
+			StochItem stoch = candles.StochRsi(9, CandleVariableCode.CLOSE, 3, 3, TicTacTec.TA.Library.Core.MAType.Sma);
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
-				if (rsi[i] > 70 && macd.Macd[i] - macd.Signal[i] < 0)
+				if (macd.Macd[i] - macd.Signal[i] < 0 && stoch.K[i] > 70 && stoch.K[i] < stoch.D[i])
 				{
 					result.Add(TradingAdviceCode.SELL);
 				}
-				else if (rsi[i] < 30 && macd.Macd[i] - macd.Signal[i] > 0)
+				else if (macd.Macd[i] - macd.Signal[i] > 0 && stoch.K[i] < 30 && stoch.K[i] > stoch.D[i])
 				{
 					result.Add(TradingAdviceCode.BUY);
 				}
@@ -54,9 +46,11 @@ namespace core.Trading.Strategies
 			}
 
 			var tmp = result.LastOrDefault();
-			var rsil = rsi.LastOrDefault();
+			//var rsil = rsi.LastOrDefault();
 			var macdl = macd.Macd.LastOrDefault();
 			var macds = macd.Signal.LastOrDefault();
+			var stoshK = stoch.K.LastOrDefault();
+			var stoshD = stoch.D.LastOrDefault();
 
 			return result.LastOrDefault();
 		}

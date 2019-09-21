@@ -52,10 +52,14 @@ namespace CandlesWorker.Workers
 						ConnectionInfo cnInfo = new ConnectionInfo(_settings.Value.BusConnectionString);
 						using (NatsClient natsClient = new NatsClient(cnInfo))
 						{
+							if (!natsClient.IsConnected)
+							{
+								natsClient.Connect();
+							}
+
 							CallResult<UpdateSubscription> successKline = client.SubscribeToKlineStream(pair.Symbol, candlePeriod.ToPeriodCode(), async (data) =>
 							{
 								await SaveCandle(data.Data, natsClient);
-								_logger.LogTrace($"Saved candle from {Exchange.Description} - {pair.Symbol}");
 							});
 
 							successKline.Data.ConnectionLost += () => { _logger.LogError($"Connection to {Exchange} is lost"); };
@@ -83,12 +87,7 @@ namespace CandlesWorker.Workers
 			{
 				Candle candle = kline.ToCandle();
 				long? id = await _candlesProcessor.Create(candle);
-
-				// TODO: Move to client
-				if (!natsClient.IsConnected)
-				{
-					natsClient.Connect();
-				}
+				_logger.LogTrace($"Saved candle from {Exchange.Description} - {candle.Symbol}");
 
 				await natsClient.PubAsJsonAsync(_settings.Value.CandlesQueueName, new Notification<Candle>() { Code = ActionCode.CREATED.Code, Payload = candle });
 			}

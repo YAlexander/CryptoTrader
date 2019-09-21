@@ -83,6 +83,7 @@ namespace TradingProcessor.Workers
 
 						while (!stoppingToken.IsCancellationRequested)
 						{
+							await Task.Delay(TimeSpan.FromSeconds(1));
 						}
 
 						natsClient.Disconnect();
@@ -111,20 +112,10 @@ namespace TradingProcessor.Workers
 
 				_logger.LogInformation($"{DateTime.UtcNow} - {code.Description} - {receivedCandle.Symbol} - Forecast: {forecast.Description}");
 
-				bool sendForecastRequired = false;
-				if (_cache.TryGetValue((code, receivedCandle.Symbol), out ITradingAdviceCode cachedForecast) && cachedForecast != forecast || cachedForecast == null)
+				if (_settings.Value.SendTelegramNotifacation)
 				{
-					_cache.Set((code, receivedCandle.Symbol), forecast);
-					sendForecastRequired = true;
-				}
-
-				if (sendForecastRequired)
-				{
-					if (_settings.Value.SendTelegramNotifacation)
-					{
-						string message = $"{DateTime.UtcNow} UTC - Exchange: {code.Description} {receivedCandle.Symbol} - Forecaset {forecast.Description}";
-						await _telegramClient.SendMessage(message);
-					}
+					string message = $"{DateTime.UtcNow} UTC - Exchange: {code.Description} {receivedCandle.Symbol} - Forecaset {forecast.Description}";
+					await _telegramClient.SendMessage(message);
 				}
 
 				TradingForecast forecastInfo = new TradingForecast();

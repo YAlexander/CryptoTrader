@@ -49,7 +49,7 @@ namespace CandlesWorker.Workers
 						DateTime now = DateTime.UtcNow;
 						IPeriodCode candlePeriod = config.Timeframe.HasValue ? PeriodCode.Create(config.Timeframe.Value) : DefaultCandleInterval;
 
-						WebCallResult<BinanceKline[]> klines = client.GetKlines(config.Symbol, candlePeriod.ToPeriodCode(), now.AddDays(-10), now, 500);
+						WebCallResult<BinanceKline[]> klines = client.GetKlines(config.Symbol, candlePeriod.ToPeriodCode(), now.AddDays(-30), now, 500);
 						_logger.LogTrace($"Received candles from {Exchange.Description}");
 
 						List<Candle> candles = klines.Data.Select(x => x.ToCandle(config.Symbol, candlePeriod)).ToList();
