@@ -15,8 +15,8 @@
     <PackageReference Include="Cryptowatcher.TA-LIb-Core" Version="1.0.0" />
     <PackageReference Include="Dapper" Version="2.0.4" />
     <PackageReference Include="Evolve" Version="2.2.0" />
-    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0-rc1.19456.10" />
-    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0-rc1.19456.10" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
     <PackageReference Include="Npgsql" Version="4.1.0-preview2" />
     <PackageReference Include="Telegram.Bot" Version="15.0.0" />
   </ItemGroup>

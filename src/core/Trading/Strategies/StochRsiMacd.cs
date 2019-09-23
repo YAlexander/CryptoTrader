@@ -26,7 +26,7 @@ namespace core.Trading.Strategies
 
 			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
 
-			MacdItem macd = candles.Macd(12, 26, 9);
+			MacdItem macd = candles.Macd(7, 12, 9);
 			StochItem stoch = candles.StochRsi(9, CandleVariableCode.CLOSE, 3, 3, TicTacTec.TA.Library.Core.MAType.Sma);
 
 			for (int i = 0; i < candles.Count(); i++)
