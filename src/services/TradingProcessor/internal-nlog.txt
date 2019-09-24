@@ -240,3 +240,27 @@
 2019-09-21 18:26:51.2743 Info Found 57 configuration items
 2019-09-21 18:26:51.3350 Info Configuration initialized.
 2019-09-21 18:26:51.3543 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.7.10445. Product version: 4.6.7.
+2019-09-21 18:38:13.7861 Info Message Template Auto Format enabled
+2019-09-21 18:38:13.8342 Info Loading assembly: NLog.Web.AspNetCore
+2019-09-21 18:38:14.0834 Info Adding target ConsoleTarget(Name=console)
+2019-09-21 18:38:14.1422 Info Adding target FileTarget(Name=allfile)
+2019-09-21 18:38:14.1561 Info Adding target FileTarget(Name=ownFile-web)
+2019-09-21 18:38:14.2135 Info Found 57 configuration items
+2019-09-21 18:38:14.2549 Info Configuration initialized.
+2019-09-21 18:38:14.2659 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.7.10445. Product version: 4.6.7.
+2019-09-22 21:28:31.0720 Info Message Template Auto Format enabled
+2019-09-22 21:28:32.9096 Info Loading assembly: NLog.Web.AspNetCore
+2019-09-22 21:28:36.0054 Info Adding target ConsoleTarget(Name=console)
+2019-09-22 21:28:36.0493 Info Adding target FileTarget(Name=allfile)
+2019-09-22 21:28:36.0589 Info Adding target FileTarget(Name=ownFile-web)
+2019-09-22 21:28:36.1009 Info Found 57 configuration items
+2019-09-22 21:28:36.1240 Info Configuration initialized.
+2019-09-22 21:28:36.1240 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.7.10445. Product version: 4.6.7.
+2019-09-23 08:16:40.0254 Info Message Template Auto Format enabled
+2019-09-23 08:16:40.0885 Info Loading assembly: NLog.Web.AspNetCore
+2019-09-23 08:16:40.2465 Info Adding target ConsoleTarget(Name=console)
+2019-09-23 08:16:40.2895 Info Adding target FileTarget(Name=allfile)
+2019-09-23 08:16:40.2895 Info Adding target FileTarget(Name=ownFile-web)
+2019-09-23 08:16:40.3510 Info Found 57 configuration items
+2019-09-23 08:16:40.3850 Info Configuration initialized.
+2019-09-23 08:16:40.3974 Info NLog, Version=4.0.0.0, Culture=neutral, PublicKeyToken=5120e14c03d0593c. File version: 4.6.7.10445. Product version: 4.6.7.
