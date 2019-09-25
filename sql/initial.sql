@@ -94,6 +94,7 @@ CREATE TABLE Orders (
 	orderTypeCode int not null,
 	orderStatusCode int not null,
 	fillPoliticsCode int not null,
+	tradingModeCode int not null,
 	dealId bigint null,
 	exchangeOrderId int null,
 	exchangeOrderStatusCode bigint null,
@@ -168,15 +169,14 @@ CREATE TABLE PairConfigs (
 	exchangeFeeBuy real null,
 	tradingLockedTill timestamp NULL,
 	isMaxAmountPercent boolean not null,
-	maxOrderAmount decimal not null,
-	isManualTrading boolean not null
+	maxOrderAmount decimal not null
 );
 
 GRANT ALL PRIVILEGES ON TABLE PairConfigs to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE pairConfigs_id_seq TO trader;
 
 INSERT INTO PairConfigs (id, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, isMaxAmountPercent, maxOrderAmount, assetOne, assetTwo)
-		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 'BTC', 'USDT', true);
+		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 'BTC', 'USDT');
 
 
 CREATE TABLE Strategies (
