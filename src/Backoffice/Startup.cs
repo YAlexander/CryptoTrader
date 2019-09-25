@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using core;
 using core.Abstractions;
 using core.Abstractions.Database;
+using core.Infrastructure;
 using core.Infrastructure.BL;
 using core.Infrastructure.BL.OrderProcessors;
 using core.Infrastructure.Database.Entities;
@@ -16,7 +17,6 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Scrutor;
 
 namespace Backoffice
 {
@@ -47,6 +47,7 @@ namespace Backoffice
 			services.AddTransient<AssetProcessor>();
 			services.AddTransient<PairConfigProcessor>();
 			services.AddTransient<OrderProcessor>();
+			services.AddTransient<NatsConnector>();
 
 			services.AddControllersWithViews();
 		}
