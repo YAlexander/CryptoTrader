@@ -3,10 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using core;
+using core.Abstractions;
 using core.Abstractions.Database;
 using core.Infrastructure.BL;
+using core.Infrastructure.BL.OrderProcessors;
 using core.Infrastructure.Database.Entities;
 using core.Infrastructure.Database.Managers;
+using core.Infrastructure.OrdersProcessing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -32,14 +35,18 @@ namespace Backoffice
 			services.AddOptions();
 			services.Configure<AppSettings>(Configuration.GetSection("AppSettings"));
 
-			services.AddTransient<IExchangeConfigManager, ExchangeConfigManager>();
 			services.AddTransient<IPairConfigManager, PairConfigManager>();
 			services.AddTransient<IStrategyManager, StrategyManager>();
 			services.AddTransient<IAssetManager, AssetManager>();
+			services.AddTransient<IOrderManager, OrdersManager>();
+			services.AddTransient<IExchangeOrdersSender, BinanceOrderSender>();
+			services.AddTransient<IExchangeConfigManager, ExchangeConfigManager>();
+
 			services.AddTransient<ExchangeConfigProcessor>();
 			services.AddTransient<StrategyProcessor>();
 			services.AddTransient<AssetProcessor>();
 			services.AddTransient<PairConfigProcessor>();
+			services.AddTransient<OrderProcessor>();
 
 			services.AddControllersWithViews();
 		}

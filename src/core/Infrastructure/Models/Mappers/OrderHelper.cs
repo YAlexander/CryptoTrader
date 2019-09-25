@@ -1,9 +1,10 @@
 ﻿using Binance.Net.Objects;
 using core.Extensions.Mappers;
+using core.Infrastructure.Database.Entities;
 
 namespace core.Infrastructure.Models.Mappers
 {
-	public static class ExchangeOrderHelper
+	public static class OrderHelper
 	{
 		public static ExchangeOrder ToOrder (this BinancePlacedOrder externalOrder)
 		{

@@ -38,8 +38,9 @@ namespace core.Infrastructure.Database.Entities
 		public string LastError { get; set; }
 
 		// Update order status on Exchange
-		public bool? UpdateRequired { get; set; }
-		public bool? CancelRequired { get; set; }
+		public bool UpdateRequired { get; set; }
+		public bool CancelRequired { get; set; }
+		public string StatusDescription { get; set; }
 
 		public List<Fill> Fills { get; } = new List<Fill>();
  	}

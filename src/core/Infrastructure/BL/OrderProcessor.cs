@@ -14,8 +14,8 @@ namespace core.Infrastructure.BL.OrderProcessors
 	public class OrderProcessor : BaseProcessor, IOrderProcessor
 	{
 		private IOrderManager _orderManager;
-		private ExchangeConfigManager _exchangeConfigManager;
-		private PairConfigManager _pairConfigManager;
+		private IExchangeConfigManager _exchangeConfigManager;
+		private IPairConfigManager _pairConfigManager;
 
 		private Dictionary<int, Func<Order, ExchangeConfig, Task<ExchangeOrder>>> orderSenders = new Dictionary<int, Func<Order, ExchangeConfig, Task<ExchangeOrder>>>();
 
@@ -23,8 +23,8 @@ namespace core.Infrastructure.BL.OrderProcessors
 			ILogger<OrderProcessor> logger,
 			IOptions<AppSettings> settings,
 			IEnumerable<IExchangeOrdersSender> senders,
-			ExchangeConfigManager exchangeConfigManager,
-			PairConfigManager pairConfigManager,
+			IExchangeConfigManager exchangeConfigManager,
+			IPairConfigManager pairConfigManager,
 			IOrderManager orderManager) : base(settings, logger)
 		{
 			_orderManager = orderManager;

@@ -8,8 +8,12 @@ namespace core.TypeCodes
 		{
 		}
 
-		public static FillPoliticsCode GTC { get; } = new FillPoliticsCode(0, "Good till cancelled");
-		public static FillPoliticsCode FOK { get; } = new FillPoliticsCode(1, "Fill or Kill. Must be fully filled, else cancelled");
-		public static FillPoliticsCode IOC { get; } = new FillPoliticsCode(2, "Immediate or Cancel. Fill max available, rest cancelled");
+		public static FillPoliticsCode GTC { get; } = new FillPoliticsCode(0, "GOOD TILL CANCELLED");
+
+		// Must be fully filled, else cancelled
+		public static FillPoliticsCode FOK { get; } = new FillPoliticsCode(1, "FILL OR KILL");
+
+		// Fill max available, rest cancelled
+		public static FillPoliticsCode IOC { get; } = new FillPoliticsCode(2, "IMMEDIATE OR CANCEL");
 	}
 }

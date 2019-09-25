@@ -38,8 +38,9 @@ namespace core.Infrastructure.Database.Managers
 						expirationDate,
 						LastErrorDate,
 						lastError,
-						updateRequired,
-						cancelRequired
+						isUpdateRequired,
+						isCancelRequired,
+						statusDescription
 					)
 					vales
 					(
@@ -66,8 +67,9 @@ namespace core.Infrastructure.Database.Managers
 						@expirationDate,
 						@LastErrorDate,
 						@lastError,
-						@updateRequired,
-						@cancelRequired
+						@isUpdateRequired,
+						@isCancelRequired,
+						@statusDescription
 					)
 					returning
 						id;";
@@ -96,8 +98,9 @@ namespace core.Infrastructure.Database.Managers
 					expirationDate = entity.ExpirationDate,
 					LastErrorDate = entity.LastErrorDate,
 					lastError = entity.LastError,
-					updateRequired = entity.UpdateRequired,
-					cancelRequired = entity.CancelRequired
+					isUpdateRequired = entity.UpdateRequired,
+					isCancelRequired = entity.CancelRequired,
+					statusDescription = entity.StatusDescription
 				}, transaction);
 		}
 
@@ -127,7 +130,8 @@ namespace core.Infrastructure.Database.Managers
 						lastErrorDate = @lastErrorDate,
 						lastError = @lastError,
 						updateRequired = @updateRequired,
-						cancelRequired = @cancelRequired
+						cancelRequired = @cancelRequired,
+						statusDescription = @statusDescription
 					where
 						id = @id
 					returning *;
@@ -144,6 +148,7 @@ namespace core.Infrastructure.Database.Managers
 					lastError = entity.LastError,
 					updateRequired = entity.UpdateRequired,
 					cancelRequired = entity.CancelRequired,
+					statusDescription = entity.StatusDescription,
 					id = entity.Id
 				}, transaction);
 		}
