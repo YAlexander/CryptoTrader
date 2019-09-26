@@ -8,10 +8,8 @@ namespace core.TypeCodes
 		{
 		}
 
-		public static TradingAdviceCode STRONG_SELL { get; } = new TradingAdviceCode(-2, "STRONG_SELL");
 		public static TradingAdviceCode SELL { get; } = new TradingAdviceCode(-1, "SELL");
 		public static TradingAdviceCode HOLD { get; } = new TradingAdviceCode(0, "HOLD");
 		public static TradingAdviceCode BUY { get; } = new TradingAdviceCode(1, "BUY");
-		public static TradingAdviceCode STRONG_BUY { get; } = new TradingAdviceCode(2, "STRONG_BUY");
 	}
 }

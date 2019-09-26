@@ -145,6 +145,7 @@ namespace core.Infrastructure.Database.Managers
 					exchangeOrderStatusCode = entity.ExchangeOrderStatusCode,
 					lastErrorDate = entity.LastErrorDate,
 					lastError = entity.LastError,
+
 					updateRequired = entity.UpdateRequired,
 					cancelRequired = entity.CancelRequired,
 					statusDescription = entity.StatusDescription,

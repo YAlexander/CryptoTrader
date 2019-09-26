@@ -2,10 +2,12 @@
 using core.Infrastructure.BL;
 using core.Infrastructure.Database.Entities;
 using core.Infrastructure.Notifications;
+using core.TypeCodes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyNatsClient;
+using MyNatsClient.Encodings.Json;
 using MyNatsClient.Events;
 using MyNatsClient.Extensions;
 using MyNatsClient.Ops;
@@ -18,14 +20,14 @@ using System.Threading.Tasks;
 namespace OrdersProcessor.Workers
 {
 	// Subscribed to new deals from all exchanges. Should process StopLoss and TakeProfit orders
-	public class DealsProcessor : BackgroundService
+	public class old_DealsProcessor : BackgroundService
 	{
 		private IOptions<AppSettings> _settings;
-		private ILogger<DealsProcessor> _logger;
+		private ILogger<old_DealsProcessor> _logger;
 		private AutoTradingProcessor _autoTradingProcessor;
 		private ExchangeConfigProcessor _exchangeConfigProcessor;
 
-		public DealsProcessor (IOptions<AppSettings> settings, ILogger<DealsProcessor> logger, ExchangeConfigProcessor exchangeConfigProcessor, AutoTradingProcessor autoTradingProcessor)
+		public old_DealsProcessor (IOptions<AppSettings> settings, ILogger<old_DealsProcessor> logger, ExchangeConfigProcessor exchangeConfigProcessor, AutoTradingProcessor autoTradingProcessor)
 		{
 			_logger = logger;
 			_settings = settings;
@@ -51,7 +53,7 @@ namespace OrdersProcessor.Workers
 						{
 							try
 							{
-								Task.Run(async () => await Process(msg));
+								Task.Run(async () => await Process(msg, natsClient));
 							}
 							catch (Exception ex)
 							{
@@ -83,7 +85,7 @@ namespace OrdersProcessor.Workers
 			}
 		}
 
-		private async Task Process (MsgOp msg)
+		private async Task Process (MsgOp msg, NatsClient natsClient)
 		{
 			string payload = msg.GetPayloadAsString();
 			Notification<Trade> response = JsonConvert.DeserializeObject<Notification<Trade>>(payload[1..]);
@@ -94,6 +96,15 @@ namespace OrdersProcessor.Workers
 
 			await _autoTradingProcessor.StopLoss(trade, pairConfig);
 			await _autoTradingProcessor.TakeProfit(trade, pairConfig);
+
+			try
+			{
+				await natsClient.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<object>() { Code = ActionCode.UPDATED.Code, Payload = null });
+			}
+			catch (Exception ex)
+			{
+				_logger.LogError("Can't send Nata notification", ex);
+			}
 		}
 	}
 }

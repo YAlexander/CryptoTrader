@@ -18,6 +18,8 @@ namespace OrdersProcessor.Extensions
 			order.Amount = binanceOrder.Quantity;
 			order.OrderStatusCode = binanceOrder.Status.ToStatus().Code;
 			order.ExchangeOrderStatusCode = (long)binanceOrder.Status;
+			order.Fee = binanceOrder.Commission;
+			order.Asset = binanceOrder.CommissionAsset;
 
 			return order;
 		}

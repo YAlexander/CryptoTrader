@@ -17,7 +17,7 @@ using System.Threading.Tasks;
 namespace OrdersProcessor.Workers
 {
 	// Monitoring orders status on Exchanges
-	public class BinanceOrdersMonitor : Worker
+	public class BinanceOrdersReceiver : Worker
 	{
 		private ILogger<Worker> _logger;
 		private ExchangeConfigProcessor _exchangeConfigProcessor;
@@ -25,7 +25,7 @@ namespace OrdersProcessor.Workers
 		private BalanceProcessor _balanceProcessor;
 		private DealProcessor _dealProcessor;
 
-		public BinanceOrdersMonitor (
+		public BinanceOrdersReceiver (
 			ILogger<Worker> logger,
 			ExchangeConfigProcessor exchangeConfigProcessor,
 			OrderProcessor orderProcessor,
@@ -60,27 +60,16 @@ namespace OrdersProcessor.Workers
 						CallResult<UpdateSubscription> successAccount = socketClient.SubscribeToUserStream(listenKey,
 						accountData => 
 						{
-							// Process Account info changes there if required
 						}, 
 						async orderData =>
 						{
 							Order order = orderData.ToOrder();
+							Deal deal = await _dealProcessor.UpdateForOrder(order);
 
-							await _orderProcessor.Update(order);
-							if(order.OrderSideCode == OrderSideCode.SELL.Code)
-							{
-								Deal deal = await _dealProcessor.Get(order.DealId.Value);
-								deal.AvgClosePrice = order.Price;
-								deal.EstimatedFee += order.Price * order.Amount * (decimal)config.ExchangeFeeSell;
-								deal.StatusCode = DealStatusCode.CLOSE.Code;
-
-								await _dealProcessor.Update(deal);
-							}
+							// TODO: Add notification
 						},
 						ocoOrderData =>
 						{
-							// TODO: Remove order checking from OrderProcessor
-							// Update Deal, update Order
 						},
 						async balancesData =>
 						{
