@@ -44,6 +44,7 @@ namespace TradesWorker.Workers
 						CallResult<UpdateSubscription> res = client.SubscribeToBookTickerStream(pair.Symbol, async (data) =>
 						{
 							Book book = new Book();
+							book.ExchangeCode = Exchange.Code;
 							book.Symbol = data.Symbol;
 							book.BestAskPrice = data.BestAskPrice;
 							book.BestAskQuantity = data.BestAskQuantity;
