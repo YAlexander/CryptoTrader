@@ -184,15 +184,15 @@ CREATE TABLE PairConfigs (
 	exchangeFeeSell real null,
 	exchangeFeeBuy real null,
 	tradingLockedTill timestamp NULL,
-	isMaxAmountPercent boolean not null,
-	maxOrderAmount decimal not null
+	maxOrderAmount decimal not null,
+	minOrderAmount decimal not null
 );
 
 GRANT ALL PRIVILEGES ON TABLE PairConfigs to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE pairConfigs_id_seq TO trader;
 
-INSERT INTO PairConfigs (id, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, isMaxAmountPercent, maxOrderAmount, assetOne, assetTwo)
-		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 'BTC', 'USDT');
+INSERT INTO PairConfigs (id, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, maxOrderAmount, minOrderAmount,assetOne, assetTwo)
+		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 15, 'BTC', 'USDT');
 
 
 CREATE TABLE Strategies (

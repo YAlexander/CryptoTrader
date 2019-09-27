@@ -1,37 +1,41 @@
 ﻿using core;
+using core.Abstractions;
 using core.Infrastructure.BL;
 using core.Infrastructure.Database.Entities;
+using core.Infrastructure.Models;
+using core.Infrastructure.Models.Mappers;
 using core.Infrastructure.Notifications;
 using core.TypeCodes;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyNatsClient;
-using MyNatsClient.Encodings.Json;
 using MyNatsClient.Events;
 using MyNatsClient.Extensions;
 using MyNatsClient.Ops;
 using Newtonsoft.Json;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
 namespace OrdersProcessor.Workers
 {
-	// Subscribed to new deals from all exchanges. Should process StopLoss and TakeProfit orders
-	public class old_DealsProcessor : BackgroundService
+	public class OrderSender : BackgroundService
 	{
+		private ILogger<OrderSender> _logger;
 		private IOptions<AppSettings> _settings;
-		private ILogger<old_DealsProcessor> _logger;
-		private AutoTradingProcessor _autoTradingProcessor;
 		private ExchangeConfigProcessor _exchangeConfigProcessor;
+		private DealProcessor _dealProcessor;
+		private IEnumerable<IExchangeOrdersSender> _senders;
 
-		public old_DealsProcessor (IOptions<AppSettings> settings, ILogger<old_DealsProcessor> logger, ExchangeConfigProcessor exchangeConfigProcessor, AutoTradingProcessor autoTradingProcessor)
+		public OrderSender(ILogger<OrderSender> logger, ExchangeConfigProcessor exchangeConfigProcessor, DealProcessor dealProcessor, IOptions<AppSettings> settings, IEnumerable<IExchangeOrdersSender> senders)
 		{
 			_logger = logger;
 			_settings = settings;
-			_autoTradingProcessor = autoTradingProcessor;
+			_senders = senders;
+			_dealProcessor = dealProcessor;
 			_exchangeConfigProcessor = exchangeConfigProcessor;
 		}
 
@@ -49,11 +53,11 @@ namespace OrdersProcessor.Workers
 							natsClient.Connect();
 						}
 
-						await natsClient.SubAsync(_settings.Value.TradesQueueName, stream => stream.Subscribe(msg =>
+						await natsClient.SubAsync(_settings.Value.OrdersQueueName, stream => stream.Subscribe(msg =>
 						{
 							try
 							{
-								Task.Run(async () => await Process(msg, natsClient));
+								Task.Run(async () => await Process(msg));
 							}
 							catch (Exception ex)
 							{
@@ -85,25 +89,22 @@ namespace OrdersProcessor.Workers
 			}
 		}
 
-		private async Task Process (MsgOp msg, NatsClient natsClient)
+		private async Task Process (MsgOp msg)
 		{
 			string payload = msg.GetPayloadAsString();
-			Notification<Trade> response = JsonConvert.DeserializeObject<Notification<Trade>>(payload[1..]);
+			Notification<Order> response = JsonConvert.DeserializeObject<Notification<Order>>(payload[1..]);
+			Order order = response.Payload;
 
-			Trade trade = response.Payload;
-			ExchangeConfig config = await _exchangeConfigProcessor.GetExchangeConfig(trade.ExchangeCode);
-			PairConfig pairConfig = config.Pairs.Single(x => x.ExchangeCode == trade.ExchangeCode && x.Symbol.Equals(trade.Symbol));
-
-			await _autoTradingProcessor.StopLoss(trade, pairConfig);
-			await _autoTradingProcessor.TakeProfit(trade, pairConfig);
-
-			try
+			if (order.OrderStatusCode == OrderStatusCode.PENDING.Code || order.UpdateRequired)
 			{
-				await natsClient.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<object>() { Code = ActionCode.UPDATED.Code, Payload = null });
-			}
-			catch (Exception ex)
-			{
-				_logger.LogError("Can't send Nata notification", ex);
+				IExchangeOrdersSender sender = _senders.SingleOrDefault(x => x.Exchange.Code == order.ExchangeCode);
+				ExchangeConfig config = await _exchangeConfigProcessor.GetExchangeConfig(order.ExchangeCode);
+
+				if (sender != null)
+				{
+					ExchangeOrder res = await sender.Send(order, config);
+					Deal deal = await _dealProcessor.UpdateForOrder(res.ToOrder(), config.Pairs.SingleOrDefault(x => x.Symbol.Equals(res.Symbol)));
+				}
 			}
 		}
 	}

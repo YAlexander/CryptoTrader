@@ -50,5 +50,21 @@ namespace core.Infrastructure.Models.Mappers
 
 			return order;
 		}
+
+		public static Order ToOrder(this ExchangeOrder externalOrder)
+		{
+			Order order = new Order();
+			order.Symbol = externalOrder.Symbol;
+			order.OrderStatusCode = externalOrder.Status.Code;
+			order.Amount = externalOrder.ExecutedQuantity;
+			order.Id = externalOrder.OrderId;
+			order.ExchangeOrderId = long.Parse(externalOrder.ExchangeOrderId);
+			order.OrderSideCode = externalOrder.OrderSideCode.Code;
+			order.OrderTypeCode = externalOrder.OrderTypeCode.Code;
+			order.FillPoliticsCode = externalOrder.FillPoliticsCode.Code;
+			order.Price = externalOrder.Price;
+
+			return order;
+		}
 	}
 }

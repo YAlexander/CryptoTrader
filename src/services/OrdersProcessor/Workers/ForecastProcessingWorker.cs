@@ -105,14 +105,15 @@ namespace OrdersProcessor.Workers
 				ExchangeConfig config = await _exchangeConfigProcessor.GetExchangeConfig(exchange.Code);
 				PairConfig pairConfig = config.Pairs.FirstOrDefault(x => x.Symbol.Equals(forecast.Symbol));
 
+				Deal deal = null;
 				if (forecast.ForecastCode == TradingAdviceCode.BUY.Code)
 				{
-					await _autoTradingProcessor.Buy(forecast, pairConfig);
+					deal = await _autoTradingProcessor.Buy(forecast, pairConfig);
 					_logger.LogInformation($"Is BUY: {ExchangeCode.Create(forecast.ExchangeCode).Description} - {forecast.Symbol}");
 				}
 				else if (forecast.ForecastCode == TradingAdviceCode.SELL.Code)
 				{
-					await _autoTradingProcessor.Sell(forecast, pairConfig);
+					deal = await _autoTradingProcessor.Sell(forecast, pairConfig);
 					_logger.LogInformation($"Is SELL: {ExchangeCode.Create(forecast.ExchangeCode).Description} - {forecast.Symbol}");
 				}
 				else
@@ -122,7 +123,7 @@ namespace OrdersProcessor.Workers
 
 				try
 				{
-					await natsClient.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<Deal>() { Code = ActionCode.CREATED.Code, Payload = new Deal() });
+					await natsClient.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<Deal>() { Code = ActionCode.CREATED.Code, Payload = deal });
 				}
 				catch (Exception ex)
 				{

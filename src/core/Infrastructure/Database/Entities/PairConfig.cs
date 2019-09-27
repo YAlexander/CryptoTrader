@@ -18,7 +18,7 @@ namespace core.Infrastructure.Database.Entities
 		public float? ExchangeFeeBuy { get; set; }
 		public DateTime? TradingLockedTill { get; set; }
 		public decimal? MaxOrderAmount { get; set; }
-		public bool isMaxAmountPercent { get; set; }
+		public decimal? MinOrderAmount { get; set; }
 
 		public int? Timeframe { get; set; }
 	}

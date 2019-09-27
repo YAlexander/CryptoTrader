@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using core.Infrastructure.Models;
+using System.Collections.Generic;
 
 namespace core.Infrastructure.Database.Managers
 {
@@ -114,6 +115,12 @@ namespace core.Infrastructure.Database.Managers
 		{
 			string query = @"select * from Orders where id = @id;";
 			return connection.QueryFirstOrDefaultAsync<Order>(query, new { id = id }, transaction);
+		}
+
+		public Task<IEnumerable<Order>> GetOrdersByDealId (long id, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			const string query = @"select * from Orders where dealId = @dealId;";
+			return connection.QueryAsync<Order>(query, new { dealId = id }, transaction);
 		}
 
 		public Task<Order> Update (Order entity, IDbConnection connection, IDbTransaction transaction = null)

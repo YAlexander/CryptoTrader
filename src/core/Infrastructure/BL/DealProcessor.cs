@@ -1,5 +1,4 @@
 ﻿using core.Abstractions.Database;
-using core.Abstractions.TypeCodes;
 using core.Infrastructure.Database.Entities;
 using core.Infrastructure.Database.Managers;
 using core.Infrastructure.Models.Mappers;
@@ -44,8 +43,6 @@ namespace core.Infrastructure.BL
 
 		public async Task<Deal> CreateForOrder (Order order)
 		{
-			// TODO: Check available balance
-
 			return await WithConnection(async (connection, transaction) =>
 			{
 				Deal deal = new Deal();
@@ -65,7 +62,7 @@ namespace core.Infrastructure.BL
 			});
 		}
 
-		public async Task<Deal> UpdateForOrder (Order order)
+		public async Task<Deal> UpdateForOrder (Order order, PairConfig config)
 		{
 			if (!order.DealId.HasValue)
 			{
@@ -87,8 +84,10 @@ namespace core.Infrastructure.BL
 					deal.AvgOpenPrice = order.Price;
 					deal.Amount = order.Amount;
 					deal.EstimatedFee = order.Fee * order.Price;
+					deal.TakeProfit = order.Price + order.Price * (decimal)config.DefaultTakeProfitPercent / 100;
+					deal.StopLoss = order.Price - order.Price * (decimal)config.DefaultStopLossPercent/ 100;
 
-					if(order.TradingModeCode == TradingModeCode.AUTO.Code)
+					if (order.TradingModeCode == TradingModeCode.AUTO.Code)
 					{
 						Order sellOrder = new Order();
 						sellOrder.ExchangeCode = deal.Exchange;
@@ -101,6 +100,7 @@ namespace core.Infrastructure.BL
 						sellOrder.OrderSideCode = OrderSideCode.SELL.Code;
 						sellOrder.Amount = deal.Amount;
 						sellOrder.Price = deal.TakeProfit;
+						sellOrder.StopLoss = deal.StopLoss;
 
 						await _orderManager.Create(order, connection, transaction);
 					}
@@ -124,6 +124,6 @@ namespace core.Infrastructure.BL
 			{
 				return _dealManager.Get(id, connection, transaction);
 			});
-		}		
+		}
 	}
 }

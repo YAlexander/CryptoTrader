@@ -1,12 +1,17 @@
 ﻿using Binance.Net;
+using core;
 using core.Abstractions.TypeCodes;
 using core.Infrastructure.BL;
 using core.Infrastructure.BL.OrderProcessors;
 using core.Infrastructure.Database.Entities;
+using core.Infrastructure.Notifications;
 using core.TypeCodes;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MyNatsClient;
+using MyNatsClient.Encodings.Json;
 using OrdersProcessor.Extensions;
 using System;
 using System.Collections.Generic;
@@ -20,6 +25,7 @@ namespace OrdersProcessor.Workers
 	public class BinanceOrdersReceiver : Worker
 	{
 		private ILogger<Worker> _logger;
+		private IOptions<AppSettings> _settings;
 		private ExchangeConfigProcessor _exchangeConfigProcessor;
 		private OrderProcessor _orderProcessor;
 		private BalanceProcessor _balanceProcessor;
@@ -27,6 +33,7 @@ namespace OrdersProcessor.Workers
 
 		public BinanceOrdersReceiver (
 			ILogger<Worker> logger,
+			IOptions<AppSettings> settings,
 			ExchangeConfigProcessor exchangeConfigProcessor,
 			OrderProcessor orderProcessor,
 			BalanceProcessor balanceProcessor,
@@ -37,6 +44,7 @@ namespace OrdersProcessor.Workers
 			_orderProcessor = orderProcessor;
 			_balanceProcessor = balanceProcessor;
 			_dealProcessor = dealProcessor;
+			_settings = settings;
 		}
 
 		public override IExchangeCode Exchange { get; } = ExchangeCode.BINANCE;
@@ -57,34 +65,44 @@ namespace OrdersProcessor.Workers
 
 					using (BinanceSocketClient socketClient = new BinanceSocketClient())
 					{
-						CallResult<UpdateSubscription> successAccount = socketClient.SubscribeToUserStream(listenKey,
-						accountData => 
+						ConnectionInfo cnInfo = new ConnectionInfo(_settings.Value.BusConnectionString);
+						using (NatsClient natsClient = new NatsClient(cnInfo))
 						{
-						}, 
-						async orderData =>
-						{
-							Order order = orderData.ToOrder();
-							Deal deal = await _dealProcessor.UpdateForOrder(order);
-
-							// TODO: Add notification
-						},
-						ocoOrderData =>
-						{
-						},
-						async balancesData =>
-						{
-							IEnumerable<Balance> balances = balancesData.Select(x => x.ToBalance());
-							foreach(Balance balance in balances)
+							if (!natsClient.IsConnected)
 							{
-								await _balanceProcessor.UpdateOrCreate(balance);
+								natsClient.Connect();
 							}
-						});
 
-						while (!stoppingToken.IsCancellationRequested)
-						{ 
+							CallResult<UpdateSubscription> successAccount = socketClient.SubscribeToUserStream(listenKey,
+							accountData =>
+							{
+							},
+							async orderData =>
+							{
+								Order order = orderData.ToOrder();
+								Deal deal = await _dealProcessor.UpdateForOrder(order, config);
+
+								await natsClient.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<Deal>() { Code = ActionCode.UPDATED.Code, Payload = deal });
+							},
+							ocoOrderData =>
+							{
+							},
+							async balancesData =>
+							{
+								IEnumerable<Balance> balances = balancesData.Select(x => x.ToBalance());
+								foreach (Balance balance in balances)
+								{
+									await _balanceProcessor.UpdateOrCreate(balance);
+								}
+							});
+
+							while (!stoppingToken.IsCancellationRequested)
+							{
+							}
+
+							natsClient.Disconnect();
+							await socketClient.UnsubscribeAll();
 						}
-
-						await socketClient.UnsubscribeAll();
 					}
 				}
 				catch (Exception ex)
