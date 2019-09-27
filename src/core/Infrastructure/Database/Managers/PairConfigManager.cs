@@ -30,7 +30,7 @@ namespace core.Infrastructure.Database.Managers
 									exchangeFeeSell,
 									exchangeFeeBuy,
 									tradingLockedTill,
-									isMaxAmountPercent,
+									minOrderAmount,
 									maxOrderAmount
 								)
 							values
@@ -50,7 +50,7 @@ namespace core.Infrastructure.Database.Managers
 									@exchangeFeeSell,
 									@exchangeFeeBuy,
 									@tradingLockedTill,
-									@isMaxAmountPercent,
+									@minOrderAmount,
 									@maxOrderAmount
 								)
 							returning id;";
@@ -69,8 +69,8 @@ namespace core.Infrastructure.Database.Managers
 					exchangeFeeSell = entity.ExchangeFeeSell,
 					exchangeFeeBuy = entity.ExchangeFeeBuy,
 					tradingLockedTill = entity.TradingLockedTill,
-					isMaxAmountPercent = entity.isMaxAmountPercent,
-					maxOrderAmount = entity.MaxOrderAmount
+					maxOrderAmount = entity.MaxOrderAmount,
+					minOrderAmount = entity.MinOrderAmount
 				}, transaction);
 		}
 
@@ -120,7 +120,7 @@ namespace core.Infrastructure.Database.Managers
 					exchangeFeeSell = entity.ExchangeFeeSell,
 					exchangeFeeBuy = entity.ExchangeFeeBuy,
 					tradingLockedTill = entity.TradingLockedTill,
-					isMaxAmountPercent = entity.isMaxAmountPercent,
+					minOrderAmount = entity.MinOrderAmount,
 					maxOrderAmount = entity.MaxOrderAmount
 				}, transaction);
 		}
