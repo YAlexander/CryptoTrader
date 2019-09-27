@@ -31,5 +31,13 @@ namespace core.Infrastructure.BL
 				return _bookManager.GetLast(exchangeCode, symbol, connection, transaction);
 			});
 		}
+
+		public Task<int> ClearData (int exchangeCode, string symbol)
+		{
+			return WithConnection((connection, transaction) =>
+			{
+				return _bookManager.ClearData(exchangeCode, symbol, connection, transaction);
+			});
+		}
 	}
 }

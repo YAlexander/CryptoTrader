@@ -35,5 +35,13 @@ namespace core.Infrastructure.BL
 				return _tradesManager.GetLast(exchangeCode.Code, symbol, connection, transaction);
 			});
 		}
+
+		public Task<int> ClearData(int exchangeCode, string symbol)
+		{
+			return WithConnection((connection, transaction) =>
+			{
+				return _tradesManager.ClearData(exchangeCode, symbol, connection, transaction);
+			});
+		}
 	}
 }

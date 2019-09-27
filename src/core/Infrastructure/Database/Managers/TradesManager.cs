@@ -9,6 +9,24 @@ namespace core.Infrastructure.Database.Managers
 {
 	public class TradesManager : ITradesManager
 	{
+		public Task<int> ClearData (int exchangeCode, string symbol, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			string query = @"
+					delete from 
+							Trades
+					where
+						exchangecode = @exchangecode
+					and
+						symbol = @symbol
+					and
+						created != (select max(created)
+					from 
+						Trades)
+					";
+
+			return connection.ExecuteAsync(query, new { exchangeCode = exchangeCode, symbol = symbol }, transaction);
+		}
+
 		public Task<long> Create (Trade entity, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			const string query = @"

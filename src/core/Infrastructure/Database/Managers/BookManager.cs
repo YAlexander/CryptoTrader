@@ -8,6 +8,24 @@ namespace core.Infrastructure.Database.Managers
 {
 	public class BookManager : IBookManager
 	{
+		public Task<int> ClearData (int exchangeCode, string symbol, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			string query = @"
+					delete from 
+							Book
+					where
+						exchangecode = @exchangecode
+					and
+						symbol = @symbol
+					and
+						created != (select max(created)
+					from 
+						Book)
+					";
+
+			return connection.ExecuteAsync(query, new { exchangeCode = exchangeCode, symbol = symbol }, transaction);
+		}
+
 		public Task<long> Create (Book entity, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			const string query = @"
