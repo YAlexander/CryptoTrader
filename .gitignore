@@ -21,3 +21,4 @@ src/services/DealsWorker/bin/
 src/services/DealsWorker/obj/
 src/Tests/bin/
 src/Tests/obj/
+src/services/DealsWorker/internal-nlog.txt

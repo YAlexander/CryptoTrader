@@ -51,6 +51,22 @@ CREATE TABLE Trades (
 GRANT ALL PRIVILEGES ON TABLE Trades to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE trades_id_seq TO trader;
 
+CREATE TABLE Book (
+	id BIGSERIAL PRIMARY KEY,
+	created timestamp NOT NULL,
+	exchangeCode int not null,
+	symbol varchar(16) NOT NULL,
+	bestAskPrice decimal not null,
+	bestAskQuantity decimal not null,
+	bestBidPrice decimal not null,
+	bestBidQuantity decimal not null,
+	isDeleted boolean NOT NULL
+);
+
+GRANT ALL PRIVILEGES ON TABLE Book to trader;
+GRANT ALL PRIVILEGES ON SEQUENCE book_id_seq TO trader;
+
+
 CREATE TABLE ExchangeConfigs (
 	id BIGSERIAL PRIMARY KEY,
 	created timestamp NOT NULL,
