@@ -51,6 +51,22 @@ CREATE TABLE Trades (
 GRANT ALL PRIVILEGES ON TABLE Trades to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE trades_id_seq TO trader;
 
+CREATE TABLE Book (
+	id BIGSERIAL PRIMARY KEY,
+	created timestamp NOT NULL,
+	exchangeCode int not null,
+	symbol varchar(16) NOT NULL,
+	bestAskPrice decimal not null,
+	bestAskQuantity decimal not null,
+	bestBidPrice decimal not null,
+	bestBidQuantity decimal not null,
+	isDeleted boolean NOT NULL
+);
+
+GRANT ALL PRIVILEGES ON TABLE Book to trader;
+GRANT ALL PRIVILEGES ON SEQUENCE book_id_seq TO trader;
+
+
 CREATE TABLE ExchangeConfigs (
 	id BIGSERIAL PRIMARY KEY,
 	created timestamp NOT NULL,
@@ -94,6 +110,7 @@ CREATE TABLE Orders (
 	orderTypeCode int not null,
 	orderStatusCode int not null,
 	fillPoliticsCode int not null,
+	tradingModeCode int not null,
 	dealId bigint null,
 	exchangeOrderId int null,
 	exchangeOrderStatusCode bigint null,
@@ -106,7 +123,10 @@ CREATE TABLE Orders (
 	takeProfit decimal null,
 	expirationDate timestamp NULL,
 	lastErrorDate timestamp NULL,
-	lastError text null
+	lastError text null,
+	statusDescription text null,
+	isUpdateRequired boolean not null,
+	isCancelRequired boolean not null
 );
 
 GRANT ALL PRIVILEGES ON TABLE Orders to trader;
@@ -164,15 +184,15 @@ CREATE TABLE PairConfigs (
 	exchangeFeeSell real null,
 	exchangeFeeBuy real null,
 	tradingLockedTill timestamp NULL,
-	isMaxAmountPercent boolean not null,
-	maxOrderAmount decimal not null
+	maxOrderAmount decimal not null,
+	minOrderAmount decimal not null
 );
 
 GRANT ALL PRIVILEGES ON TABLE PairConfigs to trader;
 GRANT ALL PRIVILEGES ON SEQUENCE pairConfigs_id_seq TO trader;
 
-INSERT INTO PairConfigs (id, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, isMaxAmountPercent, maxOrderAmount, assetOne, assetTwo)
-		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 'BTC', 'USDT');
+INSERT INTO PairConfigs (id, created, updated, isEnabled, isDeleted, exchangeCode, symbol, strategyId, defaultStopLossPercent, defaultTakeProfitPercent, isTestMode, exchangeFeeSell, exchangeFeeBuy, tradingLockedTill, maxOrderAmount, minOrderAmount,assetOne, assetTwo)
+		VALUES (default, now(), null, true, false, 1, 'BTCUSDT', 56, null, null, false, null, null, null, false, 100, 15, 'BTC', 'USDT');
 
 
 CREATE TABLE Strategies (

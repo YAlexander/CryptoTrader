@@ -3,10 +3,14 @@ using core.Abstractions.TypeCodes;
 using core.Infrastructure.Database.Entities;
 using core.Infrastructure.Database.Managers;
 using core.Infrastructure.Models;
+using core.Infrastructure.Models.Mappers;
+using core.Infrastructure.Notifications;
 using core.Trading.Models;
 using core.TypeCodes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using MyNatsClient;
+using MyNatsClient.Encodings.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,16 +18,19 @@ using System.Threading.Tasks;
 
 namespace core.Infrastructure.BL
 {
+	// TODO: Rewrite logic
 	public class AutoTradingProcessor : BaseProcessor
 	{
-		private IExchangeCode DefaultCode = ExchangeCode.UNKNOWN;
-
+		private IOptions<AppSettings> _settings;
 		private IOrderManager _orderManager;
 		private IOrderProcessor _orderProcessor;
 		private IBalanceManager _balanceManager;
 		private IDealManager _dealManager;
 		private ITradesManager _tradesManager;
+		private IBookManager _bookManager;
+		private DealProcessor _dealProcessor;
 		private ILogger<AutoTradingProcessor> _logger;
+		private NatsConnector _connector;
 
 		public AutoTradingProcessor (
 			IOptions<AppSettings> settings,
@@ -32,7 +39,10 @@ namespace core.Infrastructure.BL
 			IBalanceManager balanceManager,
 			ITradesManager tradesManager,
 			IOrderManager orderManager,
-			IDealManager dealManager) : base(settings, logger)
+			IBookManager bookManager,
+			IDealManager dealManager,
+			DealProcessor dealProcessor,
+			NatsConnector connector) : base(settings, logger)
 		{
 			_logger = logger;
 			_orderProcessor = orderProcessor;
@@ -40,20 +50,18 @@ namespace core.Infrastructure.BL
 			_dealManager = dealManager;
 			_tradesManager = tradesManager;
 			_orderManager = orderManager;
+			_dealProcessor = dealProcessor;
+			_bookManager = bookManager;
+			_connector = connector;
+			_settings = settings;
 		}
 
-		public async Task Buy (TradingForecast forecast, PairConfig config)
+		public Task<Deal> Buy (TradingForecast forecast, PairConfig config)
 		{
-			// TODO: Add check for blocked trading
-			IExchangeCode exchangeCode = ExchangeCode.Create(forecast.ExchangeCode);
-			Deal deal = new Deal();
-			deal.Exchange = forecast.ExchangeCode;
-			deal.Symbol = forecast.Symbol;
-			deal.StatusCode = DealStatusCode.OPEN;
-
-			await WithConnection(async (connection, transaction) =>
+			return WithConnection(async (connection, transaction) =>
 			{
-				deal.Id = await _dealManager.Create(deal, connection, transaction);
+				Book book = await _bookManager.GetLast(forecast.ExchangeCode, forecast.Symbol, connection, transaction);
+				Balance balance = await _balanceManager.Get(config.AssetTwo, forecast.ExchangeCode, connection, transaction);
 
 				Order order = new Order();
 				order.ExchangeCode = forecast.ExchangeCode;
@@ -61,125 +69,56 @@ namespace core.Infrastructure.BL
 				order.TradingModeCode = TradingModeCode.AUTO;
 				order.FillPoliticsCode = FillPoliticsCode.GTC;
 				order.OrderStatusCode = OrderStatusCode.PENDING;
-				order.DealId = deal.Id;
-				order.OrderTypeCode = OrderTypeCode.MKT;
+				order.OrderTypeCode = OrderTypeCode.LMT;
 				order.OrderSideCode = OrderSideCode.BUY;
 
-				// TODO: Add Asset fields to config
-				Balance balance = await _balanceManager.Get(deal.Symbol[4..6], exchangeCode.Code, connection, transaction);
+				decimal availableAmount = balance.Available <= config.MaxOrderAmount.Value ? balance.Available : balance.Available;
 
-				Trade trade = await _tradesManager.GetLast(exchangeCode.Code, deal.Symbol, connection, transaction);
-
-				decimal amountToBuy = Math.Round(config.isMaxAmountPercent
-									? (balance.Available * config.MaxOrderAmount.Value / 100) / trade.Price
-									: (balance.Available > config.MaxOrderAmount.Value ? config.MaxOrderAmount.Value : balance.Available) / trade.Price, 3);
-
-				if (amountToBuy * trade.Price < 15)
+				if (availableAmount < config.MinOrderAmount.Value)
 				{
-					throw new Exception($"Not enough funds ({exchangeCode.Description} - {forecast.Symbol})");
+					throw new Exception($"Not enough funds. Exchange code: {forecast.ExchangeCode}, Asset: {config.AssetTwo}");
 				}
 
-				order.Amount = amountToBuy;
+				decimal quantity = Math.Round(availableAmount / book.BestAskPrice, 3);
 
-				long? orderId = await _orderManager.Create(order, connection, transaction);
+				order.Price = book.BestAskPrice;
+				order.Amount = quantity;
 
-				ExchangeOrder processedOrder = null;
-				try
-				{
-					processedOrder = await _orderProcessor.List(orderId.Value);
-				}
-				catch (Exception ex)
-				{
-					_logger.LogError($"{exchangeCode.Description} - Order listing is failed with message: {ex.Message}", ex);
-					throw;
-				}
-
-				_logger.LogInformation($"Order {orderId} has been listed");
-
-				deal.AvgOpenPrice = processedOrder.Price;
-				deal.Amount = processedOrder.ExecutedQuantity;
-				deal.StatusCode = GetDealCode(processedOrder.Status).Code;
-				deal.EstimatedFee = processedOrder.ExecutedQuantity * processedOrder.Price * (decimal)(config.ExchangeFeeBuy ?? 0);
-				deal.StopLoss = config.DefaultStopLossPercent.HasValue ? processedOrder.Price - processedOrder.Price * (decimal)config.DefaultStopLossPercent.Value / 100 : 0;
-				deal.TakeProfit = config.DefaultTakeProfitPercent.HasValue ? processedOrder.Price + processedOrder.Price * (decimal)config.DefaultTakeProfitPercent.Value / 100 : 0;
-
-				await _dealManager.Update(deal, connection, transaction);
-				_logger.LogInformation($"Deal {deal.Id} has been updated");
-
-				await _orderManager.Update(processedOrder, connection, transaction);
-				_logger.LogInformation($"Order {orderId} has been updated");
-
-				return Task.CompletedTask;
+				Deal deal = await _dealProcessor.CreateForOrder(order);
+				return deal;
 			});
 		}
 
-		public async Task Sell (TradingForecast forecast, PairConfig config)
+		public Task<Deal> Sell (TradingForecast forecast, PairConfig config)
 		{
-			IExchangeCode exchangeCode = ExchangeCode.Create(forecast.ExchangeCode);
-
-			await WithConnection(async (connection, transaction) =>
+			return WithConnection(async (connection, transaction) =>
 			{
-				IEnumerable<Deal> deals = await _dealManager.GetOpenDeals(forecast.ExchangeCode, forecast.Symbol, connection, transaction);
+				Book book = await _bookManager.GetLast(forecast.ExchangeCode, forecast.Symbol, connection, transaction);
+				Balance balance = await _balanceManager.Get(config.AssetOne, forecast.ExchangeCode, connection, transaction);
 
-				Trade lastTrade = await _tradesManager.GetLast(forecast.ExchangeCode, forecast.Symbol, connection, transaction);
+				Order order = new Order();
+				order.ExchangeCode = forecast.ExchangeCode;
+				order.Symbol = forecast.Symbol;
+				order.TradingModeCode = TradingModeCode.AUTO;
+				order.FillPoliticsCode = FillPoliticsCode.GTC;
+				order.OrderStatusCode = OrderStatusCode.PENDING;
+				order.OrderTypeCode = OrderTypeCode.LMT;
+				order.OrderSideCode = OrderSideCode.SELL;
 
-				// TODO: Revise sell logic
-				foreach (Deal deal in deals.ToList())
+				decimal availableQuantity = (balance.Available <= config.MaxOrderAmount.Value / book.BestBidPrice ? balance.Available : balance.Available / book.BestBidPrice);
+
+				if (availableQuantity < config.MinOrderAmount.Value / book.BestBidPrice)
 				{
-					// TODO: Add minimal profit and replace condition
-					if(deal.TakeProfit.HasValue && deal.TakeProfit.Value < lastTrade.Price || deal.AvgOpenPrice + deal.EstimatedFee <= lastTrade.Price)
-					{
-						continue;
-					}
-
-					IEnumerable<Order> orders = await _dealManager.GetAssociatedOrders(deal.Id, connection, transaction);
-					if (orders.Count() == 1)
-					{
-						decimal? amount = orders.First().Amount;
-
-						Order order = new Order();
-						order.ExchangeCode = forecast.ExchangeCode;
-						order.Symbol = forecast.Symbol;
-						order.TradingModeCode = TradingModeCode.AUTO;
-						order.FillPoliticsCode = FillPoliticsCode.GTC;
-						order.OrderStatusCode = OrderStatusCode.PENDING;
-						order.DealId = deal.Id;
-						order.OrderTypeCode = OrderTypeCode.MKT;
-						order.OrderSideCode = OrderSideCode.SELL;
-						order.Amount = amount;
-
-						long? orderId = await _orderManager.Create(order, connection, transaction);
-
-						ExchangeOrder processedOrder = null;
-						try
-						{
-							processedOrder = await _orderProcessor.List(orderId.Value);
-						}
-						catch (Exception ex)
-						{
-							_logger.LogError($"{exchangeCode.Description} - Order listing is failed with message: {ex.Message}", ex);
-							throw;
-						}
-
-						deal.AvgClosePrice = processedOrder.Price;
-						deal.Amount = processedOrder.ExecutedQuantity;
-						deal.StatusCode = GetDealCode(processedOrder.Status).Code;
-						// TODO: Check with USDT
-						deal.EstimatedFee += processedOrder.ExecutedQuantity * processedOrder.Price * (decimal)(config.ExchangeFeeSell ?? 0);
-
-						await _dealManager.Update(deal, connection, transaction);
-						_logger.LogInformation($"Deal {deal.Id} has been updated");
-
-						await _orderManager.Update(processedOrder, connection, transaction);
-						_logger.LogInformation($"Order {orderId} has been updated");
-					}
-					else
-					{
-						_logger.LogError($"Please check orders for deal {deal.Id}");
-					}
+					throw new Exception($"Not enough funds. Exchange code: {forecast.ExchangeCode}, Asset: {config.AssetTwo}");
 				}
 
-				return Task.CompletedTask;
+				decimal quantity = Math.Round(availableQuantity, 3);
+
+				order.Price = book.BestBidPrice;
+				order.Amount = quantity;
+
+				Deal deal = await _dealProcessor.CreateForOrder(order);
+				return deal;
 			});
 		}
 
@@ -192,8 +131,28 @@ namespace core.Infrastructure.BL
 				IEnumerable<Deal> deals = await _dealManager.GetOpenDeals(trade.ExchangeCode, trade.Symbol, connection, transaction);
 				foreach(Deal deal in deals)
 				{
-					if(deal.StopLoss.HasValue && trade.Price < deal.StopLoss.Value)
+					deal.Orders = await _orderManager.GetOrdersByDealId(deal.Id, connection, transaction) as List<Order>;
+					if (deal.StopLoss.HasValue && trade.Price < deal.StopLoss.Value)
 					{
+						foreach(Order dealOrder in deal.Orders)
+						{
+							if(dealOrder.OrderStatusCode == OrderStatusCode.PENDING.Code || dealOrder.OrderStatusCode == OrderStatusCode.EXPIRED.Code || dealOrder.OrderStatusCode == OrderStatusCode.HOLD.Code)
+							{
+								await _orderManager.Delete(dealOrder.Id, connection, transaction);
+							}
+							else if(dealOrder.OrderStatusCode == OrderStatusCode.LISTED.Code)
+							{
+								dealOrder.OrderStatusCode = OrderStatusCode.CANCELED.Code;
+								dealOrder.Updated = DateTime.UtcNow;
+								dealOrder.UpdateRequired = true;
+
+								await _orderManager.Update(dealOrder, connection, transaction);
+
+								NatsClient client = _connector.Client;
+								await client.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<Order>() { Code = ActionCode.UPDATED.Code, Payload = dealOrder });
+							}
+						}
+
 						Order order = new Order();
 						order.ExchangeCode = trade.ExchangeCode;
 						order.Symbol = trade.Symbol;
@@ -205,28 +164,7 @@ namespace core.Infrastructure.BL
 						order.OrderSideCode = OrderSideCode.SELL;
 						order.Amount = deal.Amount;
 
-						long? orderId = await _orderManager.Create(order, connection, transaction);
-						
-						ExchangeOrder processedOrder = null;
-						try
-						{
-							processedOrder = await _orderProcessor.List(orderId.Value);
-						}
-						catch (Exception ex)
-						{
-							_logger.LogError($"{exchangeCode.Description} - Order listing is failed with message: {ex.Message}", ex);
-							throw;
-						}
-
-						deal.AvgClosePrice = processedOrder.Price;
-						deal.Amount = processedOrder.ExecutedQuantity;
-						deal.StatusCode = GetDealCode(processedOrder.Status).Code;
-
-						await _dealManager.Update(deal, connection, transaction);
-						_logger.LogInformation($"Deal {deal.Id} has been updated");
-
-						await _orderManager.Update(processedOrder, connection, transaction);
-						_logger.LogInformation($"Order {orderId} has been updated");
+						order.Id = await _orderManager.Create(order, connection, transaction);
 					}
 				}
 
@@ -234,70 +172,9 @@ namespace core.Infrastructure.BL
 			});
 		}
 
-		public async Task TakeProfit (Trade trade, PairConfig config)
+		public Task TakeProfit (Trade trade, PairConfig config)
 		{
-			await WithConnection(async (connection, transaction) =>
-			{
-				IExchangeCode exchangeCode = ExchangeCode.Create(trade.ExchangeCode);
-
-				IEnumerable<Deal> deals = await _dealManager.GetOpenDeals(trade.ExchangeCode, trade.Symbol, connection, transaction);
-				foreach (Deal deal in deals)
-				{
-					if (deal.TakeProfit.HasValue && trade.Price > deal.TakeProfit.Value)
-					{
-						Order order = new Order();
-						order.ExchangeCode = trade.ExchangeCode;
-						order.Symbol = trade.Symbol;
-						order.TradingModeCode = TradingModeCode.AUTO;
-						order.FillPoliticsCode = FillPoliticsCode.GTC;
-						order.OrderStatusCode = OrderStatusCode.PENDING;
-						order.DealId = deal.Id;
-						order.OrderTypeCode = OrderTypeCode.MKT;
-						order.OrderSideCode = OrderSideCode.SELL;
-						order.Amount = deal.Amount;
-
-						long? orderId = await _orderManager.Create(order, connection, transaction);
-
-						ExchangeOrder processedOrder = null;
-						try
-						{
-							processedOrder = await _orderProcessor.List(orderId.Value);
-						}
-						catch (Exception ex)
-						{
-							_logger.LogError($"{exchangeCode.Description} - Order listing is failed with message: {ex.Message}", ex);
-							throw;
-						}
-
-						deal.AvgClosePrice = processedOrder.Price;
-						deal.Amount = processedOrder.ExecutedQuantity;
-						deal.StatusCode = GetDealCode(processedOrder.Status).Code;
-
-						await _dealManager.Update(deal, connection, transaction);
-						_logger.LogInformation($"Deal {deal.Id} has been updated");
-
-						await _orderManager.Update(processedOrder, connection, transaction);
-						_logger.LogInformation($"Order {orderId} has been updated");
-					}
-				}
-
-				return Task.CompletedTask;
-			});
-		}
-
-		private IDealStatusCode GetDealCode (IOrderStatusCode code)
-		{
-			if (code == (IOrderStatusCode)OrderStatusCode.PENDING || code == (IOrderStatusCode)OrderStatusCode.HOLD || code == (IOrderStatusCode)OrderStatusCode.LISTED)
-			{
-				return DealStatusCode.OPEN;
-			}
-
-			if (code == (IOrderStatusCode)OrderStatusCode.CANCELED || code == (IOrderStatusCode)OrderStatusCode.CLOSED || code == (IOrderStatusCode)OrderStatusCode.FILLED || code == (IOrderStatusCode)OrderStatusCode.PARTIALLY_FILLED)
-			{
-				return DealStatusCode.CLOSE;
-			}
-
-			return DealStatusCode.ERROR;
+			throw new NotImplementedException();
 		}
 	}
 }

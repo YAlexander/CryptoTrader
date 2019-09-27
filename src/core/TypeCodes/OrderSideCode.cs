@@ -2,7 +2,7 @@
 
 namespace core.TypeCodes
 {
-	public class OrderSideCode : TypeCodeBase<int, OrderTypeCode>, IOrderSideCode
+	public class OrderSideCode : TypeCodeBase<int, OrderSideCode>, IOrderSideCode
 	{
 		public OrderSideCode (int code, string description) : base(code, description)
 		{

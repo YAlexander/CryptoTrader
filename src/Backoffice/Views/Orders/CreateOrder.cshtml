@@ -1,0 +1,93 @@
+﻿@model Backoffice.Models.OrderModel
+@using core.TypeCodes;
+
+@{
+	ViewData["Title"] = "CreateOrder";
+	Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>CreateOrder</h1>
+<hr />
+<div class="row">
+	<div class="col-md-12">
+		<form asp-action="CreateOrder">
+			<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+			<div class="row">
+				<div class="col-md-4">
+					<div class="form-group">
+						<label asp-for="Exchange" class="control-label"></label>
+						<select asp-for="Exchange" class="form-control" asp-items="@Model.AllExchanges"></select>
+					</div>
+					<div class="form-group">
+						<label asp-for="Symbol" class="control-label"></label>
+						<input asp-for="Symbol" class="form-control" />
+						<span asp-validation-for="Symbol" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="OrderSide" class="control-label"></label>
+						<select asp-for="OrderSide" class="form-control" asp-items="@Model.AllOrderSides"></select>
+					</div>
+					<div class="form-group">
+						<label asp-for="OrderType" class="control-label"></label>
+						<select asp-for="OrderType" class="form-control" asp-items="@Model.AllOrderTypes"></select>
+					</div>
+					<div class="form-group">
+						<label asp-for="FillPolitics" class="control-label"></label>
+						<select asp-for="FillPolitics" class="form-control" asp-items="@Model.AllFillPolitics"></select>
+					</div>
+				</div>
+				<div class="col-md-4">
+					@if (Model.OrderType != OrderTypeCode.MKT.Code)
+					{
+						<div class="form-group">
+							<label asp-for="Price" class="control-label"></label>
+							<input asp-for="Price" class="form-control" />
+							<span asp-validation-for="Price" class="text-danger"></span>
+						</div>
+					}
+
+					<div class="form-group">
+						<label asp-for="Amount" class="control-label"></label>
+						<input asp-for="Amount" class="form-control" />
+						<span asp-validation-for="Amount" class="text-danger"></span>
+					</div>
+
+					<div class="form-group">
+						<label asp-for="StopPrice" class="control-label"></label>
+						<input asp-for="StopPrice" class="form-control" />
+					</div>
+					<div class="form-group">
+						<label asp-for="Limit" class="control-label"></label>
+						<input asp-for="Limit" class="form-control" />
+					</div>
+				</div>
+				<div class="col-md-4">
+					<div class="form-group">
+						<label asp-for="StopLoss" class="control-label"></label>
+						<input asp-for="StopLoss" class="form-control" />
+						<span asp-validation-for="StopLoss" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="TakeProfit" class="control-label"></label>
+						<input asp-for="TakeProfit" class="form-control" />
+						<span asp-validation-for="TakeProfit" class="text-danger"></span>
+					</div>
+					<div class="form-group">
+						<label asp-for="ExpirationDate" class="control-label"></label>
+						<input asp-for="ExpirationDate" class="form-control" />
+					</div>
+				</div>
+			</div>
+
+			<div class="form-group">
+				<input type="submit" value="Save" class="btn btn-primary" />
+			</div>
+		</form>
+	</div>
+</div>
+
+<div>
+	<a asp-action="Index">Back to List</a>
+</div>
+

@@ -4,6 +4,7 @@ using System.Data;
 using System.Threading.Tasks;
 using Dapper;
 using core.Infrastructure.Models;
+using System.Collections.Generic;
 
 namespace core.Infrastructure.Database.Managers
 {
@@ -18,56 +19,60 @@ namespace core.Infrastructure.Database.Managers
 						id,
 						created,
 						updated,
+						isEnabled,
 						isDeleted,
-						tradingModeCode,
 						exchangeCode,
 						orderSideCode,
 						orderTypeCode,
 						orderStatusCode,
 						fillPoliticsCode,
+						tradingModeCode,
 						dealId,
 						exchangeOrderId,
 						exchangeOrderStatusCode,
 						symbol,
 						price,
 						amount,
-						limit,
-						stopLimit,
+						limitPrice,
+						stopLimitPrice,
 						stopLoss,
 						takeProfit,
 						expirationDate,
-						LastErrorDate,
+						lastErrorDate,
 						lastError,
-						updateRequired,
-						cancelRequired
+						statusDescription,
+						isUpdateRequired,
+						isCancelRequired
 					)
-					vales
+					values
 					(
 						default,
 						@created,
-						@updated,
-						false
-						@tradingModeCode,
+						null,
+						true,
+						false,
 						@exchangeCode,
 						@orderSideCode,
 						@orderTypeCode,
 						@orderStatusCode,
 						@fillPoliticsCode,
+						@tradingModeCode,
 						@dealId,
 						@exchangeOrderId,
 						@exchangeOrderStatusCode,
 						@symbol,
 						@price,
 						@amount,
-						@limit,
-						@stopLimit,
+						@limitPrice,
+						@stopLimitPrice,
 						@stopLoss,
 						@takeProfit,
 						@expirationDate,
-						@LastErrorDate,
+						@lastErrorDate,
 						@lastError,
-						@updateRequired,
-						@cancelRequired
+						@statusDescription,
+						false,
+						false
 					)
 					returning
 						id;";
@@ -76,8 +81,6 @@ namespace core.Infrastructure.Database.Managers
 				new
 				{
 					created = entity.Created,
-					updated = entity.Updated,
-					tradingModeCode = entity.TradingModeCode,
 					exchangeCode = entity.ExchangeCode,
 					orderSideCode = entity.OrderSideCode,
 					orderTypeCode = entity.OrderTypeCode,
@@ -89,15 +92,15 @@ namespace core.Infrastructure.Database.Managers
 					symbol = entity.Symbol,
 					price = entity.Price,
 					amount = entity.Amount,
-					limit = entity.Limit,
-					stopLimit = entity.StopLimit,
+					limitPrice = entity.Limit,
+					stopLimitPrice = entity.StopLimit,
 					stopLoss = entity.StopLoss,
 					takeProfit = entity.TakeProfit,
 					expirationDate = entity.ExpirationDate,
 					LastErrorDate = entity.LastErrorDate,
 					lastError = entity.LastError,
-					updateRequired = entity.UpdateRequired,
-					cancelRequired = entity.CancelRequired
+					tradingModeCode = entity.TradingModeCode,
+					statusDescription = entity.StatusDescription
 				}, transaction);
 		}
 
@@ -114,6 +117,12 @@ namespace core.Infrastructure.Database.Managers
 			return connection.QueryFirstOrDefaultAsync<Order>(query, new { id = id }, transaction);
 		}
 
+		public Task<IEnumerable<Order>> GetOrdersByDealId (long id, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			const string query = @"select * from Orders where dealId = @dealId;";
+			return connection.QueryAsync<Order>(query, new { dealId = id }, transaction);
+		}
+
 		public Task<Order> Update (Order entity, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			string query = @"
@@ -127,7 +136,8 @@ namespace core.Infrastructure.Database.Managers
 						lastErrorDate = @lastErrorDate,
 						lastError = @lastError,
 						updateRequired = @updateRequired,
-						cancelRequired = @cancelRequired
+						cancelRequired = @cancelRequired,
+						statusDescription = @statusDescription
 					where
 						id = @id
 					returning *;
@@ -142,8 +152,10 @@ namespace core.Infrastructure.Database.Managers
 					exchangeOrderStatusCode = entity.ExchangeOrderStatusCode,
 					lastErrorDate = entity.LastErrorDate,
 					lastError = entity.LastError,
+
 					updateRequired = entity.UpdateRequired,
 					cancelRequired = entity.CancelRequired,
+					statusDescription = entity.StatusDescription,
 					id = entity.Id
 				}, transaction);
 		}

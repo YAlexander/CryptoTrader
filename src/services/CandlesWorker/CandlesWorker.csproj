@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Binance.Net" Version="4.3.1" />
+    <PackageReference Include="Binance.Net" Version="4.3.2" />
     <PackageReference Include="Dapper" Version="2.0.4" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.0.0" />

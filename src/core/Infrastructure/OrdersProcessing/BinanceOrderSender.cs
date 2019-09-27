@@ -34,7 +34,7 @@ namespace core.Infrastructure.OrdersProcessing
 			ExchangeOrder exchangeOrder = null;
 			PairConfig pairConfig = config.Pairs.FirstOrDefault(x => x.Symbol.Equals(order.Symbol));
 
-			if (order.UpdateRequired.HasValue && order.UpdateRequired.Value)
+			if (order.UpdateRequired)
 			{
 				using (BinanceClient client = new BinanceClient(new BinanceClientOptions() { ApiCredentials = new ApiCredentials(config.ApiKey, config.ApiSecret) }))
 				{

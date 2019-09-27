@@ -26,8 +26,16 @@
 								History
 							</a>
 							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
-								<a class="dropdown-item" href="#">Orders</a>
 								<a class="dropdown-item" href="#">Traides</a>
+							</div>
+						</li>
+						<li class="nav-item dropdown">
+							<a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								ORDERS
+							</a>
+							<div class="dropdown-menu" aria-labelledby="navbarDropdown">
+								<a class="dropdown-item" asp-controller="Orders" asp-action="Index">Orders</a>
+								<a class="dropdown-item" asp-controller="Orders" asp-action="CreateOrder">CREATE ORDER</a>
 							</div>
 						</li>
 						<li class="nav-item dropdown">

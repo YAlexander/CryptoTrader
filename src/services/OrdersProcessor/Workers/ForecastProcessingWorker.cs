@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using MyNatsClient;
+using MyNatsClient.Encodings.Json;
 using MyNatsClient.Events;
 using MyNatsClient.Ops;
 using Newtonsoft.Json;
@@ -58,7 +59,7 @@ namespace OrdersProcessor.Workers
 						{
 							try
 							{
-								Task.Run(async () => await Process(msg));
+								Task.Run(async () => await Process(msg, natsClient));
 							}
 							catch (Exception ex)
 							{
@@ -90,7 +91,7 @@ namespace OrdersProcessor.Workers
 			}
 		}
 
-		private async Task Process (MsgOp msg)
+		private async Task Process (MsgOp msg, NatsClient natsClient)
 		{
 			ExchangeCode code = ExchangeCode.UNKNOWN;
 			string payload = msg.GetPayloadAsString();
@@ -104,19 +105,29 @@ namespace OrdersProcessor.Workers
 				ExchangeConfig config = await _exchangeConfigProcessor.GetExchangeConfig(exchange.Code);
 				PairConfig pairConfig = config.Pairs.FirstOrDefault(x => x.Symbol.Equals(forecast.Symbol));
 
-				if (forecast.ForecastCode == TradingAdviceCode.BUY.Code || forecast.ForecastCode == TradingAdviceCode.STRONG_BUY.Code)
+				Deal deal = null;
+				if (forecast.ForecastCode == TradingAdviceCode.BUY.Code)
 				{
-					await _autoTradingProcessor.Buy(forecast, pairConfig);
+					deal = await _autoTradingProcessor.Buy(forecast, pairConfig);
 					_logger.LogInformation($"Is BUY: {ExchangeCode.Create(forecast.ExchangeCode).Description} - {forecast.Symbol}");
 				}
-				else if (forecast.ForecastCode == TradingAdviceCode.SELL.Code || forecast.ForecastCode == TradingAdviceCode.STRONG_SELL.Code)
+				else if (forecast.ForecastCode == TradingAdviceCode.SELL.Code)
 				{
-					await _autoTradingProcessor.Sell(forecast, pairConfig);
+					deal = await _autoTradingProcessor.Sell(forecast, pairConfig);
 					_logger.LogInformation($"Is SELL: {ExchangeCode.Create(forecast.ExchangeCode).Description} - {forecast.Symbol}");
 				}
 				else
 				{
 					_logger.LogInformation($"Is HOLD: {ExchangeCode.Create(forecast.ExchangeCode).Description} - {forecast.Symbol}");
+				}
+
+				try
+				{
+					await natsClient.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<Deal>() { Code = ActionCode.CREATED.Code, Payload = deal });
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError("Can't send Nata notification", ex);
 				}
 			}
 		}

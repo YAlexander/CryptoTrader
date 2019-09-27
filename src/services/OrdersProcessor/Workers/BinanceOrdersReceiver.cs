@@ -1,12 +1,17 @@
 ﻿using Binance.Net;
+using core;
 using core.Abstractions.TypeCodes;
 using core.Infrastructure.BL;
 using core.Infrastructure.BL.OrderProcessors;
 using core.Infrastructure.Database.Entities;
+using core.Infrastructure.Notifications;
 using core.TypeCodes;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using MyNatsClient;
+using MyNatsClient.Encodings.Json;
 using OrdersProcessor.Extensions;
 using System;
 using System.Collections.Generic;
@@ -17,16 +22,18 @@ using System.Threading.Tasks;
 namespace OrdersProcessor.Workers
 {
 	// Monitoring orders status on Exchanges
-	public class BinanceOrdersMonitor : Worker
+	public class BinanceOrdersReceiver : Worker
 	{
 		private ILogger<Worker> _logger;
+		private IOptions<AppSettings> _settings;
 		private ExchangeConfigProcessor _exchangeConfigProcessor;
 		private OrderProcessor _orderProcessor;
 		private BalanceProcessor _balanceProcessor;
 		private DealProcessor _dealProcessor;
 
-		public BinanceOrdersMonitor (
+		public BinanceOrdersReceiver (
 			ILogger<Worker> logger,
+			IOptions<AppSettings> settings,
 			ExchangeConfigProcessor exchangeConfigProcessor,
 			OrderProcessor orderProcessor,
 			BalanceProcessor balanceProcessor,
@@ -37,6 +44,7 @@ namespace OrdersProcessor.Workers
 			_orderProcessor = orderProcessor;
 			_balanceProcessor = balanceProcessor;
 			_dealProcessor = dealProcessor;
+			_settings = settings;
 		}
 
 		public override IExchangeCode Exchange { get; } = ExchangeCode.BINANCE;
@@ -57,45 +65,44 @@ namespace OrdersProcessor.Workers
 
 					using (BinanceSocketClient socketClient = new BinanceSocketClient())
 					{
-						CallResult<UpdateSubscription> successAccount = socketClient.SubscribeToUserStream(listenKey,
-						accountData => 
+						ConnectionInfo cnInfo = new ConnectionInfo(_settings.Value.BusConnectionString);
+						using (NatsClient natsClient = new NatsClient(cnInfo))
 						{
-							// Process Account info changes there if required
-						}, 
-						async orderData =>
-						{
-							Order order = orderData.ToOrder();
-
-							await _orderProcessor.Update(order);
-							if(order.OrderSideCode == OrderSideCode.SELL.Code)
+							if (!natsClient.IsConnected)
 							{
-								Deal deal = await _dealProcessor.Get(order.DealId.Value);
-								deal.AvgClosePrice = order.Price;
-								deal.EstimatedFee += order.Price * order.Amount * (decimal)config.ExchangeFeeSell;
-								deal.StatusCode = DealStatusCode.CLOSE.Code;
-
-								await _dealProcessor.Update(deal);
+								natsClient.Connect();
 							}
-						},
-						ocoOrderData =>
-						{
-							// TODO: Remove order checking from OrderProcessor
-							// Update Deal, update Order
-						},
-						async balancesData =>
-						{
-							IEnumerable<Balance> balances = balancesData.Select(x => x.ToBalance());
-							foreach(Balance balance in balances)
+
+							CallResult<UpdateSubscription> successAccount = socketClient.SubscribeToUserStream(listenKey,
+							accountData =>
 							{
-								await _balanceProcessor.UpdateOrCreate(balance);
-							}
-						});
+							},
+							async orderData =>
+							{
+								Order order = orderData.ToOrder();
+								Deal deal = await _dealProcessor.UpdateForOrder(order, config);
 
-						while (!stoppingToken.IsCancellationRequested)
-						{ 
+								await natsClient.PubAsJsonAsync(_settings.Value.OrdersQueueName, new Notification<Deal>() { Code = ActionCode.UPDATED.Code, Payload = deal });
+							},
+							ocoOrderData =>
+							{
+							},
+							async balancesData =>
+							{
+								IEnumerable<Balance> balances = balancesData.Select(x => x.ToBalance());
+								foreach (Balance balance in balances)
+								{
+									await _balanceProcessor.UpdateOrCreate(balance);
+								}
+							});
+
+							while (!stoppingToken.IsCancellationRequested)
+							{
+							}
+
+							natsClient.Disconnect();
+							await socketClient.UnsubscribeAll();
 						}
-
-						await socketClient.UnsubscribeAll();
 					}
 				}
 				catch (Exception ex)

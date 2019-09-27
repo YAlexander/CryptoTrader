@@ -1,4 +1,6 @@
-﻿namespace core.Infrastructure.Database.Entities
+﻿using System.Collections.Generic;
+
+namespace core.Infrastructure.Database.Entities
 {
 	public class Deal : BaseEntity
 	{
@@ -13,5 +15,7 @@
 		// Set after BuyOrder is filled
 		public decimal? StopLoss { get; set; }
 		public decimal? TakeProfit { get; set; }
+
+		public List<Order> Orders { get; set; } = new List<Order>();
 	}
 }

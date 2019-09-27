@@ -1,9 +1,10 @@
 ﻿using Binance.Net.Objects;
 using core.Extensions.Mappers;
+using core.Infrastructure.Database.Entities;
 
 namespace core.Infrastructure.Models.Mappers
 {
-	public static class ExchangeOrderHelper
+	public static class OrderHelper
 	{
 		public static ExchangeOrder ToOrder (this BinancePlacedOrder externalOrder)
 		{
@@ -45,6 +46,22 @@ namespace core.Infrastructure.Models.Mappers
 			order.OrderTypeCode = externalOrder.Type.ToCode();
 			order.FillPoliticsCode = externalOrder.TimeInForce.ToCode();
 			order.ExecutedQuantity = externalOrder.ExecutedQuantity;
+			order.Price = externalOrder.Price;
+
+			return order;
+		}
+
+		public static Order ToOrder(this ExchangeOrder externalOrder)
+		{
+			Order order = new Order();
+			order.Symbol = externalOrder.Symbol;
+			order.OrderStatusCode = externalOrder.Status.Code;
+			order.Amount = externalOrder.ExecutedQuantity;
+			order.Id = externalOrder.OrderId;
+			order.ExchangeOrderId = long.Parse(externalOrder.ExchangeOrderId);
+			order.OrderSideCode = externalOrder.OrderSideCode.Code;
+			order.OrderTypeCode = externalOrder.OrderTypeCode.Code;
+			order.FillPoliticsCode = externalOrder.FillPoliticsCode.Code;
 			order.Price = externalOrder.Price;
 
 			return order;

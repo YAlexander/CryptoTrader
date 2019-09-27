@@ -43,11 +43,14 @@ namespace TradesWorker
 					services.AddTransient<IPairConfigManager, PairConfigManager>();
 					services.AddTransient<IExchangeConfigManager, ExchangeConfigManager>();
 					services.AddTransient<ITradesManager, TradesManager>();
+					services.AddTransient<IBookManager, BookManager>();
 
 					services.AddSingleton<ExchangeConfigProcessor>();
 					services.AddSingleton<TradesProcessor>();
+					services.AddSingleton<BookProcessor>();
 
-					services.AddHostedService<BinanceWorker>();
+					//services.AddHostedService<BinanceWorker>();
+					services.AddHostedService<BinanceBookWorker>();
 				})
 				.UseNLog();
 	}

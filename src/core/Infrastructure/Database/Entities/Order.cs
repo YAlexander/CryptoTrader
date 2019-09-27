@@ -21,7 +21,7 @@ namespace core.Infrastructure.Database.Entities
 
 		public decimal? Price { get; set; }
 		public decimal? Amount { get; set; }
-		
+
 		public decimal? Limit { get; set; }
 
 		// Place limit order when Stop price is reached
@@ -38,8 +38,12 @@ namespace core.Infrastructure.Database.Entities
 		public string LastError { get; set; }
 
 		// Update order status on Exchange
-		public bool? UpdateRequired { get; set; }
-		public bool? CancelRequired { get; set; }
+		public bool UpdateRequired { get; set; }
+		public bool CancelRequired { get; set; }
+		public string StatusDescription { get; set; }
+
+		public decimal? Fee { get; set; }
+		public string Asset { get; set; }
 
 		public List<Fill> Fills { get; } = new List<Fill>();
  	}
