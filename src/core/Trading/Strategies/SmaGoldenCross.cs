@@ -18,7 +18,7 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 200;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
@@ -31,7 +31,7 @@ namespace core.Trading.Strategies
 				preset = JSONParser.FromJson<SmaGoldenCrossPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			List<decimal?> sma50 = candles.Sma(preset?.SmaFast ?? 50);
 			List<decimal?> sma200 = candles.Sma(preset?.SmaSlow ?? 200);
@@ -43,25 +43,25 @@ namespace core.Trading.Strategies
 				// Since we look back 1 candle, the first candle can never be a signal.
 				if (i == 0)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				// When the slow SMA moves above the fast SMA, we have a negative cross-over
 				else if (crossUnder[i])
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				// When the fast SMA moves above the slow SMA, we have a positive cross-over
 				else if (crossOver[i])
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

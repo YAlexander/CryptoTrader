@@ -17,25 +17,25 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 36;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			StochItem stoch = candles.Stoch(14);
-			List<decimal?> ema5 = candles.Ema(5);
-			List<decimal?> ema10 = candles.Ema(10);
+			List<decimal?> emaShort = candles.Ema(5);
+			List<decimal?> emaLong = candles.Ema(10);
 			List<decimal?> rsi = candles.Rsi(14);
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
 				if (i < 1)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else
 				{
@@ -66,22 +66,22 @@ namespace core.Trading.Strategies
 						pointedDown = true;
 					}
 
-					if (ema5[i] >= ema10[i] && ema5[i - 1] < ema10[i] && rsi[i] > 50 && pointedUp)
+					if (emaShort[i] >= emaLong[i] && emaShort[i - 1] < emaLong[i] && rsi[i] > 50 && pointedUp)
 					{
-						result.Add(TradingAdviceCode.BUY);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 					}
-					else if (ema5[i] <= ema10[i] && ema5[i - 1] > ema10[i] && rsi[i] < 50 && pointedDown)
+					else if (emaShort[i] <= emaLong[i] && emaShort[i - 1] > emaLong[i] && rsi[i] < 50 && pointedDown)
 					{
-						result.Add(TradingAdviceCode.SELL);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 					}
 					else
 					{
-						result.Add(TradingAdviceCode.HOLD);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 					}
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

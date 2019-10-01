@@ -18,7 +18,7 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 15;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
@@ -31,7 +31,7 @@ namespace core.Trading.Strategies
 				preset = JSONParser.FromJson<EmaAdxFPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			List<decimal> closes = candles.Select(x => x.Close).ToList();
 			List<decimal?> ema = candles.Ema(preset?.Ema ?? 9);
@@ -43,23 +43,23 @@ namespace core.Trading.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else if (ema[i] < closes[i] && plusDi[i] > 20 && plusDi[i] > minusDi[i])
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 				else if (ema[i] > closes[i] && minusDi[i] > 20 && plusDi[i] < minusDi[i])
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

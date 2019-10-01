@@ -16,14 +16,14 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 365;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			List<decimal?> sma6 = candles.Sma(6);
 			List<decimal?> sma25 = candles.Sma(25);
@@ -34,26 +34,26 @@ namespace core.Trading.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else
 				{
 					if (sma6[i] > sma150[i] && sma6[i] > sma365[i] && sma25[i] > sma150[i] && sma25[i] > sma365[i] && (sma6[i - 1] < sma150[i] || sma6[i - 1] < sma365[i] || sma25[i - 1] < sma150[i] || sma25[i - 1] < sma365[i]))
 					{
-						result.Add(TradingAdviceCode.BUY);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 					}
 					if (sma6[i] < sma150[i] && sma6[i] < sma365[i] && sma25[i] < sma150[i] && sma25[i] < sma365[i] && (sma6[i - 1] > sma150[i] || sma6[i - 1] > sma365[i] || sma25[i - 1] > sma150[i] || sma25[i - 1] > sma365[i]))
 					{
-						result.Add(TradingAdviceCode.SELL);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 					}
 					else
 					{
-						result.Add(TradingAdviceCode.HOLD);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 					}
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

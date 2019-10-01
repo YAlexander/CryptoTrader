@@ -17,14 +17,14 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 10;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			List<decimal?> high = candles.PivotHigh(4, 2, false);
 			List<decimal?> low = candles.PivotLow(4, 2, false);
@@ -35,20 +35,20 @@ namespace core.Trading.Strategies
 				// Buy when a lower pivot was found.
 				if (low[i].HasValue)
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 				// Either a upper pivot or a new potential low pivot should make us sell.
 				else if (high[i].HasValue || i > 3 && lows[i] <= lows[i - 1] && lows[i] <= lows[i - 2] && lows[i] <= lows[i - 3] && lows[i] <= lows[i - 4])
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

@@ -17,14 +17,14 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 40;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			List<decimal?> rsi = candles.Rsi(14);
 			List<decimal?> adx = candles.Adx(14);
@@ -36,19 +36,19 @@ namespace core.Trading.Strategies
 			{
 				if (rsi[i] < 25 && fast.D[i] < 30 && adx[i] > 30 && plusDi[i] > 5)
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 				else if (adx[i] > 0 && minusDi[i] > 0 && fast.D[i] > 65)
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

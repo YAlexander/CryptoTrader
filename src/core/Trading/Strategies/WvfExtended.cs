@@ -19,9 +19,9 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 40;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candleItems)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
-			if (candleItems.Count() < MinNumberOfCandles)
+			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
@@ -33,8 +33,8 @@ namespace core.Trading.Strategies
 				preset = JsonConvert.DeserializeObject<WvfExtendedPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
-			List<ICandle> candles = candleItems.ToList();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
+			//List<ICandle> candles = candleItems.ToList();
 
 			List<decimal> close = candles.Select(x => x.Close).ToList();
 			List<decimal> high = candles.Select(x => x.High).ToList();
@@ -66,7 +66,7 @@ namespace core.Trading.Strategies
 				int indexToStartFrom = i < pd - 1 ? 0 : i - pd;
 
 				decimal highestClose = candles.Skip(indexToStartFrom).Take(itemsToPick).Select(x => x.Close).Max();
-				var wvf = (highestClose - candles[i].Low) / highestClose * 100;
+				decimal wvf = (highestClose - candles.ElementAt(i).Low) / highestClose * 100;
 
 				// Calculate the WVF
 				wvfs.Add(wvf);
@@ -115,7 +115,7 @@ namespace core.Trading.Strategies
 			{
 				if (i < ltLb)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else
 				{
@@ -132,20 +132,20 @@ namespace core.Trading.Strategies
 
 					if ((filteredAlert || aggressiveAlert) && rsi[i] > ema[i] && rsi[i - 1] < ema[i - 1])
 					{
-						result.Add(TradingAdviceCode.BUY);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 					}
 					else if (stochRsi.K[i] > 80 && stochRsi.K[i] > stochRsi.D[i] && stochRsi.K[i - 1] < stochRsi.D[i - 1])
 					{
-						result.Add(TradingAdviceCode.SELL);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 					}
 					else
 					{
-						result.Add(TradingAdviceCode.HOLD);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 					}
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 
 		private decimal GetStandardDeviation (List<decimal> decimalList)

@@ -19,7 +19,7 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 35;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
@@ -32,7 +32,7 @@ namespace core.Trading.Strategies
 				preset = JSONParser.FromJson<RsiMacdMfiPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			MacdItem macd = candles.Macd(preset?.MacdFast ?? 5, preset?.MacdSlow ?? 10, preset?.MacdSignal ?? 4);
 			List<decimal?> rsi = candles.Rsi(preset?.Rsi ?? 16);
@@ -45,19 +45,19 @@ namespace core.Trading.Strategies
 			{
 				if (mfi[i] < 30 && rsi[i] < 45 && ao[i] > 0)
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 				else if (mfi[i] > 30 && rsi[i] > 45 && ao[i] < 0)
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

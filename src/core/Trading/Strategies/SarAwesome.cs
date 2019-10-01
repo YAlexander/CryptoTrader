@@ -17,14 +17,14 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 35;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			List<decimal?> sar = candles.Sar();
 			List<decimal?> ema5 = candles.Ema(5);
@@ -46,24 +46,24 @@ namespace core.Trading.Strategies
 
 					if (currentSar > lastHigh && priorSar > lastHigh && earlierSar > lastHigh && ao[i] > 0 && ema5[i] < close[i])
 					{
-						result.Add(TradingAdviceCode.BUY);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 					}
 					else if (currentSar < lastLow && priorSar < lastLow && earlierSar < lastLow && ao[i] < 0 && ema5[i] > close[i])
 					{
-						result.Add(TradingAdviceCode.SELL);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 					}
 					else
 					{
-						result.Add(TradingAdviceCode.HOLD);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 					}
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

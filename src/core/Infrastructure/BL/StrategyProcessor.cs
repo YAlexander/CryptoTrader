@@ -40,5 +40,13 @@ namespace core.Infrastructure.BL
 				return _strategyManager.Enable(id, connection, transaction);
 			});
 		}
+
+		public Task<Strategy> Get (long id)
+		{
+			return WithConnection((connection, transaction) =>
+			{
+				return _strategyManager.Get(id, connection, transaction);
+			});
+		}
 	}
 }

@@ -17,40 +17,40 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 10;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 			StochItem stoch = candles.Stoch(10);
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
 				if (i < 1)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else
 				{
 					if (stoch.K[i] > 20 && stoch.K[i - 1] < 20 || stoch.D[i] > 20 && stoch.D[i - 1] < 20)
 					{
-						result.Add(TradingAdviceCode.BUY);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 					}
 					else if (stoch.K[i] < 80 && stoch.K[i - 1] > 80 || stoch.D[i] < 80 && stoch.D[i - 1] > 80)
 					{
-						result.Add(TradingAdviceCode.SELL);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 					}
 					else
 					{
-						result.Add(TradingAdviceCode.HOLD);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 					}
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

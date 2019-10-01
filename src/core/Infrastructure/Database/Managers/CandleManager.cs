@@ -86,7 +86,7 @@ namespace core.Infrastructure.Database.Managers
 			return await connection.ExecuteScalarAsync<Candle>(query, new { id = id }, transaction);
 		}
 
-		public Task<IEnumerable<Candle>> GetLastCandles (IExchangeCode exchangeCode, string symbol, int interval, int numberOfCandles, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<IEnumerable<Candle>> GetLastCandles (int exchangeCode, string symbol, int interval, int numberOfCandles, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			string query = @"select
 								*
@@ -106,7 +106,7 @@ namespace core.Infrastructure.Database.Managers
 			return connection.QueryAsync<Candle>(query, 
 					new 
 					{ 
-						exchangeCode  = exchangeCode.Code,
+						exchangeCode  = exchangeCode,
 						symbol = symbol,
 						interval = interval,
 						numberOfCandles = @numberOfCandles }, transaction);

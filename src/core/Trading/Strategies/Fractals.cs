@@ -16,14 +16,14 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 40;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			// Settings for this strat.
 			int exitAfterBars = 3;
@@ -47,7 +47,7 @@ namespace core.Trading.Strategies
 					fractalPrice.Add(0);
 					fractalAverage.Add(0);
 					fractalTrend.Add(false);
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else
 				{
@@ -77,20 +77,20 @@ namespace core.Trading.Strategies
 
 					if (tradeExit)
 					{
-						result.Add(TradingAdviceCode.SELL);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 					}
 					else if (tradeEntry && ao[i] > 0)
 					{
-						result.Add(TradingAdviceCode.BUY);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 					}
 					else
 					{
-						result.Add(TradingAdviceCode.HOLD);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 					}
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

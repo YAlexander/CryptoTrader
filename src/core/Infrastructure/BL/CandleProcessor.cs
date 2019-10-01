@@ -3,6 +3,7 @@ using core.Infrastructure.Database.Entities;
 using core.Infrastructure.Database.Managers;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace core.Infrastructure.BL
@@ -24,6 +25,14 @@ namespace core.Infrastructure.BL
 			return WithConnection((connection, transaction) =>
 			{
 				return _candleManager.Create(candle, connection, transaction);
+			});
+		}
+
+		public Task<IEnumerable<Candle>> GetLast (int exchangeCode, string symbol, int interval, int number)
+		{
+			return WithConnection((connection, transaction) =>
+			{
+				return _candleManager.GetLastCandles(exchangeCode, symbol, interval, number, connection, transaction);
 			});
 		}
 	}
