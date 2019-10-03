@@ -40,27 +40,55 @@ namespace core.Infrastructure.OrdersProcessing
 				{
 					if (order.OrderStatusCode == OrderStatusCode.PENDING)
 					{
-						WebCallResult<BinancePlacedOrder> orderResult = null;
+						(bool success, string error, BinancePlacedOrder order) result; ;
 						if (order.OrderTypeCode == OrderTypeCode.MKT.Code)
 						{
 							if (pairConfig.IsTestMode)
 							{
-								orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
+								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 							}
 							else
 							{
-								orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
+								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 							}
 						}
 						else if (order.OrderTypeCode == OrderTypeCode.LMT.Code)
 						{
 							if (pairConfig.IsTestMode)
 							{
-								orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
+
 							}
 							else
 							{
-								orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
+							}
+						}
+						else if (order.OrderTypeCode == OrderTypeCode.LST.Code)
+						{
+							if (pairConfig.IsTestMode)
+							{
+								// OCO Order can't be used in test mode
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
+							}
+							else
+							{
+								if(order.OrderSideCode == OrderSideCode.BUY.Code)
+								{
+									// For now let's use limit standard order
+									WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, OrderSide.Buy, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+									result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
+								}
+								else
+								{
+									WebCallResult<BinanceOrderList> orderResult = await client.PlaceOCOOrderAsync(order.Symbol, OrderSide.Sell, order.Amount.Value, order.Price.Value, order.StopLoss.Value);
+									result = (orderResult.Success, orderResult.Error.Message, orderResult.Data.OrderReports[0]);
+								}
 							}
 						}
 						else
@@ -68,13 +96,13 @@ namespace core.Infrastructure.OrdersProcessing
 							throw new Exception($"{order.Id} selected order type isn't supported");
 						}
 
-						if (!orderResult.Success)
+						if (!result.success)
 						{
-							throw new Exception(orderResult.Error.Message);
+							throw new Exception(result.error);
 						}
 
-						exchangeOrder = orderResult.Data.ToOrder();
-						_logger.LogInformation($"{Exchange.Description} - Order {order.Id} has been processed with status: {orderResult.Data.Status}");
+						exchangeOrder = result.order.ToOrder();
+						_logger.LogInformation($"{Exchange.Description} - Order {order.Id} has been processed with status: {result.order.Status}");
 					}
 					else if (order.OrderStatusCode == OrderStatusCode.CANCELED)
 					{

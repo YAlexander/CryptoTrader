@@ -13,14 +13,14 @@
   <ItemGroup>
     <PackageReference Include="Binance.Net" Version="4.3.2" />
     <PackageReference Include="Cryptowatcher.TA-LIb-Core" Version="1.0.0" />
-    <PackageReference Include="Dapper" Version="2.0.4" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Evolve" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
     <PackageReference Include="MyNatsClient" Version="0.13.0" />
     <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.13.0" />
     <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
-    <PackageReference Include="Npgsql" Version="4.1.0-preview2" />
+    <PackageReference Include="Npgsql" Version="4.1.1" />
     <PackageReference Include="Telegram.Bot" Version="15.0.0" />
   </ItemGroup>
 

@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <PackageReference Include="Binance.Net" Version="4.3.2" />
-    <PackageReference Include="Dapper" Version="2.0.4" />
+    <PackageReference Include="Dapper" Version="2.0.30" />
     <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.0.0" />
     <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.0.0" />
@@ -16,8 +16,8 @@
     <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.13.0" />
     <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
     <PackageReference Include="NLog" Version="4.6.7" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.5" />
-    <PackageReference Include="Npgsql" Version="4.1.0-preview2" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.6" />
+    <PackageReference Include="Npgsql" Version="4.1.1" />
   </ItemGroup>
 
   <ItemGroup>

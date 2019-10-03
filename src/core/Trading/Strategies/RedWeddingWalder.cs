@@ -19,7 +19,7 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 100;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
@@ -32,7 +32,7 @@ namespace core.Trading.Strategies
 				preset = JSONParser.FromJson<RedWeddingPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			decimal fastEnd = 0.666m;
 			int smaPeriod = preset?.Sma ?? 6;
@@ -113,23 +113,23 @@ namespace core.Trading.Strategies
 			{
 				if (i <= 2)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else if (fish[i] >= fish[i - 1] && fish[i - 1] >= fish[i - 2] && fish[i - 2] >= fish[i - 3] && closes[i] < snow_low[i] && opens[i] < snow_low[i])
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 				else if (closes[i] > snow_high[i])
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

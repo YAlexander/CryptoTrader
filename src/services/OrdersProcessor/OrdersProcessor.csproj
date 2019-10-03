@@ -14,7 +14,7 @@
     <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.13.0" />
     <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
     <PackageReference Include="NLog" Version="4.6.7" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.5" />
+    <PackageReference Include="NLog.Web.AspNetCore" Version="4.8.6" />
   </ItemGroup>
 
   <ItemGroup>

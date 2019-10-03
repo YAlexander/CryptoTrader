@@ -18,7 +18,7 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 50;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
@@ -31,7 +31,7 @@ namespace core.Trading.Strategies
 				preset = JsonConvert.DeserializeObject<TripleMaPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
 			List<decimal?> sma1 = candles.Sma(preset?.Sma1 ?? 20);
 			List<decimal?> sma2 = candles.Sma(preset?.Sma2 ?? 50);
@@ -41,23 +41,23 @@ namespace core.Trading.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else if (ema[i] > sma2[i] && ema[i - 1] < sma2[i - 1])
 				{
-					result.Add(TradingAdviceCode.BUY); // A cross of the EMA and long SMA is a buy signal.
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY)); // A cross of the EMA and long SMA is a buy signal.
 				}
 				else if (ema[i] < sma2[i] && ema[i - 1] > sma2[i - 1] || ema[i] < sma1[i] && ema[i - 1] > sma1[i - 1])
 				{
-					result.Add(TradingAdviceCode.SELL); // As soon as our EMA crosses below an SMA its a sell signal.
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL)); // As soon as our EMA crosses below an SMA its a sell signal.
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

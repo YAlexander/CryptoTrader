@@ -16,37 +16,38 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 30;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
-			List<decimal?> sma11 = candles.Sma(11);
-			List<decimal?> sma21 = candles.Sma(21);
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
+
+			List<decimal?> smaFast = candles.Sma(11);
+			List<decimal?> smaSlow = candles.Sma(21);
 			List<decimal?> mom = candles.Mom(30);
 			List<decimal?> rsi = candles.Rsi();
 			List<decimal> closes = candles.Select(x => x.Close).ToList();
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
-				if (rsi[i] < 30 && mom[i] > 0 && sma11[i] > sma21[i] && closes[i] > sma21[i] && closes[i] > sma11[i])
+				if (rsi[i] < 30 && mom[i] > 0 && smaFast[i] > smaSlow[i] && closes[i] > smaSlow[i] && closes[i] > smaFast[i])
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
-				else if (rsi[i] > 70 && mom[i] < 0 && sma11[i] < sma21[i] && closes[i] < sma21[i] && closes[i] < sma11[i])
+				else if (rsi[i] > 70 && mom[i] < 0 && smaFast[i] < smaSlow[i] && closes[i] < smaSlow[i] && closes[i] < smaFast[i])
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

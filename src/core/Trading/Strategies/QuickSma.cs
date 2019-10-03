@@ -19,7 +19,7 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 20;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
@@ -32,32 +32,32 @@ namespace core.Trading.Strategies
 				preset = JSONParser.FromJson<QuickSmaPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
-			List<decimal?> sma1 = candles.Sma(preset?.SmaFast ?? 12);
-			List<decimal?> sma2 = candles.Sma(preset?.SmaSlow ?? 18);
+			List<decimal?> smaFast = candles.Sma(preset?.SmaFast ?? 12);
+			List<decimal?> smaSlow = candles.Sma(preset?.SmaSlow ?? 18);
 
 			List<decimal> closes = candles.Close();
-			List<bool> crossOver = sma1.Crossover(sma2);
-			List<bool> crossUnder = sma2.Crossunder(closes);
+			List<bool> crossOver = smaFast.Crossover(smaSlow);
+			List<bool> crossUnder = smaSlow.Crossunder(closes);
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
 				if (crossOver[i])
 				{
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 				else if (crossUnder[i])
 				{
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

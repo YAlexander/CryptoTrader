@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using core.Abstractions;
 using core.Abstractions.TypeCodes;
 
@@ -19,6 +20,12 @@ namespace core.Trading.Strategies
 		/// </summary>
 		public virtual double StrategyWeight { get; set; }
 
-		public abstract ITradingAdviceCode Forecast (IEnumerable<ICandle> candles);
+		public virtual ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		{
+			IEnumerable<(ICandle candle, ITradingAdviceCode forecast)> forecasts = AllForecasts(candles);
+			return forecasts.Last().forecast;
+		}
+
+		public abstract IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles);
 	}
 }

@@ -16,46 +16,46 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 14;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
-			List<decimal?> sma6 = candles.Sma(3);
-			List<decimal?> sma40 = candles.Sma(10);
+			List<decimal?> smaShort = candles.Sma(3);
+			List<decimal?> smaLong = candles.Sma(10);
 			List<decimal?> adx = candles.Adx(14);
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
 				if (i == 0)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				else
 				{
-					int sixCross = sma6[i - 1] < sma40[i] && sma6[i] > sma40[i] ? 1 : 0;
-					int fortyCross = sma40[i - 1] < sma6[i] && sma40[i] > sma6[i] ? 1 : 0;
+					int sixCross = smaShort[i - 1] < smaLong[i] && smaShort[i] > smaLong[i] ? 1 : 0;
+					int fortyCross = smaLong[i - 1] < smaShort[i] && smaLong[i] > smaShort[i] ? 1 : 0;
 
 					if (adx[i] > 25 && sixCross == 1)
 					{
-						result.Add(TradingAdviceCode.BUY);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 					}
 					else if (adx[i] < 25 && fortyCross == 1)
 					{
-						result.Add(TradingAdviceCode.SELL);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 					}
 					else
 					{
-						result.Add(TradingAdviceCode.HOLD);
+						result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 					}
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

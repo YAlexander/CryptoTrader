@@ -18,7 +18,7 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 60;
 
-		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
 			{
@@ -31,14 +31,14 @@ namespace core.Trading.Strategies
 				preset = JsonConvert.DeserializeObject<SmaCrossoverPreset>(Preset);
 			}
 
-			List<TradingAdviceCode> result = new List<TradingAdviceCode>();
+			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
 
-			List<decimal?> sma1 = candles.Sma(preset?.Sma1 ?? 12);
-			List<decimal?> sma2 = candles.Sma(preset?.Sma2 ?? 16);
+			List<decimal?> smaFast = candles.Sma(preset?.Sma1 ?? 12);
+			List<decimal?> smaSlow = candles.Sma(preset?.Sma2 ?? 16);
 			List<decimal?> rsi = candles.Rsi(preset?.Rsi ?? 14);
 
-			List<bool> crossOver = sma1.Crossover(sma2);
-			List<bool> crossUnder = sma1.Crossunder(sma2);
+			List<bool> crossOver = smaFast.Crossover(smaSlow);
+			List<bool> crossUnder = smaFast.Crossunder(smaSlow);
 
 			decimal startRsi = 0m;
 
@@ -52,28 +52,28 @@ namespace core.Trading.Strategies
 				// Since we look back 1 candle, the first candle can never be a signal.
 				if (i == 0)
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 				// When the RSI has dropped 10 points from the peak, sell...
 				else if (startRsi - rsi[i] > 10)
 				{
 					startRsi = 0;
-					result.Add(TradingAdviceCode.SELL);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.SELL));
 				}
 				// When the fast SMA moves above the slow SMA, we have a positive cross-over
-				else if (sma1[i] > sma2[i] && sma1[i - 1] < sma2[i - 1] && rsi[i] <= 65)
+				else if (smaFast[i] > smaSlow[i] && smaFast[i - 1] < smaSlow[i - 1] && rsi[i] <= 65)
 				{
 					startRsi = rsi[i].Value;
-					result.Add(TradingAdviceCode.BUY);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.BUY));
 				}
 
 				else
 				{
-					result.Add(TradingAdviceCode.HOLD);
+					result.Add((candles.ElementAt(i), TradingAdviceCode.HOLD));
 				}
 			}
 
-			return result.LastOrDefault();
+			return result;
 		}
 	}
 }

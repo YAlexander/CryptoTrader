@@ -15,6 +15,11 @@ namespace core.Trading.Strategies
 
 		public override int MinNumberOfCandles { get; } = 20;
 
+		public override IEnumerable<(ICandle, ITradingAdviceCode)> AllForecasts (IEnumerable<ICandle> candles)
+		{
+			throw new NotImplementedException();
+		}
+
 		public override ITradingAdviceCode Forecast (IEnumerable<ICandle> candles)
 		{
 			if (candles.Count() < MinNumberOfCandles)
