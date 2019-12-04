@@ -73,7 +73,7 @@ namespace OrdersProcessor.Workers
 								natsClient.Connect();
 							}
 
-							CallResult<UpdateSubscription> successAccount = socketClient.SubscribeToUserStream(listenKey,
+							CallResult<UpdateSubscription> successAccount = socketClient.SubscribeToUserDataUpdates(listenKey,
 							accountData =>
 							{
 							},
@@ -94,6 +94,9 @@ namespace OrdersProcessor.Workers
 								{
 									await _balanceProcessor.UpdateOrCreate(balance);
 								}
+							},
+							onAccountBalanceUpdate =>
+							{ 
 							});
 
 							while (!stoppingToken.IsCancellationRequested)

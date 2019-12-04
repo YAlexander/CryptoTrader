@@ -57,7 +57,7 @@ namespace CandlesWorker.Workers
 								natsClient.Connect();
 							}
 
-							CallResult<UpdateSubscription> successKline = client.SubscribeToKlineStream(pair.Symbol, candlePeriod.ToPeriodCode(), async (data) =>
+							CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.Symbol, candlePeriod.ToPeriodCode(), async (data) =>
 							{
 								await SaveCandle(data.Data, natsClient);
 							});

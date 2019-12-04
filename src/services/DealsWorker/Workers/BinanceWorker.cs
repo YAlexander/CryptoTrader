@@ -50,7 +50,7 @@ namespace TradesWorker.Workers
 							}
 
 							CallResult<UpdateSubscription> successKline = null;
-							successKline = client.SubscribeToTradesStream(pair.Symbol, async (data) =>
+							successKline = client.SubscribeToTradeUpdates(pair.Symbol, async (data) =>
 							{
 								Trade trade = data.ToEntity();
 

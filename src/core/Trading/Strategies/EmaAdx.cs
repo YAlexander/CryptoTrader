@@ -6,7 +6,7 @@ using core.Abstractions.TypeCodes;
 using core.Trading.Extensions;
 using core.Trading.Strategies.Presets;
 using core.TypeCodes;
-using TinyJson;
+using Newtonsoft.Json;
 
 namespace core.Trading.Strategies
 {
@@ -27,7 +27,7 @@ namespace core.Trading.Strategies
 			EmaAdxPreset preset = null;
 			if (!string.IsNullOrWhiteSpace(Preset))
 			{
-				preset = JSONParser.FromJson<EmaAdxPreset>(Preset);
+				preset = JsonConvert.DeserializeObject<EmaAdxPreset>(Preset);
 			}
 
 			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();

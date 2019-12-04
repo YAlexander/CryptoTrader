@@ -6,7 +6,7 @@ using core.Abstractions.TypeCodes;
 using core.Trading.Extensions;
 using core.Trading.Strategies.Presets;
 using core.TypeCodes;
-using TinyJson;
+using Newtonsoft.Json;
 
 namespace core.Trading.Strategies
 {
@@ -28,7 +28,7 @@ namespace core.Trading.Strategies
 			CciRsiPreset preset = null;
 			if (!string.IsNullOrWhiteSpace(Preset))
 			{
-				preset = JSONParser.FromJson<CciRsiPreset>(Preset);
+				preset = JsonConvert.DeserializeObject<CciRsiPreset>(Preset);
 			}
 
 			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
