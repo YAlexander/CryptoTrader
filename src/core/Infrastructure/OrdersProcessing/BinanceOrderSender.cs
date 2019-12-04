@@ -45,12 +45,12 @@ namespace core.Infrastructure.OrdersProcessing
 						{
 							if (pairConfig.IsTestMode)
 							{
-								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, null, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
 								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 							}
 							else
 							{
-								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Market, order.Amount.Value, null, order.Id.ToString(), null, TimeInForce.GoodTillCancel);
 								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 							}
 						}
@@ -58,13 +58,13 @@ namespace core.Infrastructure.OrdersProcessing
 						{
 							if (pairConfig.IsTestMode)
 							{
-								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, null, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
 								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 
 							}
 							else
 							{
-								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, null, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
 								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 							}
 						}
@@ -73,7 +73,7 @@ namespace core.Infrastructure.OrdersProcessing
 							if (pairConfig.IsTestMode)
 							{
 								// OCO Order can't be used in test mode
-								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+								WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceTestOrderAsync(order.Symbol, (OrderSide)order.OrderSideCode, OrderType.Limit, order.Amount.Value, null, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
 								result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 							}
 							else
@@ -81,13 +81,13 @@ namespace core.Infrastructure.OrdersProcessing
 								if(order.OrderSideCode == OrderSideCode.BUY.Code)
 								{
 									// For now let's use limit standard order
-									WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, OrderSide.Buy, OrderType.Limit, order.Amount.Value, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
+									WebCallResult<BinancePlacedOrder> orderResult = await client.PlaceOrderAsync(order.Symbol, OrderSide.Buy, OrderType.Limit, order.Amount.Value, null, order.Id.ToString(), order.Price, TimeInForce.GoodTillCancel);
 									result = (orderResult.Success, orderResult.Error.Message, orderResult.Data);
 								}
 								else
 								{
 									WebCallResult<BinanceOrderList> orderResult = await client.PlaceOCOOrderAsync(order.Symbol, OrderSide.Sell, order.Amount.Value, order.Price.Value, order.StopLoss.Value);
-									result = (orderResult.Success, orderResult.Error.Message, orderResult.Data.OrderReports[0]);
+									result = (orderResult.Success, orderResult.Error.Message, orderResult.Data.OrderReports.First());
 								}
 							}
 						}

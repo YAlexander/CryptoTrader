@@ -7,7 +7,7 @@ using core.Trading.Extensions;
 using core.Trading.Models;
 using core.Trading.Strategies.Presets;
 using core.TypeCodes;
-using TinyJson;
+using Newtonsoft.Json;
 
 namespace core.Trading.Strategies
 {
@@ -29,7 +29,7 @@ namespace core.Trading.Strategies
 			RsiMacdPreset preset = null;
 			if (!string.IsNullOrWhiteSpace(Preset))
 			{
-				preset = JSONParser.FromJson<RsiMacdPreset>(Preset);
+				preset = JsonConvert.DeserializeObject<RsiMacdPreset>(Preset);
 			}
 
 			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();

@@ -7,7 +7,7 @@ using core.Trading.Extensions;
 using core.Trading.Models;
 using core.Trading.Strategies.Presets;
 using core.TypeCodes;
-using TinyJson;
+using Newtonsoft.Json;
 
 namespace core.Trading.Strategies
 {
@@ -29,7 +29,7 @@ namespace core.Trading.Strategies
 			RsiBbandsPreset preset = null;
 			if (!string.IsNullOrWhiteSpace(Preset))
 			{
-				preset = JSONParser.FromJson<RsiBbandsPreset>(Preset);
+				preset = JsonConvert.DeserializeObject<RsiBbandsPreset>(Preset);
 			}
 
 			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();

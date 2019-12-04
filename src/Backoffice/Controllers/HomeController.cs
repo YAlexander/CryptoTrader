@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Backoffice.Models;
+using System.Dynamic;
 
 namespace Backoffice.Controllers
 {
@@ -19,11 +20,6 @@ namespace Backoffice.Controllers
 		}
 
 		public IActionResult Index ()
-		{
-			return View();
-		}
-
-		public IActionResult Privacy ()
 		{
 			return View();
 		}

@@ -1,5 +1,4 @@
-﻿using core.Abstractions.TypeCodes;
-using core.TypeCodes;
+﻿using core.TypeCodes;
 using System.ComponentModel.DataAnnotations;
 
 namespace Backoffice.Models

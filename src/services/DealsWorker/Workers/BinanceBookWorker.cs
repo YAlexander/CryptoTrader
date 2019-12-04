@@ -41,7 +41,7 @@ namespace TradesWorker.Workers
 				{
 					using (BinanceSocketClient client = new BinanceSocketClient())
 					{
-						CallResult<UpdateSubscription> res = client.SubscribeToBookTickerStream(pair.Symbol, async (data) =>
+						CallResult<UpdateSubscription> res = client.SubscribeToBookTickerUpdates(pair.Symbol, async (data) =>
 						{
 							Book book = new Book();
 							book.ExchangeCode = Exchange.Code;
