@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using core.Abstractions;
 using core.Abstractions.TypeCodes;
 using core.Trading.Extensions;
@@ -8,7 +9,6 @@ using core.Trading.Models;
 using core.Trading.Strategies.Presets;
 using core.TypeCodes;
 using Core.Trading.Extensions;
-using Newtonsoft.Json;
 
 namespace core.Trading.Strategies
 {
@@ -30,7 +30,7 @@ namespace core.Trading.Strategies
 			SarStochPreset preset = null;
 			if (!string.IsNullOrWhiteSpace(Preset))
 			{
-				preset = JsonConvert.DeserializeObject<SarStochPreset>(Preset);
+				preset = JsonSerializer.Deserialize<SarStochPreset>(Preset);
 			}
 
 			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();

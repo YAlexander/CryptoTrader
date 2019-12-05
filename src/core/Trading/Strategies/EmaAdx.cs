@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using core.Abstractions;
 using core.Abstractions.TypeCodes;
 using core.Trading.Extensions;
 using core.Trading.Strategies.Presets;
 using core.TypeCodes;
-using Newtonsoft.Json;
 
 namespace core.Trading.Strategies
 {
@@ -27,7 +27,7 @@ namespace core.Trading.Strategies
 			EmaAdxPreset preset = null;
 			if (!string.IsNullOrWhiteSpace(Preset))
 			{
-				preset = JsonConvert.DeserializeObject<EmaAdxPreset>(Preset);
+				preset = JsonSerializer.Deserialize<EmaAdxPreset>(Preset);
 			}
 
 			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();

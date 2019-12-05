@@ -20,7 +20,6 @@
     <PackageReference Include="MyNatsClient" Version="0.13.0" />
     <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.13.0" />
     <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="Npgsql" Version="4.1.2" />
     <PackageReference Include="Telegram.Bot" Version="15.1.0" />
   </ItemGroup>

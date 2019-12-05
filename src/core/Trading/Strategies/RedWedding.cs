@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json;
 using core.Abstractions;
 using core.Abstractions.TypeCodes;
 using core.Extensions;
@@ -8,7 +9,6 @@ using core.Trading.Extensions;
 using core.Trading.Models;
 using core.Trading.Strategies.Presets;
 using core.TypeCodes;
-using Newtonsoft.Json;
 
 namespace core.Trading.Strategies
 {
@@ -30,7 +30,7 @@ namespace core.Trading.Strategies
 			RedWeddingPreset preset = null;
 			if (!string.IsNullOrWhiteSpace(Preset))
 			{
-				preset = JsonConvert.DeserializeObject<RedWeddingPreset>(Preset);
+				preset = JsonSerializer.Deserialize<RedWeddingPreset>(Preset);
 			}
 
 			List<(ICandle, ITradingAdviceCode)> result = new List<(ICandle, ITradingAdviceCode)>();
