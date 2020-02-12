@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
+      <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="Cryptowatcher.TA-LIb-Core" Version="1.0.0" />
+      <PackageReference Include="System.Text.Json" Version="4.7.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Folder Include="Helpers\Mappers" />
+      <Folder Include="Trading\Risk" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Trading\Indicators\Options\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Remove="Trading\Indicators\Options\**" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Trading\Indicators\Options\**" />
+    </ItemGroup>
+
+</Project>
