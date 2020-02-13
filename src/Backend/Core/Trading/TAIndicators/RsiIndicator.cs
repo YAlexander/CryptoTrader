@@ -1,6 +1,7 @@
 using System;
 using System.Linq;
 using Contracts;
+using Core.Trading.Extensions;
 using core.Trading.TAIndicators.Options;
 using core.Trading.TAIndicators.Results;
 
@@ -48,8 +49,8 @@ namespace Core.Trading.TAIndicators
 				decimal?[] gainForPeriod = gain[range];
 				decimal?[] lossForPeriod = loss[range];
 				
-				decimal? cu = gainForPeriod.Average();
-				decimal? cd = lossForPeriod.Average();
+				decimal? cu = gainForPeriod.Ema(options.Period).LastOrDefault();
+				decimal? cd = lossForPeriod.Ema(options.Period).LastOrDefault();
 
 				rsi[i] = 100 - 100 / (1 + cu / cd);
 
