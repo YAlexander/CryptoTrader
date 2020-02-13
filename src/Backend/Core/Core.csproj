@@ -21,6 +21,7 @@
 
     <ItemGroup>
       <Compile Remove="Trading\Indicators\Options\**" />
+      <Compile Remove="Trading\Indicators\Atr.cs" />
     </ItemGroup>
 
     <ItemGroup>

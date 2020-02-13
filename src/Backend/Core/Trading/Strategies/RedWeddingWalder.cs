@@ -5,6 +5,7 @@ using Contracts;
 using Contracts.Enums;
 using Core.Trading.Extensions;
 using Core.Trading.Strategies.StrategyOptions;
+using Core.Trading.TAIndicators.Extensions;
 
 namespace Core.Trading.Strategies
 {

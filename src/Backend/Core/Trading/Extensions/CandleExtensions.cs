@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
+using Core.Trading.TAIndicators.Extensions;
 using Persistence.Entities;
 
 namespace Core.Trading.Extensions

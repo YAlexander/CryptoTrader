@@ -4,6 +4,7 @@ using System.Linq;
 using Contracts;
 using Contracts.Enums;
 using Core.Trading.Extensions;
+using Core.Trading.TAIndicators.Extensions;
 using Core.TypeCodes;
 
 namespace Core.Trading.Strategies

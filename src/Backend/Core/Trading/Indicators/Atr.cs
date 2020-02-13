@@ -31,9 +31,5 @@ namespace Core.Trading.Indicators
 			throw new Exception("Could not calculate ATR");
 		}
 
-		public override dynamic Get (IEnumerable<decimal?> candles, IIndicatorOptions options = null)
-		{
-			throw new NotImplementedException();
-		}
 	}
 }

@@ -22,3 +22,10 @@ src/services/DealsWorker/obj/
 src/Tests/bin/
 src/Tests/obj/
 src/services/DealsWorker/internal-nlog.txt
+src/Services/Bitmex/obj/
+src/Services/Binance/obj/
+src/Contracts/obj/
+src/Backend/Persistence/obj/
+src/Backend/Persistence.PostgreSQL/obj/
+src/Backend/Core/obj/
+.idea/

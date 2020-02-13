@@ -4,6 +4,7 @@ using System.Linq;
 using Contracts;
 using Contracts.Trading;
 using Core.Trading.Extensions;
+using Core.Trading.TAIndicators.Extensions;
 
 namespace Core.Trading.Indicators
 {

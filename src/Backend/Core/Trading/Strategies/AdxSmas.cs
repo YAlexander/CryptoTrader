@@ -3,6 +3,8 @@ using System.Linq;
 using Contracts;
 using Contracts.Enums;
 using Core.Trading.Extensions;
+using Core.Trading.TAIndicators.Extensions;
+using Core.TypeCodes;
 
 namespace Core.Trading.Strategies
 {
@@ -18,8 +20,8 @@ namespace Core.Trading.Strategies
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			List<decimal?> smaShort = candles.Sma(3);
-			List<decimal?> smaLong = candles.Sma(10);
+			List<decimal?> smaShort = candles.Sma(3, CandleVariableCode.Close);
+			List<decimal?> smaLong = candles.Sma(10, CandleVariableCode.Close);
 			List<decimal?> adx = candles.Adx(14);
 
 			for (int i = 0; i < candles.Count(); i++)

@@ -4,6 +4,7 @@ using Contracts;
 using Contracts.Enums;
 using Core.Trading.Extensions;
 using Core.Trading.Strategies.StrategyOptions;
+using Core.TypeCodes;
 
 namespace Core.Trading.Strategies
 {
@@ -22,8 +23,8 @@ namespace Core.Trading.Strategies
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
 			List<decimal?> cci = candles.Cci(options?.Cci ?? 30);
-			List<decimal?> emaFast = candles.Ema(options?.EmaFast ?? 8);
-			List<decimal?> emaSlow = candles.Ema(options?.EmaSlow ?? 28);
+			List<decimal?> emaFast = candles.Ema(options?.EmaFast ?? 8, CandleVariableCode.Close);
+			List<decimal?> emaSlow = candles.Ema(options?.EmaSlow ?? 28, CandleVariableCode.Close);
 
 			for (int i = 0; i < candles.Count(); i++)
 			{

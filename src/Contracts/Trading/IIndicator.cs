@@ -1,11 +1,10 @@
 ﻿namespace Contracts.Trading
 {
-	public interface IIndicator
+	public interface IIndicator<in T, out TK> where T : IOptionsSet where TK : IResultSet
 	{
 		string Name { get; }
 
-		dynamic Get (ICandle[] candles, IOptionsSet options);
-
-		dynamic Get (decimal?[] candles, IOptionsSet options);
+		TK Get (ICandle[] source, T options);
+		TK Get (decimal[] source, T options);
 	}
 }

@@ -6,13 +6,12 @@ using Contracts.Trading;
 
 namespace Core.Trading.Indicators
 {
-	public abstract class BaseIndicator : IIndicator
+	public abstract class BaseIndicator<T, TK> : IIndicator<T, TK> where T : IOptionsSet where TK: IResultSet
 	{
 		public abstract string Name { get; }
 
-		public abstract dynamic Get (ICandle[] candles, params object[] options);
-
-		public abstract dynamic Get (decimal?[] candles, params object[] options);
+		public abstract TK Get (ICandle[] source, T options);
+		public abstract TK Get(decimal[] source, T options);
 
 		protected List<decimal?> FixIndicatorOrdering (IEnumerable<double> items, int outBegIdx, int outNbElement)
 		{
