@@ -4,7 +4,7 @@ using System.Linq;
 using Contracts;
 using Contracts.Trading;
 
-namespace Core.Trading.Indicators
+namespace Core.Trading.TAIndicators
 {
 	public abstract class BaseIndicator<T, TK> : IIndicator<T, TK> where T : IOptionsSet where TK: IResultSet
 	{
@@ -12,21 +12,22 @@ namespace Core.Trading.Indicators
 
 		public abstract TK Get (ICandle[] source, T options);
 		public abstract TK Get(decimal[] source, T options);
+		public abstract TK Get(decimal?[] source, T options);
 
-		protected List<decimal?> FixIndicatorOrdering (IEnumerable<double> items, int outBegIdx, int outNbElement)
-		{
-			List<decimal?> outValues = new List<decimal?>();
-			IEnumerable<double> validItems = items.Take(outNbElement);
-
-			for (int i = 0; i < outBegIdx; i++)
-			{
-				outValues.Add(null);
-			}
-
-			outValues.AddRange(validItems.Select(value => (decimal?) value));
-			return outValues;
-		}
-
+		// protected List<decimal?> FixIndicatorOrdering (IEnumerable<double> items, int outBegIdx, int outNbElement)
+		// {
+		// 	List<decimal?> outValues = new List<decimal?>();
+		// 	IEnumerable<double> validItems = items.Take(outNbElement);
+		//
+		// 	for (int i = 0; i < outBegIdx; i++)
+		// 	{
+		// 		outValues.Add(null);
+		// 	}
+		//
+		// 	outValues.AddRange(validItems.Select(value => (decimal?) value));
+		// 	return outValues;
+		// }
+		
 		protected List<decimal?> FillPivotNulls (List<decimal?> result)
 		{
 			List<(decimal, int)> values = new List<(decimal, int)>();

@@ -25,5 +25,13 @@ namespace Core.Trading.TAIndicators.Extensions
 			
 			return sma.Get(source.ToArray(), options);
 		}
+		
+		public static DefaultIndicatorResult Sma (this IEnumerable<decimal?> source, int period)
+		{
+			SmaIndicator sma = new SmaIndicator();
+			SmaOptions options = new SmaOptions() { Period = period, CandleVariable = null};
+			
+			return sma.Get(source.ToArray(), options);
+		}
 	}
 }

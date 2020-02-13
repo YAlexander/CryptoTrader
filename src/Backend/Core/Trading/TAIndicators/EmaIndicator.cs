@@ -1,19 +1,20 @@
-﻿using System;
+using System;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
-using Core.Trading.TAIndicators;
+using Core.Trading.Extensions;
 using core.Trading.TAIndicators.Options;
 using core.Trading.TAIndicators.Results;
 
-namespace core.Trading.TAIndicators
+namespace Core.Trading.TAIndicators
 {
-	public class SmaIndicator : BaseIndicator<SmaOptions, DefaultIndicatorResult>
+	public class EmaIndicator : BaseIndicator<EmaOptions, DefaultIndicatorResult>
 	{
-		public override string Name { get; } = "Simple Moving Average (SMA) Indicator";
+		public override string Name { get; } = "Exponential Moving Average (EMA) Indicator";
 		
-		public override DefaultIndicatorResult Get(ICandle[] source, SmaOptions options)
+		public override DefaultIndicatorResult Get(ICandle[] source, EmaOptions options)
 		{
+			
 			decimal[] values = options.CandleVariable switch
 			{
 				CandleVariables.CLOSE => source.Select(x => x.Close).ToArray(),
@@ -26,21 +27,31 @@ namespace core.Trading.TAIndicators
 			return Get(values, options);
 		}
 
-		public override DefaultIndicatorResult Get(decimal[] source, SmaOptions options)
+		public override DefaultIndicatorResult Get(decimal[] source, EmaOptions options)
 		{
 			decimal?[] values = source.Select(x => (decimal?) x).ToArray();
 			return Get(values, options);
 		}
 		
-		public override DefaultIndicatorResult Get(decimal?[] source, SmaOptions options)
+		public override DefaultIndicatorResult Get(decimal?[] source, EmaOptions options)
 		{
 			decimal?[] result = new decimal?[source.Length];
-			Span<decimal?> sma = new Span<decimal?>(source);
+			Span<decimal?> values = new Span<decimal?>(source);
+
+			decimal a = 2 / (options.Period + 1);
 
 			int index = 0;
-			for (int i = options.Period - 1; i < source.Length; i++)
+			for (int i = options.Period; i < source.Length; i++)
 			{
-				result[i] = sma.Slice(index, options.Period).ToArray().Average();
+				if (index == 0)
+				{
+					result[i] = values.Slice(index, options.Period).ToArray().Average();
+				}
+				else
+				{
+					result[i] = a * values[i] + (1 - a) * result[i - 1];
+				}
+
 				index++;
 			}
 			

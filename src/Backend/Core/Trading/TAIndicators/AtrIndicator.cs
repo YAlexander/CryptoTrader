@@ -1,6 +1,6 @@
 ﻿using System;
 using Contracts;
-using Core.Trading.Indicators;
+using Core.Trading.TAIndicators;
 using Core.Trading.TAIndicators.Extensions;
 using core.Trading.TAIndicators.Options;
 using core.Trading.TAIndicators.Results;
@@ -25,6 +25,11 @@ namespace core.Trading.TAIndicators
 		}
 
 		public override DefaultIndicatorResult Get(decimal[] source, AtrOptions options)
+		{
+			throw new NotImplementedException();
+		}
+
+		public override DefaultIndicatorResult Get(decimal?[] source, AtrOptions options)
 		{
 			throw new NotImplementedException();
 		}

@@ -6,5 +6,6 @@
 
 		TK Get (ICandle[] source, T options);
 		TK Get (decimal[] source, T options);
+		TK Get (decimal?[] source, T options);
 	}
 }
