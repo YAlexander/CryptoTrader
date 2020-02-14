@@ -15,9 +15,9 @@ namespace Persistence
 			_candlesManager = candlesManager;
 		}
 
-		public Task<IEnumerable<Candle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to,  Timeframes period)
+		public Task<IEnumerable<Candle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfCandles)
 		{
-			return WithConnection((connection, transaction) => _candlesManager.Get(exchange, asset1, asset2, @from, to, period, connection, transaction));
+			throw new NotImplementedException();
 		}
 	}
 }
