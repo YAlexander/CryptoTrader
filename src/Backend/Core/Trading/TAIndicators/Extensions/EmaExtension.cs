@@ -24,5 +24,13 @@ namespace Core.Trading.TAIndicators.Extensions
 			
 			return ema.Get(source.ToArray(), options);
 		}
+		
+		public static DefaultIndicatorResult Ema (this IEnumerable<decimal?> source, int period)
+		{
+			EmaIndicator ema = new EmaIndicator();
+			EmaOptions options = new EmaOptions() { Period = period, CandleVariable = null};
+			
+			return ema.Get(source.ToArray(), options);
+		}
 	}
 }

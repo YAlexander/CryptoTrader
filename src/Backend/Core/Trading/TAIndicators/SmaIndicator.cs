@@ -35,15 +35,26 @@ namespace core.Trading.TAIndicators
 		public override DefaultIndicatorResult Get(decimal?[] source, SmaOptions options)
 		{
 			decimal?[] result = new decimal?[source.Length];
-			Span<decimal?> sma = new Span<decimal?>(source);
-
-			int index = 0;
-			for (int i = options.Period - 1; i < source.Length; i++)
-			{
-				result[i] = sma.Slice(index, options.Period).ToArray().Average();
-				index++;
-			}
 			
+			for (int i = 0; i < source.Length; i++)
+			{   
+				if (i >= options.Period - 1)
+				{
+					decimal? sum = 0;
+					for (int j = i; j >= i - (options.Period - 1); j--)
+					{
+						sum += source[j];
+					}
+					
+					decimal? avg = sum / options.Period;
+					result[i] = avg;
+				}
+				else
+				{
+					result[i] = null;
+				}
+			}
+
 			return new DefaultIndicatorResult() { Result = result};
 		}
 	}

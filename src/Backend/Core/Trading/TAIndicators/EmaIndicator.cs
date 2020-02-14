@@ -2,7 +2,6 @@ using System;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
-using Core.Trading.Extensions;
 using core.Trading.TAIndicators.Options;
 using core.Trading.TAIndicators.Results;
 
@@ -36,23 +35,33 @@ namespace Core.Trading.TAIndicators
 		public override DefaultIndicatorResult Get(decimal?[] source, EmaOptions options)
 		{
 			decimal?[] result = new decimal?[source.Length];
-			Span<decimal?> values = new Span<decimal?>(source);
-
-			decimal a = 2 / (options.Period + 1);
-
-			int index = 0;
-			for (int i = options.Period; i < source.Length; i++)
+			decimal multiplier = 2 / (options.Period + 1);
+			
+			for (int i = 0; i < source.Length; i++)
 			{
-				if (index == 0)
+				if (i >= options.Period - 1)
 				{
-					result[i] = values.Slice(index, options.Period).ToArray().Average();
+					if (result[i - 1].HasValue)
+					{
+						decimal? emaPrev = result[i - 1].Value;
+						result[i] = (source[i] * multiplier) + emaPrev * (1 - multiplier);
+					}
+					else
+					{
+						decimal? sum = 0;
+						
+						for (int j = i; j >= i - (options.Period - 1); j--)
+						{
+							sum += source[i];
+						}
+						
+						result[i] = sum / options.Period;
+					}
 				}
 				else
 				{
-					result[i] = a * values[i] + (1 - a) * result[i - 1];
+					result[i] = null;
 				}
-
-				index++;
 			}
 			
 			return new DefaultIndicatorResult() { Result = result};

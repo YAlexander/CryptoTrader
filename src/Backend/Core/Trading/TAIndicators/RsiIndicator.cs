@@ -1,7 +1,5 @@
-using System;
 using System.Linq;
 using Contracts;
-using Core.Trading.Extensions;
 using core.Trading.TAIndicators.Options;
 using core.Trading.TAIndicators.Results;
 
@@ -26,37 +24,26 @@ namespace Core.Trading.TAIndicators
 		public override DefaultIndicatorResult Get(decimal?[] source, RsiOptions options)
 		{
 			decimal?[] rsi = new decimal?[source.Length];
-			decimal?[] gain = new decimal?[source.Length];
-			decimal?[] loss = new decimal?[source.Length];
-			
+			decimal?[] change = new decimal?[source.Length];
+
 			for (int i = 1; i < source.Length; i++)
 			{
-				if (source[i] > source[i - 1])
+				if (i >= options.Period)
 				{
-					gain[i] = source[i] - source[i - 1];
+					decimal? averageGain = change.Where(x => x > 0).Sum() / change.Length;
+					decimal? averageLoss = -1 * change.Where(x => x < 0).Sum() / change.Length;
+					
+					decimal? rs = averageGain / averageLoss;
+					rsi[i] = 100 - (100 / (1 + rs));
 				}
 				else
 				{
-					loss[i] = source[i - 1] - source[i];
+					rsi[i] = null;
 				}
-			}
-			
-			int index = 0;
-			for (int i = options.Period; i < source.Length; i++)
-			{
-				Range range = new Range(index, index + options.Period);
 				
-				decimal?[] gainForPeriod = gain[range];
-				decimal?[] lossForPeriod = loss[range];
-				
-				decimal? cu = gainForPeriod.Ema(options.Period).LastOrDefault();
-				decimal? cd = lossForPeriod.Ema(options.Period).LastOrDefault();
-
-				rsi[i] = 100 - 100 / (1 + cu / cd);
-
-				index++;
+				change[i] = source[i] - source[i - 1];
 			}
-			
+
 			return new DefaultIndicatorResult() { Result = rsi };
 		}
 	}

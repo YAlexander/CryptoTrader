@@ -21,7 +21,7 @@ namespace core.Trading.TAIndicators
 				trueRanges[i] = Math.Max(source[i].High, source[i - 1].Close) - Math.Min(source[i].Low, source[i - 1].Close);
 			}
 
-			return trueRanges.Sma(options.Period);
+			return trueRanges.Ema(options.Period);
 		}
 
 		public override DefaultIndicatorResult Get(decimal[] source, AtrOptions options)

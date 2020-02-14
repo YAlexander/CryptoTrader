@@ -10,6 +10,16 @@ namespace Core.Trading.TAIndicators
 	{
 		public override string Name { get; } = "Moving Average Convergence Divergence (MACD) Indicator";
 		
+		public override MacdIndicatorResult Get(decimal[] source, MacdOptions options)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public override MacdIndicatorResult Get(decimal?[] source, MacdOptions options)
+		{
+			throw new System.NotImplementedException();
+		}
+		
 		public override MacdIndicatorResult Get(ICandle[] source, MacdOptions options)
 		{
 			decimal?[] macd = new decimal?[source.Length];
@@ -23,7 +33,7 @@ namespace Core.Trading.TAIndicators
 				macd[i] = (fastEma[i] - slowEma[i]) ?? 0;
 			}
 
-			decimal?[] signal = macd.Sma(options.SignalPeriod).Result;
+			decimal?[] signal = macd.Ema(options.SignalPeriod).Result;
 
 			for (int i = 0; i < source.Length; i++)
 			{
@@ -31,16 +41,6 @@ namespace Core.Trading.TAIndicators
 			}
 			
 			return new MacdIndicatorResult() { Macd = macd, Signal = signal, Hist = hist};
-		}
-
-		public override MacdIndicatorResult Get(decimal[] source, MacdOptions options)
-		{
-			throw new System.NotImplementedException();
-		}
-
-		public override MacdIndicatorResult Get(decimal?[] source, MacdOptions options)
-		{
-			throw new System.NotImplementedException();
 		}
 	}
 }
