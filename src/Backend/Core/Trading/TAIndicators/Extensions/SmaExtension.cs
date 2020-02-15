@@ -10,7 +10,7 @@ namespace Core.Trading.TAIndicators.Extensions
 {
 	public static class SmaExtension
 	{
-		public static DefaultIndicatorResult Sma (this IEnumerable<ICandle> source, int period, CandleVariables type)
+		public static SeriesIndicatorResult Sma (this IEnumerable<ICandle> source, int period, CandleVariables type)
 		{
 			SmaIndicator sma = new SmaIndicator();
 			SmaOptions options = new SmaOptions() { Period = period, CandleVariable = type};
@@ -18,7 +18,7 @@ namespace Core.Trading.TAIndicators.Extensions
 			return sma.Get(source.ToArray(), options);
 		}
 		
-		public static DefaultIndicatorResult Sma (this IEnumerable<decimal> source, int period)
+		public static SeriesIndicatorResult Sma (this IEnumerable<decimal> source, int period)
 		{
 			SmaIndicator sma = new SmaIndicator();
 			SmaOptions options = new SmaOptions() { Period = period, CandleVariable = null};
@@ -26,7 +26,7 @@ namespace Core.Trading.TAIndicators.Extensions
 			return sma.Get(source.ToArray(), options);
 		}
 		
-		public static DefaultIndicatorResult Sma (this IEnumerable<decimal?> source, int period)
+		public static SeriesIndicatorResult Sma (this IEnumerable<decimal?> source, int period)
 		{
 			SmaIndicator sma = new SmaIndicator();
 			SmaOptions options = new SmaOptions() { Period = period, CandleVariable = null};

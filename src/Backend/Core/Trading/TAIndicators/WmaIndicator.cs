@@ -7,32 +7,11 @@ using core.Trading.TAIndicators.Results;
 
 namespace Core.Trading.TAIndicators
 {
-    public class WmaIndicator : BaseIndicator<WmaOptions, DefaultIndicatorResult>
+    public class WmaIndicator : BaseIndicator<WmaOptions, SeriesIndicatorResult>
     {
-        public override string Name { get; }
+        public override string Name { get; } = "Weighted Moving Average (WMA) Indicator";
         
-        public override DefaultIndicatorResult Get(ICandle[] source, WmaOptions options)
-        {
-            decimal[] values = options.CandleVariable switch
-            {
-                CandleVariables.CLOSE => source.Select(x => x.Close).ToArray(),
-                CandleVariables.HIGH => source.Select(x => x.High).ToArray(),
-                CandleVariables.LOW => source.Select(x => x.Low).ToArray(),
-                CandleVariables.OPEN => source.Select(x => x.Open).ToArray(),
-                _ => throw new Exception("Unknown CandleVariableCode")
-            };
-
-            return Get(values, options);
-        }
-
-        public override DefaultIndicatorResult Get(decimal[] source, WmaOptions options)
-        {
-            decimal?[] values = source.Select(x => (decimal?) x).ToArray();
-            return Get(values, options);
-            return Get(values, options);
-        }
-
-        public override DefaultIndicatorResult Get(decimal?[] source, WmaOptions options)
+        public override SeriesIndicatorResult Get(decimal?[] source, WmaOptions options)
         {
             decimal?[] result = new decimal?[source.Length];
 
@@ -62,7 +41,28 @@ namespace Core.Trading.TAIndicators
                 }
             }
 			
-            return new DefaultIndicatorResult() { Result = result};
+            return new SeriesIndicatorResult() { Result = result};
+        }
+        
+        public override SeriesIndicatorResult Get(ICandle[] source, WmaOptions options)
+        {
+            decimal[] values = options.CandleVariable switch
+            {
+                CandleVariables.CLOSE => source.Select(x => x.Close).ToArray(),
+                CandleVariables.HIGH => source.Select(x => x.High).ToArray(),
+                CandleVariables.LOW => source.Select(x => x.Low).ToArray(),
+                CandleVariables.OPEN => source.Select(x => x.Open).ToArray(),
+                _ => throw new Exception("Unknown CandleVariableCode")
+            };
+
+            return Get(values, options);
+        }
+
+        public override SeriesIndicatorResult Get(decimal[] source, WmaOptions options)
+        {
+            decimal?[] values = source.Select(x => (decimal?) x).ToArray();
+            return Get(values, options);
+            return Get(values, options);
         }
     }
 }

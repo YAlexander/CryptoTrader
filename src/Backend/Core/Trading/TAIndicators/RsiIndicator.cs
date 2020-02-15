@@ -5,23 +5,11 @@ using core.Trading.TAIndicators.Results;
 
 namespace Core.Trading.TAIndicators
 {
-	public class RsiIndicator : BaseIndicator<RsiOptions, DefaultIndicatorResult>
+	public class RsiIndicator : BaseIndicator<RsiOptions, SeriesIndicatorResult>
 	{
 		public override string Name { get; } = "Relative Strength Index (RSI) Indicator";
 		
-		public override DefaultIndicatorResult Get(ICandle[] source, RsiOptions options)
-		{
-			decimal?[] values = source.Select(x => (decimal?)x.Close).ToArray();
-			return Get(values, options);
-		}
-
-		public override DefaultIndicatorResult Get(decimal[] source, RsiOptions options)
-		{
-			decimal?[] values = source.Select(x => (decimal?)x).ToArray();
-			return Get(values, options);
-		}
-
-		public override DefaultIndicatorResult Get(decimal?[] source, RsiOptions options)
+		public override SeriesIndicatorResult Get(decimal?[] source, RsiOptions options)
 		{
 			decimal?[] rsi = new decimal?[source.Length];
 			decimal?[] change = new decimal?[source.Length];
@@ -44,7 +32,19 @@ namespace Core.Trading.TAIndicators
 				change[i] = source[i] - source[i - 1];
 			}
 
-			return new DefaultIndicatorResult() { Result = rsi };
+			return new SeriesIndicatorResult() { Result = rsi };
+		}
+		
+		public override SeriesIndicatorResult Get(ICandle[] source, RsiOptions options)
+		{
+			decimal?[] values = source.Select(x => (decimal?)x.Close).ToArray();
+			return Get(values, options);
+		}
+
+		public override SeriesIndicatorResult Get(decimal[] source, RsiOptions options)
+		{
+			decimal?[] values = source.Select(x => (decimal?)x).ToArray();
+			return Get(values, options);
 		}
 	}
 }

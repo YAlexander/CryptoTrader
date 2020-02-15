@@ -8,31 +8,11 @@ using core.Trading.TAIndicators.Results;
 
 namespace core.Trading.TAIndicators
 {
-	public class SmaIndicator : BaseIndicator<SmaOptions, DefaultIndicatorResult>
+	public class SmaIndicator : BaseIndicator<SmaOptions, SeriesIndicatorResult>
 	{
 		public override string Name { get; } = "Simple Moving Average (SMA) Indicator";
 		
-		public override DefaultIndicatorResult Get(ICandle[] source, SmaOptions options)
-		{
-			decimal[] values = options.CandleVariable switch
-			{
-				CandleVariables.CLOSE => source.Select(x => x.Close).ToArray(),
-				CandleVariables.HIGH => source.Select(x => x.High).ToArray(),
-				CandleVariables.LOW => source.Select(x => x.Low).ToArray(),
-				CandleVariables.OPEN => source.Select(x => x.Open).ToArray(),
-				_ => throw new Exception("Unknown CandleVariableCode")
-			};
-
-			return Get(values, options);
-		}
-
-		public override DefaultIndicatorResult Get(decimal[] source, SmaOptions options)
-		{
-			decimal?[] values = source.Select(x => (decimal?) x).ToArray();
-			return Get(values, options);
-		}
-		
-		public override DefaultIndicatorResult Get(decimal?[] source, SmaOptions options)
+		public override SeriesIndicatorResult Get(decimal?[] source, SmaOptions options)
 		{
 			decimal?[] result = new decimal?[source.Length];
 			
@@ -55,7 +35,27 @@ namespace core.Trading.TAIndicators
 				}
 			}
 
-			return new DefaultIndicatorResult() { Result = result};
+			return new SeriesIndicatorResult() { Result = result};
+		}
+		
+		public override SeriesIndicatorResult Get(ICandle[] source, SmaOptions options)
+		{
+			decimal[] values = options.CandleVariable switch
+			{
+				CandleVariables.CLOSE => source.Select(x => x.Close).ToArray(),
+				CandleVariables.HIGH => source.Select(x => x.High).ToArray(),
+				CandleVariables.LOW => source.Select(x => x.Low).ToArray(),
+				CandleVariables.OPEN => source.Select(x => x.Open).ToArray(),
+				_ => throw new Exception("Unknown CandleVariableCode")
+			};
+
+			return Get(values, options);
+		}
+
+		public override SeriesIndicatorResult Get(decimal[] source, SmaOptions options)
+		{
+			decimal?[] values = source.Select(x => (decimal?) x).ToArray();
+			return Get(values, options);
 		}
 	}
 }

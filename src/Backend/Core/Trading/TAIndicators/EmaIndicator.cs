@@ -7,11 +7,11 @@ using core.Trading.TAIndicators.Results;
 
 namespace Core.Trading.TAIndicators
 {
-	public class EmaIndicator : BaseIndicator<EmaOptions, DefaultIndicatorResult>
+	public class EmaIndicator : BaseIndicator<EmaOptions, SeriesIndicatorResult>
 	{
 		public override string Name { get; } = "Exponential Moving Average (EMA) Indicator";
 		
-		public override DefaultIndicatorResult Get(ICandle[] source, EmaOptions options)
+		public override SeriesIndicatorResult Get(ICandle[] source, EmaOptions options)
 		{
 			
 			decimal[] values = options.CandleVariable switch
@@ -26,13 +26,13 @@ namespace Core.Trading.TAIndicators
 			return Get(values, options);
 		}
 
-		public override DefaultIndicatorResult Get(decimal[] source, EmaOptions options)
+		public override SeriesIndicatorResult Get(decimal[] source, EmaOptions options)
 		{
 			decimal?[] values = source.Select(x => (decimal?) x).ToArray();
 			return Get(values, options);
 		}
 		
-		public override DefaultIndicatorResult Get(decimal?[] source, EmaOptions options)
+		public override SeriesIndicatorResult Get(decimal?[] source, EmaOptions options)
 		{
 			decimal?[] result = new decimal?[source.Length];
 			decimal multiplier = 2 / (options.Period + 1);
@@ -64,7 +64,7 @@ namespace Core.Trading.TAIndicators
 				}
 			}
 			
-			return new DefaultIndicatorResult() { Result = result};
+			return new SeriesIndicatorResult() { Result = result};
 		}
 	}
 }

@@ -7,11 +7,11 @@ using core.Trading.TAIndicators.Results;
 
 namespace core.Trading.TAIndicators
 {
-	public class AtrIndicator : BaseIndicator<AtrOptions, DefaultIndicatorResult>
+	public class AtrIndicator : BaseIndicator<AtrOptions, SeriesIndicatorResult>
 	{
-		public override string Name { get; } = "ATR Indicator";
+		public override string Name { get; } = "Average True Range (ATR) Indicator";
 		
-		public override DefaultIndicatorResult Get(ICandle[] source, AtrOptions options)
+		public override SeriesIndicatorResult Get(ICandle[] source, AtrOptions options)
 		{
 			decimal[] trueRanges = new decimal[source.Length];
 			
@@ -24,12 +24,12 @@ namespace core.Trading.TAIndicators
 			return trueRanges.Ema(options.Period);
 		}
 
-		public override DefaultIndicatorResult Get(decimal[] source, AtrOptions options)
+		public override SeriesIndicatorResult Get(decimal[] source, AtrOptions options)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override DefaultIndicatorResult Get(decimal?[] source, AtrOptions options)
+		public override SeriesIndicatorResult Get(decimal?[] source, AtrOptions options)
 		{
 			throw new NotImplementedException();
 		}

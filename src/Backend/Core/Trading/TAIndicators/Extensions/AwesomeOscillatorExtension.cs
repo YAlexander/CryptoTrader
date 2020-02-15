@@ -8,7 +8,7 @@ namespace Core.Trading.TAIndicators.Extensions
 {
 	public static class AwesomeOscillatorExtension
 	{
-		public static DefaultIndicatorResult AwesomeOscillator (this IEnumerable<ICandle> candles, int fastPeriod, int slowPeriod)
+		public static SeriesIndicatorResult AwesomeOscillator (this IEnumerable<ICandle> candles, int fastPeriod, int slowPeriod)
 		{
 			AwesomeOscillatorIndicator awesome = new AwesomeOscillatorIndicator();
 			AwesomeOscillatorOptions options = new AwesomeOscillatorOptions() { FastSmaPeriod = fastPeriod, SlowSmaPeriod = slowPeriod };

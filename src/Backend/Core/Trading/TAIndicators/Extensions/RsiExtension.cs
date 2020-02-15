@@ -8,7 +8,7 @@ namespace Core.Trading.TAIndicators.Extensions
 {
 	public static class RsiExtension
 	{
-		public static DefaultIndicatorResult Rsi (this IEnumerable<ICandle> source, int period)
+		public static SeriesIndicatorResult Rsi (this IEnumerable<ICandle> source, int period)
 		{
 			RsiIndicator rsi = new RsiIndicator();
 			RsiOptions options = new RsiOptions() { Period = period };

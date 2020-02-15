@@ -3,7 +3,7 @@ using Contracts.Trading;
 
 namespace core.Trading.TAIndicators.Results
 {
-	public class DefaultIndicatorResult : IResultSet
+	public class SeriesIndicatorResult : IResultSet
 	{
 		public decimal?[] Result { get; set; }
 	}

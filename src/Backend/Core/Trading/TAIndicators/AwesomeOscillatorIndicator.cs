@@ -6,11 +6,11 @@ using core.Trading.TAIndicators.Results;
 
 namespace Core.Trading.TAIndicators
 {
-	public class AwesomeOscillatorIndicator : BaseIndicator<AwesomeOscillatorOptions, DefaultIndicatorResult>
+	public class AwesomeOscillatorIndicator : BaseIndicator<AwesomeOscillatorOptions, SeriesIndicatorResult>
 	{
-		public override string Name { get; } = "Awesome Oscillator (AO)";
+		public override string Name { get; } = "Awesome Oscillator (AO) Indicator";
 		
-		public override DefaultIndicatorResult Get(ICandle[] source, AwesomeOscillatorOptions options)
+		public override SeriesIndicatorResult Get(ICandle[] source, AwesomeOscillatorOptions options)
 		{
 			decimal[] values = source.Select(x => (x.High + x.Low) / 2).ToArray();
 
@@ -45,15 +45,15 @@ namespace Core.Trading.TAIndicators
 				}
 			}
 
-			return new DefaultIndicatorResult() { Result = awesomeData };
+			return new SeriesIndicatorResult() { Result = awesomeData };
 		}
 
-		public override DefaultIndicatorResult Get(decimal[] source, AwesomeOscillatorOptions options)
+		public override SeriesIndicatorResult Get(decimal[] source, AwesomeOscillatorOptions options)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public override DefaultIndicatorResult Get(decimal?[] source, AwesomeOscillatorOptions options)
+		public override SeriesIndicatorResult Get(decimal?[] source, AwesomeOscillatorOptions options)
 		{
 			throw new System.NotImplementedException();
 		}
