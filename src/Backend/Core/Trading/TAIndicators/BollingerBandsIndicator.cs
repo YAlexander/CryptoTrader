@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using Contracts;
 using Core.Trading.TAIndicators.Extensions;
 using core.Trading.TAIndicators.Options;
@@ -14,6 +13,8 @@ namespace Core.Trading.TAIndicators
         public override BollingerBandsResult Get(ICandle[] source, BollingerBandsOptions options)
         {
             decimal[] typicalPrice = source.Select(x => (x.High + x.Low + x.Close) / 3).ToArray();
+            decimal?[] stdDevs = typicalPrice.StDev(options.Period).Result;
+            
             decimal?[] middleBand = typicalPrice.Sma(options.Period).Result;
 
             decimal?[] upperBand = new decimal?[source.Length];
@@ -23,15 +24,8 @@ namespace Core.Trading.TAIndicators
             {
                 if (i >= options.Period - 1)
                 {
-                    double stdev = 
-                        Math.Sqrt(typicalPrice
-                                      .Skip(i - options.Period)
-                                      .Take(options.Period)
-                                      .Select(x => ((double)x - (double)middleBand[i]) * ((double)x - (double)middleBand[i]))
-                                      .Sum() / (options.Period - 1));
-
-                    upperBand[i] = middleBand[i] + (decimal)(options.DeviationUp * stdev);
-                    lowerBand[i] = middleBand[i] + (decimal)(options.DeviationDown * stdev);
+                    upperBand[i] = middleBand[i] + (decimal)options.DeviationUp * stdDevs[i];
+                    lowerBand[i] = middleBand[i] + (decimal)options.DeviationDown * stdDevs[i]);
                 }
                 else
                 {
