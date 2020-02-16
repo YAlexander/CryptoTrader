@@ -19,17 +19,4 @@
       <Folder Include="Trading\Risk" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Compile Remove="Trading\Indicators\Options\**" />
-      <Compile Remove="Trading\Indicators\Atr.cs" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <EmbeddedResource Remove="Trading\Indicators\Options\**" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <None Remove="Trading\Indicators\Options\**" />
-    </ItemGroup>
-
 </Project>
