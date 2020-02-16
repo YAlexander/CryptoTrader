@@ -25,7 +25,7 @@ namespace Core.Trading.TAIndicators
                 if (i >= options.Period - 1)
                 {
                     upperBand[i] = middleBand[i] + (decimal)options.DeviationUp * stdDevs[i];
-                    lowerBand[i] = middleBand[i] + (decimal)options.DeviationDown * stdDevs[i]);
+                    lowerBand[i] = middleBand[i] + (decimal)options.DeviationDown * stdDevs[i];
                 }
                 else
                 {
