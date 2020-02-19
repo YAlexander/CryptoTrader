@@ -3,42 +3,41 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
-using Core.Trading.Extensions;
-using Core.Trading.Models;
-using Core.Trading.Strategies;
-using Core.Trading.TAIndicators.Extensions;
+using TechanCore.Indicators.Extensions;
+using TechanCore.Strategies.Options;
 
-namespace Core.Trading.Strategies
+namespace TechanCore.Strategies
 {
-	public class BollingerAwe : BaseStrategy
+	public class BollingerAwesomeMacdStrategy : BaseStrategy<BollingerAwesomeMacdOptions>
 	{
-		public override string Name { get; } = "Bollinger Awe";
+		public override string Name { get; } = "Bollinger Awesome MACD Strategy";
 
 		public override int MinNumberOfCandles { get; } = 50;
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			Validate(candles, default);
+			BollingerAwesomeMacdOptions options = GetOptions;
+			Validate(candles, options);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
 			List<decimal> closes = candles.Select(x => x.Close).ToList();
-			BbandItem bb = candles.Bbands(20);
-			List<decimal?> fastMa = candles.Ema(3);
-			List<decimal?> hl1 = candles.Select(x => (x.High + x.Low) / 2).ToList().Sma(5);
-			List<decimal?> hl2 = candles.Select(x => (x.High + x.Low) / 2).ToList().Sma(34);
+			var bb = candles.BollingerBands(options.BollingerPeriod, options.BollingerDeviationUp, options.BollingerDeviationDown);
+			decimal?[] fastMa = candles.Ema(options.EmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] hl1 = candles.Select(x => (x.High + x.Low) / 2).ToList().Sma(options.SmaFastPeriod).Result;
+			decimal?[] hl2 = candles.Select(x => (x.High + x.Low) / 2).ToList().Sma(options.SmaSlowPeriod).Result;
 			List<int> ao = new List<int>();
-			MacdItem macd = candles.Macd();
+			var macd = candles.Macd(options.FastPeriod, options.SlowPeriod, options.SignalPeriod);
 
-			for (int i = 0; i < hl1.Count; i++)
+			for (int i = 0; i < hl1.Length; i++)
 			{
 				if (i > 0)
 				{
 					if (hl1[i - 1].HasValue && hl2[i - 1].HasValue && hl1[i].HasValue && hl2[i].HasValue)
 					{
-						ao.Add(hl1[i].Value - hl2[i].Value >= 0
-							  ? hl1[i].Value - hl2[i].Value > hl1[i - 1].Value - hl2[i - 1].Value ? 1 : 2
-							  : hl1[i].Value - hl2[i].Value > hl1[i - 1].Value - hl2[i - 1].Value ? -1 : -2);
+						ao.Add(hl1[i] - hl2[i] >= 0
+							  ? (hl1[i] - hl2[i] > hl1[i - 1] - hl2[i - 1] ? 1 : 2)
+							  : hl1[i] - hl2[i] < hl1[i - 1] - hl2[i - 1] ? -1 : -2);
 					}
 					else
 					{
@@ -82,6 +81,10 @@ namespace Core.Trading.Strategies
 			}
 
 			return result;
+		}
+
+		public BollingerAwesomeMacdStrategy(BollingerAwesomeMacdOptions options) : base(options)
+		{
 		}
 	}
 }

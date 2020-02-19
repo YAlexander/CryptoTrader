@@ -1,28 +1,28 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
-using Core.Trading.Extensions;
-using Core.Trading.Strategies;
+using TechanCore.Indicators.Extensions;
+using TechanCore.Strategies.Options;
 
-namespace Core.Trading.Strategies
+namespace TechanCore.Strategies
 {
-	public class BigThree : BaseStrategy
+	public class BigThreeStrategy : BaseStrategy<BigTreeStrategyOptions>
 	{
-		public override string Name { get; } = "Big Three";
+		public override string Name { get; } = "Big Three Strategy";
 
 		public override int MinNumberOfCandles { get; } = 100;
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
+			BigTreeStrategyOptions options = GetOptions;
 			Validate(candles, default);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			List<decimal?> sma20 = candles.Sma(20);
-			List<decimal?> sma40 = candles.Sma(40);
-			List<decimal?> sma80 = candles.Sma(80);
+			decimal?[] sma20 = candles.Sma(options.VeryFastSmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] sma40 = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] sma80 = candles.Sma(options.SlowSmaPeriod, CandleVariables.CLOSE).Result;
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
@@ -51,20 +51,24 @@ namespace Core.Trading.Strategies
 
 					if (lastIsGreen && previousIsRed && beforeIsGreen && allAboveSma && sma20[i] > sma40[i] && sma20[i] > sma80[i])
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.BUY));
+						result.Add((candles[i], TradingAdvices.BUY));
 					}
 					else if (hitsAnSma)
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.SELL));
+						result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+						result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 			}
 
 			return result;
+		}
+
+		public BigThreeStrategy(BigTreeStrategyOptions options) : base(options)
+		{
 		}
 	}
 }
