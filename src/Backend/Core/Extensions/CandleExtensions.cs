@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
-using Core.Trading.TAIndicators.Extensions;
 using Persistence.Entities;
+using TechanCore.Indicators.Extensions;
 
-namespace Core.Trading.Extensions
+namespace Core.Extensions
 {
 	public static class CandleExtensions
 	{
@@ -56,37 +56,36 @@ namespace Core.Trading.Extensions
 			return ashiCandles;
 		}
 
-
 		public static IEnumerable<ICandle> HeikenAshiSmoothed(this ICandle[] source, MaTypes type, int maPeriod)
 		{
 			if (source == null || !source.Any()) return source;
 
 			List<ICandle> ashiCandles = new List<ICandle>();
 
-			List<decimal?> close;
-			List<decimal?> open;
-			List<decimal?> low;
-			List<decimal?> high;
+			decimal?[] close;
+			decimal?[] open;
+			decimal?[] low;
+			decimal?[] high;
 
 			switch (type)
 			{
 				case MaTypes.SMA:
-					close = source.Select(x => x.Close).Sma(maPeriod);
-					open = source.Select(x => x.Open).Sma(maPeriod);
-					low = source.Select(x => x.Low).Sma(maPeriod);
-					high = source.Select(x => x.High).Sma(maPeriod);
+					close = source.Select(x => x.Close).Sma(maPeriod).Result;
+					open = source.Select(x => x.Open).Sma(maPeriod).Result;
+					low = source.Select(x => x.Low).Sma(maPeriod).Result;
+					high = source.Select(x => x.High).Sma(maPeriod).Result;
 					break;
 				case MaTypes.EMA:
-					close = source.Select(x => x.Close).Ema(maPeriod);
-					open = source.Select(x => x.Open).Ema(maPeriod);
-					low = source.Select(x => x.Low).Ema(maPeriod);
-					high = source.Select(x => x.High).Ema(maPeriod);
+					close = source.Select(x => x.Close).Ema(maPeriod).Result;
+					open = source.Select(x => x.Open).Ema(maPeriod).Result;
+					low = source.Select(x => x.Low).Ema(maPeriod).Result;
+					high = source.Select(x => x.High).Ema(maPeriod).Result;
 					break;
 				case MaTypes.WMA:
-					close = source.Select(x => x.Close).Wma(maPeriod);
-					open = source.Select(x => x.Open).Wma(maPeriod);
-					low = source.Select(x => x.Low).Wma(maPeriod);
-					high = source.Select(x => x.High).Wma(maPeriod);
+					close = source.Select(x => x.Close).Wma(maPeriod).Result;
+					open = source.Select(x => x.Open).Wma(maPeriod).Result;
+					low = source.Select(x => x.Low).Wma(maPeriod).Result;
+					high = source.Select(x => x.High).Wma(maPeriod).Result;
 					break;
 				default:
 					throw new Exception($"Unsupported MA type {type}");
