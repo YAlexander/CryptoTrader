@@ -2,7 +2,7 @@
 using Contracts.Enums;
 using Contracts.Trading;
 
-namespace core.Trading
+namespace Core.BusinessLogic
 {
 	public class TradingContext : ITradingContext
 	{

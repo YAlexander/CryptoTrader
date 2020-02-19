@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using Contracts.Trading;
-using Persistence.StrategyOptions.OptionManagers;
 using TechanCore.Strategies;
 using TechanCore.Strategies.Options;
 
-namespace core.Trading
+namespace Core.BusinessLogic
 {
 	public class StrategiesHelper
 	{

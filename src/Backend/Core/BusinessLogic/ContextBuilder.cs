@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Contracts.Enums;
 using Contracts.Trading;
 using Core.Helpers;
-using core.Trading;
 using Persistence;
 using Persistence.Entities;
 using Persistence.StrategyOptions;
