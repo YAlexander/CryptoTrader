@@ -18,6 +18,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence.PostgreSQL", "s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "src\Backend\Persistence\Persistence.csproj", "{803F1411-63D3-4644-9B34-97D8E52F42C0}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechanCore", "src\TechanCore\TechanCore.csproj", "{ABFACAC0-06E5-4730-9E45-75AE52FD1444}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -29,6 +31,7 @@ Global
 		{4DCEF526-AF4C-4F83-84C2-AEA6DB92E89B} = {AB535CA8-EBAA-412A-BC5F-B37821B1D09C}
 		{0D2CF796-7BFE-4624-BBF1-1BA4F7D01DB5} = {AB535CA8-EBAA-412A-BC5F-B37821B1D09C}
 		{803F1411-63D3-4644-9B34-97D8E52F42C0} = {AB535CA8-EBAA-412A-BC5F-B37821B1D09C}
+		{ABFACAC0-06E5-4730-9E45-75AE52FD1444} = {AB535CA8-EBAA-412A-BC5F-B37821B1D09C}
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{0EE6C351-65D0-44A7-AD1F-E529A4645C89}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
@@ -55,5 +58,9 @@ Global
 		{803F1411-63D3-4644-9B34-97D8E52F42C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{803F1411-63D3-4644-9B34-97D8E52F42C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{803F1411-63D3-4644-9B34-97D8E52F42C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{ABFACAC0-06E5-4730-9E45-75AE52FD1444}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ABFACAC0-06E5-4730-9E45-75AE52FD1444}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ABFACAC0-06E5-4730-9E45-75AE52FD1444}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ABFACAC0-06E5-4730-9E45-75AE52FD1444}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

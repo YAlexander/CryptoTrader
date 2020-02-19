@@ -2,13 +2,13 @@ using Contracts.Enums;
 
 namespace Contracts.Trading
 {
-	public interface ITradingStrategy
+	public interface ITradingStrategy<T> where T : IStrategyOption
 	{
 		string Name { get; }
 		
 		int MinNumberOfCandles { get; }
-		
-		IStrategyOption Options { get; set; }
+
+		T GetOptions { get; }
 		
 		TradingAdvices Forecast(ICandle[] candles);
 	}

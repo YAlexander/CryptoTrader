@@ -13,7 +13,7 @@ namespace Contracts.Trading
 		
 		ICandle[] Candles { get; set; }
 
-		ITradingStrategy Strategy { get; set; }
+		ITradingStrategy<IStrategyOption> Strategy { get; set; }
 		
 		IRisk[] Risks { get; set; }
 		
