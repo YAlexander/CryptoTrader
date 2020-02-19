@@ -11,7 +11,7 @@ namespace TechanCore.Indicators.Extensions
     {
         public static MovingAverageEnvelopesResult MovingAverageEnvelopes (this IEnumerable<ICandle> source, int period, CandleVariables type, double upwardFactor, double downwardFactor)
         {
-            MovingAverageEnvelopesIndicator sma = new MovingAverageEnvelopesIndicator();
+            MovingAverageEnvelopesIndicator mae = new MovingAverageEnvelopesIndicator();
             MovingAverageEnvelopesOptions options = new MovingAverageEnvelopesOptions
             {
                 Period = period, 
@@ -20,12 +20,12 @@ namespace TechanCore.Indicators.Extensions
                 DownwardFactor = downwardFactor
             };
 			
-            return sma.Get(source.ToArray(), options);
+            return mae.Get(source.ToArray(), options);
         }
 		
-        public static MovingAverageEnvelopesResult Sma (this IEnumerable<decimal> source, int period, double upwardFactor, double downwardFactor )
+        public static MovingAverageEnvelopesResult MovingAverageEnvelopes (this IEnumerable<decimal> source, int period, double upwardFactor, double downwardFactor )
         {
-            MovingAverageEnvelopesIndicator sma = new MovingAverageEnvelopesIndicator();
+            MovingAverageEnvelopesIndicator mae = new MovingAverageEnvelopesIndicator();
             MovingAverageEnvelopesOptions options = new MovingAverageEnvelopesOptions
             {
                 Period = period, 
@@ -34,12 +34,12 @@ namespace TechanCore.Indicators.Extensions
                 DownwardFactor = downwardFactor
             };
 
-            return sma.Get(source.ToArray(), options);
+            return mae.Get(source.ToArray(), options);
         }
 		
-        public static MovingAverageEnvelopesResult Sma (this IEnumerable<decimal?> source, int period, double upwardFactor, double downwardFactor)
+        public static MovingAverageEnvelopesResult MovingAverageEnvelopes (this IEnumerable<decimal?> source, int period, double upwardFactor, double downwardFactor)
         {
-            MovingAverageEnvelopesIndicator sma = new MovingAverageEnvelopesIndicator();
+            MovingAverageEnvelopesIndicator mae = new MovingAverageEnvelopesIndicator();
             MovingAverageEnvelopesOptions options = new MovingAverageEnvelopesOptions
             {
                 Period = period, 
@@ -48,7 +48,7 @@ namespace TechanCore.Indicators.Extensions
                 DownwardFactor = downwardFactor
             };
 			
-            return sma.Get(source.ToArray(), options);
+            return mae.Get(source.ToArray(), options);
         }
     }
 }

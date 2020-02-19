@@ -2,11 +2,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
-using Core.Trading.Extensions;
+using TechanCore.Indicators.Extensions;
+using TechanCore.Strategies.Options;
 
-namespace Core.Trading.Strategies
+namespace TechanCore.Strategies
 {
-	public class Momentum : BaseStrategy
+	public class MomentumStrategy : BaseStrategy<MomentumStrategyOptions>
 	{
 		public override string Name { get; } = "Momentum";
 
@@ -14,15 +15,16 @@ namespace Core.Trading.Strategies
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			Validate(candles, default);
+			MomentumStrategyOptions options = GetOptions;
+			Validate(candles, options);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			List<decimal?> smaFast = candles.Sma(11);
-			List<decimal?> smaSlow = candles.Sma(21);
-			List<decimal?> mom = candles.Mom(30);
-			List<decimal?> rsi = candles.Rsi();
-			List<decimal> closes = candles.Select(x => x.Close).ToList();
+			decimal?[] smaFast = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] smaSlow = candles.Sma(options.SlowSmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] mom = candles.Momentum(options.MomentumPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
+			decimal[] closes = candles.Select(x => x.Close).ToArray();
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
@@ -41,6 +43,10 @@ namespace Core.Trading.Strategies
 			}
 
 			return result;
+		}
+
+		public MomentumStrategy(MomentumStrategyOptions options) : base(options)
+		{
 		}
 	}
 }

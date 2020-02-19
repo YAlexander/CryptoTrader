@@ -4,6 +4,8 @@ using System.Linq;
 using Contracts;
 using Contracts.Enums;
 using Contracts.Trading;
+using TechanCore.Indicators.Options;
+using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
@@ -28,14 +30,14 @@ namespace TechanCore.Strategies
 
 		protected abstract IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles);
 
-		protected void Validate(ICandle[] candles, object options)
+		protected void Validate(ICandle[] candles, T options)
 		{
 			if (candles == null || candles.Length < MinNumberOfCandles)
 			{
 				throw new Exception("Number of candles less then expected");
 			}
 
-			if (options == null)
+			if (typeof(T) != typeof(EmptyStrategyOptions) && options == null)
 			{
 				throw new Exception("Missed strategy's configuration");
 			}
