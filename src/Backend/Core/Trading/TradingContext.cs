@@ -10,7 +10,7 @@ namespace core.Trading
 		public (Assets asset1, Assets asset2) TradingPair { get; set; }
 		public Timeframes TimeFrame { get; set; }
 		public ICandle[] Candles { get; set; }
-		public ITradingStrategy Strategy { get; set; }
+		public ITradingStrategy<IStrategyOption> Strategy { get; set; }
 		public IRisk[] Risks { get; set; }
 	}
 }

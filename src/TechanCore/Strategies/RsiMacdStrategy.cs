@@ -7,7 +7,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class RsiMacd : BaseStrategy <RsiMacdStrategyOptions>
+	public class RsiMacdStrategy : BaseStrategy <RsiMacdStrategyOptions>
 	{
 		public override string Name { get; } = "RSI MACD Strategy";
 		
@@ -42,7 +42,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public RsiMacd(RsiMacdStrategyOptions options) : base(options)
+		public RsiMacdStrategy(RsiMacdStrategyOptions options) : base(options)
 		{
 		}
 	}

@@ -7,7 +7,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class AwesomeMacd : BaseStrategy<AwesomeMacdStrategyOptions>
+	public class AwesomeMacdStrategy : BaseStrategy<AwesomeMacdStrategyOptions>
 	{
 		public override string Name { get; } = "Awesome MACD Strategy";
 
@@ -46,7 +46,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public AwesomeMacd(AwesomeMacdStrategyOptions options) : base(options)
+		public AwesomeMacdStrategy(AwesomeMacdStrategyOptions options) : base(options)
 		{
 		}
 	}

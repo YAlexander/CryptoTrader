@@ -9,7 +9,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class MacdCross : BaseStrategy<MacdCrossStrategyOptions>
+	public class MacdCrossStrategy : BaseStrategy<MacdCrossStrategyOptions>
 	{
 		public override string Name { get; } = "MACD X Strategy";
 
@@ -50,7 +50,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public MacdCross(MacdCrossStrategyOptions options) : base(options)
+		public MacdCrossStrategy(MacdCrossStrategyOptions options) : base(options)
 		{
 		}
 	}

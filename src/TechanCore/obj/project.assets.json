@@ -1,7 +1,7 @@
 {
   "version": 3,
   "targets": {
-    ".NETCoreApp,Version=v3.1": {
+    ".NETStandard,Version=v2.1": {
       "Contracts/1.0.0": {
         "type": "project",
         "framework": ".NETStandard,Version=v2.1",
@@ -22,47 +22,47 @@
     }
   },
   "projectFileDependencyGroups": {
-    ".NETCoreApp,Version=v3.1": [
+    ".NETStandard,Version=v2.1": [
       "Contracts >= 1.0.0"
     ]
   },
   "packageFolders": {
-    "c:\\nuget\\packages": {},
+    "C:\\Users\\alexe\\.nuget\\packages\\": {},
     "C:\\Microsoft\\Xamarin\\NuGet": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Sources\\CryptoTrader\\src\\TechanCore\\TechanCore.csproj",
+      "projectUniqueName": "D:\\Projects\\CryptoTrader\\src\\TechanCore\\TechanCore.csproj",
       "projectName": "TechanCore",
-      "projectPath": "D:\\Sources\\CryptoTrader\\src\\TechanCore\\TechanCore.csproj",
-      "packagesPath": "c:\\nuget\\packages",
-      "outputPath": "D:\\Sources\\CryptoTrader\\src\\TechanCore\\obj\\",
+      "projectPath": "D:\\Projects\\CryptoTrader\\src\\TechanCore\\TechanCore.csproj",
+      "packagesPath": "C:\\Users\\alexe\\.nuget\\packages\\",
+      "outputPath": "D:\\Projects\\CryptoTrader\\src\\TechanCore\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Microsoft\\Xamarin\\NuGet",
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\alexander.ermakov\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\alexe\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Xamarin.Offline.config"
       ],
       "originalTargetFrameworks": [
-        "netcoreapp3.1"
+        "netstandard2.1"
       ],
       "sources": {
         "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
-        "C:\\nuget\\LocalPackages": {},
         "https://api.nuget.org/v3/index.json": {},
-        "https://dotnet.myget.org/F/orleans-ci/api/v3/index.json": {}
+        "https://dotnet.myget.org/F/orleans-ci/api/v3/index.json": {},
+        "https://www.myget.org/F/npgsql-unstable/api/v3/index.json": {}
       },
       "frameworks": {
-        "netcoreapp3.1": {
+        "netstandard2.1": {
           "projectReferences": {
-            "D:\\Sources\\CryptoTrader\\src\\Contracts\\Contracts.csproj": {
-              "projectPath": "D:\\Sources\\CryptoTrader\\src\\Contracts\\Contracts.csproj"
+            "D:\\Projects\\CryptoTrader\\src\\Contracts\\Contracts.csproj": {
+              "projectPath": "D:\\Projects\\CryptoTrader\\src\\Contracts\\Contracts.csproj"
             }
           }
         }
@@ -74,7 +74,7 @@
       }
     },
     "frameworks": {
-      "netcoreapp3.1": {
+      "netstandard2.1": {
         "imports": [
           "net461",
           "net462",
@@ -85,8 +85,14 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "NETStandard.Library.Ref",
+            "version": "[2.1.0, 2.1.0]"
+          }
+        ],
         "frameworkReferences": {
-          "Microsoft.NETCore.App": {
+          "NETStandard.Library": {
             "privateAssets": "all"
           }
         },

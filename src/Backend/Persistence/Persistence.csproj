@@ -6,6 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\..\TechanCore\TechanCore.csproj" />
     </ItemGroup>
 
     <ItemGroup>

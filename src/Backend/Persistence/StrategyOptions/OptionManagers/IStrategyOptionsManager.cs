@@ -1,12 +1,13 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Contracts.Enums;
-using Persistence.Entities;
+using Contracts.Trading;
 
 namespace Persistence.StrategyOptions.OptionManagers
 {
-	public interface IStrategyOptionsManager<T>
+	public interface IStrategyOptionsManager<T> where T : IStrategyOption 
 	{
-		Task<IEnumerable<T>> GetOptions(Exchanges exchange, Assets asset1, Assets asset2, string strategyName);
+		string StrategyName { get; }
+		
+		Task<T> GetOptions(Exchanges exchange, Assets asset1, Assets asset2, string strategyName);
 	}
 }

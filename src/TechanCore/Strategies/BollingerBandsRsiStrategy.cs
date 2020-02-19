@@ -8,7 +8,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class BollingerBandsRsiStrategy : BaseStrategy<BollingerBandsRsiOptions>
+	public class BollingerBandsRsiStrategy : BaseStrategy<BollingerBandsRsiStrategyOptions>
 	{
 		public override string Name { get; } = "Bollinger Bands RSI Strategy";
 
@@ -16,7 +16,7 @@ namespace TechanCore.Strategies
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			BollingerBandsRsiOptions options = GetOptions;
+			BollingerBandsRsiStrategyOptions options = GetOptions;
 			Validate(candles, default);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
@@ -48,7 +48,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public BollingerBandsRsiStrategy(BollingerBandsRsiOptions options) : base(options)
+		public BollingerBandsRsiStrategy(BollingerBandsRsiStrategyOptions options) : base(options)
 		{
 		}
 	}

@@ -7,7 +7,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class AwesomeSma : BaseStrategy<AwesomeSmaStrategyOptions>
+	public class AwesomeSmaStrategy : BaseStrategy<AwesomeSmaStrategyOptions>
 	{
 		public override string Name { get; } = "Awesome SMA";
 
@@ -47,7 +47,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public AwesomeSma(AwesomeSmaStrategyOptions options) : base(options)
+		public AwesomeSmaStrategy(AwesomeSmaStrategyOptions options) : base(options)
 		{
 		}
 	}

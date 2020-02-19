@@ -5,6 +5,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\TechanCore\TechanCore.csproj" />
       <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
       <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
     </ItemGroup>

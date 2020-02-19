@@ -2,7 +2,7 @@ using Contracts.Trading;
 
 namespace TechanCore.Strategies.Options
 {
-	public class BollingerAwesomeMacdOptions : IStrategyOption
+	public class BollingerAwesomeMacdStrategyOptions : IStrategyOption
 	{
 		public int FastPeriod { get; set; }
 		public int SlowPeriod { get; set; }

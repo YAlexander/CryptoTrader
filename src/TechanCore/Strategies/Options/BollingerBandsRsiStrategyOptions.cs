@@ -2,7 +2,7 @@ using Contracts.Trading;
 
 namespace TechanCore.Strategies.Options
 {
-	public class BollingerBandsRsiOptions : IStrategyOption
+	public class BollingerBandsRsiStrategyOptions : IStrategyOption
 	{
 		public int BollingerPeriod { get; set; }
 		public int BollingerDeviationDown { get; set; }

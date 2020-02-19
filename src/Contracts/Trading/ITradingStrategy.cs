@@ -2,7 +2,7 @@ using Contracts.Enums;
 
 namespace Contracts.Trading
 {
-	public interface ITradingStrategy<T> where T : IStrategyOption
+	public interface ITradingStrategy<out T> where T : IStrategyOption
 	{
 		string Name { get; }
 		

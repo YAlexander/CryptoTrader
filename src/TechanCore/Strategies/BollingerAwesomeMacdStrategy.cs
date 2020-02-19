@@ -8,7 +8,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class BollingerAwesomeMacdStrategy : BaseStrategy<BollingerAwesomeMacdOptions>
+	public class BollingerAwesomeMacdStrategy : BaseStrategy<BollingerAwesomeMacdStrategyOptions>
 	{
 		public override string Name { get; } = "Bollinger Awesome MACD Strategy";
 
@@ -16,7 +16,7 @@ namespace TechanCore.Strategies
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			BollingerAwesomeMacdOptions options = GetOptions;
+			BollingerAwesomeMacdStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
@@ -83,7 +83,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public BollingerAwesomeMacdStrategy(BollingerAwesomeMacdOptions options) : base(options)
+		public BollingerAwesomeMacdStrategy(BollingerAwesomeMacdStrategyOptions options) : base(options)
 		{
 		}
 	}

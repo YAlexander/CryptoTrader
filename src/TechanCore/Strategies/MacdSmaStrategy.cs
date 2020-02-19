@@ -7,7 +7,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class MacdSma : BaseStrategy<MacdSmaStrategyOptions>
+	public class MacdSmaStrategy : BaseStrategy<MacdSmaStrategyOptions>
 	{
 		public override string Name { get; } = "MACD SMA Strategy";
 		
@@ -50,7 +50,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public MacdSma(MacdSmaStrategyOptions options) : base(options)
+		public MacdSmaStrategy(MacdSmaStrategyOptions options) : base(options)
 		{
 		}
 	}

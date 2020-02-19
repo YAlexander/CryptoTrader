@@ -8,7 +8,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class QuickSma : BaseStrategy<QuickSmaStrategyOptions>
+	public class QuickSmaStrategy : BaseStrategy<QuickSmaStrategyOptions>
 	{
 		public override string Name { get; } = "Quick SMA Strategy";
 		
@@ -47,7 +47,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public QuickSma(QuickSmaStrategyOptions options) : base(options)
+		public QuickSmaStrategy(QuickSmaStrategyOptions options) : base(options)
 		{
 		}
 	}

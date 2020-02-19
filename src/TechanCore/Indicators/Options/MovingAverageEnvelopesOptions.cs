@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using Contracts.Enums;
+﻿using Contracts.Enums;
 using Contracts.Trading;
 
 namespace TechanCore.Indicators.Options

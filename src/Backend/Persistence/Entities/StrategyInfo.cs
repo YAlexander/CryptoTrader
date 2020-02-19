@@ -12,6 +12,8 @@
 		
 		public string StrategyName { get; set; }
 		
+		public string Class { get; set; }
+		
 		public int TimeFrame { get; set; }
 		
 		public bool IsDisabled { get; set; }

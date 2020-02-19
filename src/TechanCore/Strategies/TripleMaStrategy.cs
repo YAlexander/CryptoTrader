@@ -7,7 +7,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class TripleMaStrategy : BaseStrategy<TripleMaOptions>
+	public class TripleMaStrategy : BaseStrategy<TripleMaStrategyOptions>
 	{
 		public override string Name { get; } = "Triple MA Strategy";
 
@@ -15,7 +15,7 @@ namespace TechanCore.Strategies
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			TripleMaOptions options = GetOptions;			
+			TripleMaStrategyOptions options = GetOptions;			
 			Validate(candles, options);
 			
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
@@ -47,7 +47,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public TripleMaStrategy(TripleMaOptions options) : base(options)
+		public TripleMaStrategy(TripleMaStrategyOptions options) : base(options)
 		{
 		}
 	}
