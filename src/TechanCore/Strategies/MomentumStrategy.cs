@@ -9,7 +9,7 @@ namespace TechanCore.Strategies
 {
 	public class MomentumStrategy : BaseStrategy<MomentumStrategyOptions>
 	{
-		public override string Name { get; } = "Momentum";
+		public override string Name { get; } = "Momentum Strategy";
 
 		public override int MinNumberOfCandles { get; } = 30;
 

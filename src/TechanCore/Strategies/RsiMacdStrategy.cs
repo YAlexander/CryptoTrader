@@ -9,7 +9,7 @@ namespace TechanCore.Strategies
 {
 	public class RsiMacd : BaseStrategy <RsiMacdStrategyOptions>
 	{
-		public override string Name { get; } = "RSI MACD";
+		public override string Name { get; } = "RSI MACD Strategy";
 		
 		public override int MinNumberOfCandles { get; } = 52;
 

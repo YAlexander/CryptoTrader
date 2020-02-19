@@ -9,7 +9,7 @@ namespace TechanCore.Strategies
 {
 	public class MacdSma : BaseStrategy<MacdSmaStrategyOptions>
 	{
-		public override string Name { get; } = "MACD SMA";
+		public override string Name { get; } = "MACD SMA Strategy";
 		
 		public override int MinNumberOfCandles { get; } = 200;
 
