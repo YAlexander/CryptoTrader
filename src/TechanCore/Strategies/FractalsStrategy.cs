@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
-using TechanCore.Indicators.Helpers;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
@@ -27,8 +27,8 @@ namespace TechanCore.Strategies
 			List<bool> fractalTrend = new List<bool>();
 
 			decimal?[] ao = candles.AwesomeOscillator(options.AwesomeFastPeriod, options.AwesomeSlowPeriod).Result;
-			decimal?[] high = candles.High();
-			decimal?[] highLowAvgs = candles.AverageExtremum();
+			decimal[] high = candles.High();
+			decimal[] highLowAvgs = candles.AverageExtremum();
 
 			for (int i = 0; i < candles.Length; i++)
 			{

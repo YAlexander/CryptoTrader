@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
-using TechanCore.Indicators.Helpers;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
@@ -24,7 +24,7 @@ namespace TechanCore.Strategies
 			decimal?[] ema = candles.Ema(options.EmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] wma = candles.Wma(options.WmaPeriod, CandleVariables.CLOSE).Result;
 
-			decimal?[] closes = candles.Close();
+			decimal[] closes = candles.Close();
 			Bars[] bars = new Bars[candles.Length];
 
 			for (int i = 0; i < candles.Length; i++)

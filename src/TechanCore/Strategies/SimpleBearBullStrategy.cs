@@ -1,24 +1,25 @@
 using System.Collections.Generic;
-using System.Linq;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Helpers;
+using TechanCore.Strategies.Options;
 
-namespace Core.Trading.Strategies
+namespace TechanCore.Strategies
 {
-	public class SimpleBearBull : BaseStrategy
+	public class SimpleBearBullStrategy : BaseStrategy<EmptyStrategyOptions>
 	{
-		public override string Name { get; } = "The Bull and The Bear";
+		public override string Name { get; } = "The Bull and The Bear Strategy";
 		
 		public override int MinNumberOfCandles { get; } = 5;
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			Validate(candles, default);
+			Validate(candles, null);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-			List<decimal> closes = candles.Select(x => x.Close).ToList();
+			decimal[] closes = candles.Close();
 
-			for (int i = 0; i < candles.Count(); i++)
+			for (int i = 0; i < candles.Length; i++)
 			{
 				if (i >= 2)
 				{
@@ -28,24 +29,28 @@ namespace Core.Trading.Strategies
 
 					if (current > previous && previous > prior)
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.BUY));
+						result.Add((candles[i], TradingAdvices.BUY));
 					}
 					else if (current < previous)
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.SELL));
+						result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+						result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 				else
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
 			return result;
+		}
+
+		public SimpleBearBullStrategy(EmptyStrategyOptions options) : base(options)
+		{
 		}
 	}
 }

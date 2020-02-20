@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
-using TechanCore.Indicators.Helpers;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
@@ -24,11 +24,11 @@ namespace TechanCore.Strategies
 			decimal?[] smaFast = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] smaSlow = candles.Sma(options.SlowSmaPeriod, CandleVariables.CLOSE).Result;
 
-			decimal?[] closes = candles.Close();
+			decimal[] closes = candles.Close();
 			bool[] crossOver = smaFast.Crossover(smaSlow).ToArray();
 			bool[] crossUnder = smaSlow.Crossunder(closes).ToArray();
 
-			for (int i = 0; i < candles.Count(); i++)
+			for (int i = 0; i < candles.Length; i++)
 			{
 				if (crossOver[i])
 				{

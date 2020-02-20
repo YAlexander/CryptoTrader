@@ -2,8 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
-using TechanCore.Indicators.Helpers;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
@@ -22,9 +22,9 @@ namespace TechanCore.Strategies
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
 			decimal?[] rsi = candles.Rsi(11).Result;
-			decimal?[] close = candles.Close();
-			decimal?[] high = candles.High();
-			decimal?[] low = candles.Low();
+			decimal[] close = candles.Close();
+			decimal[] high = candles.High();
+			decimal[] low = candles.Low();
 
 			for (int i = 0; i < candles.Count(); i++)
 			{

@@ -2,8 +2,8 @@ using System;
 using System.Collections.Generic;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
-using TechanCore.Indicators.Helpers;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
@@ -24,8 +24,8 @@ namespace TechanCore.Strategies
 			decimal?[] smaFastHigh = candles.Sma(options.FastSmaPeriod, CandleVariables.HIGH).Result;
 			decimal?[] smaNormalHigh = candles.Sma(options.NormalSmaPeriod, CandleVariables.HIGH).Result;
 			decimal?[] smaSlowLow = candles.Sma(options.SlowSmaPeriod, CandleVariables.LOW).Result;
-			decimal?[] closes = candles.Close();
-			decimal?[] opens = candles.Open();
+			decimal[] closes = candles.Close();
+			decimal[] opens = candles.Open();
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
 
 			for (int i = 0; i < candles.Length; i++)
@@ -36,8 +36,8 @@ namespace TechanCore.Strategies
 				}
 				else if (smaFastHigh[i] > smaNormalHigh[i] 
 						&& rsi[i] > 65
-						&& Math.Abs(opens[i - 1].Value - closes[i - 1].Value) > 0 
-						&& Math.Abs(opens[i].Value - closes[i].Value) / Math.Abs(opens[i - 1].Value - closes[i - 1].Value) < 2)
+						&& Math.Abs(opens[i - 1] - closes[i - 1]) > 0 
+						&& Math.Abs(opens[i] - closes[i]) / Math.Abs(opens[i - 1] - closes[i - 1]) < 2)
 				{
 					result.Add((candles[i], TradingAdvices.BUY));
 				}

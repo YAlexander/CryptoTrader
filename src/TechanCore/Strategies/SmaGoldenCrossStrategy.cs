@@ -4,40 +4,38 @@ using Contracts;
 using Contracts.Enums;
 using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
-using TechanCore.Indicators.Results;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class MacdCrossStrategy : BaseStrategy<MacdCrossStrategyOptions>
+	public class SmaGoldenCrossStrategy : BaseStrategy<EmptyStrategyOptions>
 	{
-		public override string Name { get; } = "MACD X Strategy";
+		public override string Name { get; } = "SMA 50/200 Golden Cross Strategy";
 
-		public override int MinNumberOfCandles { get; } = 50;
+		public override int MinNumberOfCandles { get; } = 200;
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			MacdCrossStrategyOptions options = GetOptions;
-			Validate(candles, options);
+			Validate(candles, null);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			MacdIndicatorResult macd = candles.Macd(options.FastPeriod, options.SlowPeriod, options.SignalPeriod);
-			
+			decimal?[] sma50 = candles.Sma(50, CandleVariables.CLOSE).Result;
+			decimal?[] sma200 = candles.Sma(200, CandleVariables.CLOSE).Result;
+			bool[] crossUnder = sma50.Crossunder(sma200).ToArray();
+			bool[] crossOver = sma50.Crossover(sma200).ToArray();
+
 			for (int i = 0; i < candles.Length; i++)
 			{
-				bool[] crossUnder = macd.Macd.Crossunder(macd.Signal).ToArray();
-				bool[] crossOver = macd.Macd.Crossover(macd.Signal).ToArray();
-			
 				if (i == 0)
 				{
 					result.Add((candles[i], TradingAdvices.HOLD));
 				}
-				else if (macd.Macd[i] > 0 && crossUnder[i])
+				else if (crossUnder[i])
 				{
 					result.Add((candles[i], TradingAdvices.SELL));
 				}
-				else if (macd.Macd[i] < 0 && crossOver[i])
+				else if (crossOver[i])
 				{
 					result.Add((candles[i], TradingAdvices.BUY));
 				}
@@ -50,7 +48,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public MacdCrossStrategy(MacdCrossStrategyOptions options) : base(options)
+		public SmaGoldenCrossStrategy(EmptyStrategyOptions options) : base(options)
 		{
 		}
 	}
