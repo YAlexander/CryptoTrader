@@ -2,11 +2,13 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
-using Core.Trading.Extensions;
+using TechanCore.Indicators.Extensions;
+using TechanCore.Indicators.Helpers;
+using TechanCore.Strategies.Options;
 
-namespace Core.Trading.Strategies
+namespace TechanCore.Strategies
 {
-	public class Fractals : BaseStrategy
+	public class FractalsStrategy : BaseStrategy<FractalsStrategyOptions>
 	{
 		public override string Name { get; } = "Fractals";
 
@@ -14,25 +16,21 @@ namespace Core.Trading.Strategies
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			Validate(candles, default);
+			FractalsStrategyOptions options = GetOptions;
+			Validate(candles, options);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			// Settings for this strategy
-			int exitAfterBars = 3;
-			bool useLongerAverage = true;
-			bool noRepainting = true;
-
 			// Our lists to hold our values
-			List<decimal> fractalPrice = new List<decimal>();
-			List<decimal> fractalAverage = new List<decimal>();
+			List<decimal?> fractalPrice = new List<decimal?>();
+			List<decimal?> fractalAverage = new List<decimal?>();
 			List<bool> fractalTrend = new List<bool>();
 
-			List<decimal?> ao = candles.AwesomeOscillator();
-			List<decimal> high = candles.Select(x => x.High).ToList();
-			List<decimal> highLowAvgs = candles.Select(x => (x.High + x.Low) / 2).ToList();
+			decimal?[] ao = candles.AwesomeOscillator(options.AwesomeFastPeriod, options.AwesomeSlowPeriod).Result;
+			decimal?[] high = candles.High();
+			decimal?[] highLowAvgs = candles.AverageExtremum();
 
-			for (int i = 0; i < candles.Count(); i++)
+			for (int i = 0; i < candles.Length; i++)
 			{
 				// Calculate the price for this fractal
 				if (i < 4)
@@ -48,42 +46,42 @@ namespace Core.Trading.Strategies
 									 high[i - 2] > high[i - 4] &&
 									 high[i - 2] > high[i - 1] &&
 									 high[i - 2] > high[i];
-					decimal price = fractalTop ? highLowAvgs[i] : 0;
+					decimal? price = fractalTop ? highLowAvgs[i] : 0;
 					fractalPrice.Add(price);
 
 					// Calculate the avg price
-					decimal avg = useLongerAverage
-						? (fractalPrice[i - 1] + fractalPrice[i - 2] + fractalPrice[i - 3]) / 3
-						: (fractalPrice[i - 1] + fractalPrice[i - 2]) / 2;
+					decimal? avg = (fractalPrice[i - 1] + fractalPrice[i - 2] + fractalPrice[i - 3]) / 3;
 					fractalAverage.Add(avg);
 
 					// Check the trend.
 					bool trend = fractalAverage[i] > fractalAverage[i - 1];
 					fractalTrend.Add(trend);
 
-					bool fractalBreakout = noRepainting
-						? highLowAvgs[i - 1] > fractalPrice[i]
-						: highLowAvgs[i] > fractalPrice[i];
+					bool fractalBreakout = highLowAvgs[i - 1] > fractalPrice[i];
 
 					bool tradeEntry = fractalTrend[i] && fractalBreakout;
-					bool tradeExit = fractalTrend[i - exitAfterBars] && fractalTrend[i] == false;
+					bool tradeExit = fractalTrend[i - options.ExitAfterBarsCount] && fractalTrend[i] == false;
 
 					if (tradeExit)
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.SELL));
+						result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else if (tradeEntry && ao[i] > 0)
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.BUY));
+						result.Add((candles[i], TradingAdvices.BUY));
 					}
 					else
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+						result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 			}
 
 			return result;
+		}
+
+		public FractalsStrategy(FractalsStrategyOptions options) : base(options)
+		{
 		}
 	}
 }

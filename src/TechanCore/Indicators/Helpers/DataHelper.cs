@@ -13,6 +13,8 @@ namespace TechanCore.Indicators.Helpers
 		public static decimal?[] Open(this IEnumerable<ICandle> source) => source.Select(x => (decimal?)x.Open).ToArray();
 
 		public static decimal?[] Close(this IEnumerable<ICandle> source) => source.Select(x => (decimal?)x.Close).ToArray();
+		
+		public static decimal?[] AverageExtremum(this IEnumerable<ICandle> source) => source.Select(x => (decimal?)((x.High + x.Low) / 2)).ToArray();
 
 		// public static IEnumerable<bool> Crossunder (this decimal?[] source, decimal value)
 		// {

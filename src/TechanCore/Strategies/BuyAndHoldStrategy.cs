@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Strategies.Options;
 
-namespace Core.Trading.Strategies
+namespace TechanCore.Strategies
 {
-	public class BuyAndHold : BaseStrategy
+	public class BuyAndHoldStrategy : BaseStrategy<EmptyStrategyOptions>
 	{
 		public override string Name { get; } = "Buy and Hold";
 
@@ -19,7 +20,7 @@ namespace Core.Trading.Strategies
 
 		public override TradingAdvices Forecast (ICandle[] candles)
 		{
-			Validate(candles, default);
+			Validate(candles, null);
 
 			List<TradingAdvices> result = new List<TradingAdvices> { TradingAdvices.BUY };
 			TradingAdvices[] holdAdvices = new TradingAdvices[candles.Count() - 2];
@@ -28,6 +29,10 @@ namespace Core.Trading.Strategies
 			result.Add(TradingAdvices.SELL);
 
 			return result.LastOrDefault();
+		}
+
+		public BuyAndHoldStrategy(EmptyStrategyOptions options) : base(options)
+		{
 		}
 	}
 }

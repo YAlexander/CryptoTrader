@@ -29,3 +29,4 @@ src/Backend/Persistence/obj/
 src/Backend/Persistence.PostgreSQL/obj/
 src/Backend/Core/obj/
 .idea/
+src/TechanCore/obj/
