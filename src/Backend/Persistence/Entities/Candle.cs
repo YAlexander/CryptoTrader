@@ -3,7 +3,7 @@ using Contracts;
 
 namespace Persistence.Entities
 {
-	public class Candle : ICandle
+	public class Candle : BaseEntity, ICandle
 	{
 		public DateTime Time { get; set; }
 		public decimal High { get; set; }

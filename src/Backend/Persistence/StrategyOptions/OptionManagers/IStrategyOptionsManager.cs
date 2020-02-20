@@ -4,7 +4,7 @@ using Contracts.Trading;
 
 namespace Persistence.StrategyOptions.OptionManagers
 {
-	public interface IStrategyOptionsManager<T> where T : IStrategyOption 
+	public interface IStrategyOptionsManager<T> where T : IStrategyOption
 	{
 		string StrategyName { get; }
 		
