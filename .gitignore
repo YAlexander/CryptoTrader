@@ -30,3 +30,6 @@ src/Backend/Persistence.PostgreSQL/obj/
 src/Backend/Core/obj/
 .idea/
 src/TechanCore/obj/
+src/Contracts/bin/Debug/netstandard2.1/Contracts.deps.json
+src/Contracts/bin/
+src/Services/Binance/bin/
