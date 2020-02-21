@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
-using System.Net.Mail;
 using System.Threading.Tasks;
 using Contracts;
 using Contracts.Enums;
@@ -8,7 +8,6 @@ using Contracts.Trading;
 using Core.Helpers;
 using Persistence;
 using Persistence.Entities;
-using Persistence.StrategyOptions;
 using Persistence.StrategyOptions.OptionManagers;
 using TechanCore.Enums;
 using TechanCore.Helpers;
@@ -61,7 +60,7 @@ namespace Core.BusinessLogic
 			IStrategyOptionsManager<IStrategyOption> optionManager = _strategyOptionManagers.SingleOrDefault(x => x.StrategyName.Equals(strategyInfo.Class));
 			if (optionManager == null)
 			{
-				throw new SmtpException($"Options for strategy {strategyInfo.StrategyName} wasn't found");
+				throw new Exception($"Options for strategy {strategyInfo.StrategyName} wasn't found");
 			} 
 			
 			IStrategyOption options = await optionManager.GetOptions(exchangeCode, asset1, asset2, strategyInfo.Class);

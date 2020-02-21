@@ -5,8 +5,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\..\TechanCore\TechanCore.csproj" />
-      <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
       <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
     </ItemGroup>
 
@@ -17,7 +17,6 @@
 
     <ItemGroup>
       <Folder Include="Helpers\Mappers" />
-      <Folder Include="Trading\Risk" />
     </ItemGroup>
 
 </Project>

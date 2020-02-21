@@ -33,3 +33,8 @@ src/TechanCore/obj/
 src/Contracts/bin/Debug/netstandard2.1/Contracts.deps.json
 src/Contracts/bin/
 src/Services/Binance/bin/
+src/Services/Bitmex/bin/
+src/Backend/Persistence/bin/
+src/TechanCore/bin/
+src/Backend/Persistence.PostgreSQL/bin/
+src/Backend/Core/bin/
