@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
+using Contracts;
 using Contracts.Enums;
 using Contracts.Trading;
 using Core.Helpers;
@@ -9,6 +10,8 @@ using Persistence;
 using Persistence.Entities;
 using Persistence.StrategyOptions;
 using Persistence.StrategyOptions.OptionManagers;
+using TechanCore.Enums;
+using TechanCore.Helpers;
 
 namespace Core.BusinessLogic
 {
@@ -43,7 +46,16 @@ namespace Core.BusinessLogic
 
 			int numberOfCandles = strategyInfo.TimeFrame * context.Strategy.MinNumberOfCandles;
 			IEnumerable<Candle> candles = await _candlesProcessor.GetCandles(exchangeCode, asset1, asset2, numberOfCandles);
-			context.Candles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);
+			ICandle[] groupedCandles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);
+
+			if (strategyInfo.UseHeikenAshiCandles)
+			{
+				groupedCandles = strategyInfo.SmoothHeikenAshiCandles 
+					? groupedCandles.HeikenAshiSmoothed(MaTypes.EMA, 14).ToArray() 
+					: groupedCandles.HeikenAshi().ToArray();
+			}
+
+			context.Candles = groupedCandles; 
 
 			//Get strategy
 			IStrategyOptionsManager<IStrategyOption> optionManager = _strategyOptionManagers.SingleOrDefault(x => x.StrategyName.Equals(strategyInfo.Class));

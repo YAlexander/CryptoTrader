@@ -16,6 +16,9 @@
 		
 		public int TimeFrame { get; set; }
 		
+		public bool UseHeikenAshiCandles { get; set; }
+		public bool SmoothHeikenAshiCandles { get; set; }
+		
 		public bool IsDisabled { get; set; }
 	}
 }
