@@ -38,3 +38,6 @@ src/Backend/Persistence/bin/
 src/TechanCore/bin/
 src/Backend/Persistence.PostgreSQL/bin/
 src/Backend/Core/bin/
+src/Backoffice/Site/bin/
+src/Backoffice/Site/ClientApp/node_modules/
+src/Backoffice/Site/obj/
