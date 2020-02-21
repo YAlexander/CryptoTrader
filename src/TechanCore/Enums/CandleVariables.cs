@@ -1,4 +1,4 @@
-﻿namespace Contracts.Enums
+﻿namespace TechanCore.Enums
 {
 	public enum CandleVariables
 	{

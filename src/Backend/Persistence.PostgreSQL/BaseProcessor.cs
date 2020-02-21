@@ -2,7 +2,7 @@
 using System.Data;
 using System.Threading.Tasks;
 using Contracts;
-using Npgsql;
+
 
 namespace Persistence
 {
@@ -17,22 +17,23 @@ namespace Persistence
 
 		public async Task<T> WithConnection<T> (Func<IDbConnection, IDbTransaction, Task<T>> f)
 		{
-			await using NpgsqlConnection sqlConnection = new NpgsqlConnection(_connectionString);
-			await sqlConnection.OpenAsync();
-			
-			await using NpgsqlTransaction transaction = sqlConnection.BeginTransaction();
-			try
-			{
-				T result = await f(sqlConnection, transaction);
-				transaction.Commit();
-					
-				return result;
-			}
-			catch
-			{
-				await transaction.RollbackAsync();
-				throw;
-			}
+			// await using NpgsqlConnection sqlConnection = new NpgsqlConnection(_connectionString);
+			// await sqlConnection.OpenAsync();
+			//
+			// await using NpgsqlTransaction transaction = sqlConnection.BeginTransaction();
+			// try
+			// {
+			// 	T result = await f(sqlConnection, transaction);
+			// 	transaction.Commit();
+			// 		
+			// 	return result;
+			// }
+			// catch
+			// {
+			// 	await transaction.RollbackAsync();
+			// 	throw;
+			// }
+			throw new NotImplementedException();
 		}
 	}
 }

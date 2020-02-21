@@ -4,35 +4,41 @@ using Contracts;
 using Contracts.Enums;
 using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
+using TechanCore.Indicators.Results;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class CciScalperStrategy : BaseStrategy<CciScalperStrategyOptions>
+	public class EmaAdxMacdStrategy : BaseStrategy<EmaAdxMacdOptions>
 	{
-		public override string Name { get; } = "CCI Scalper";
-
-		public override int MinNumberOfCandles { get; } = 14;
+		public override string Name { get; } = "EMA ADX MACD";
+		
+		public override int MinNumberOfCandles { get; } = 30;
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			CciScalperStrategyOptions options = GetOptions;
+			EmaAdxMacdOptions options = GetOptions;
 			Validate(candles, options);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			decimal?[] cci = candles.Cci(options.CciPeriod).Result;
 			decimal?[] emaFast = candles.Ema(options.FastEmaPeriod, CandleVariables.CLOSE).Result;
-			decimal?[] emaNormal = candles.Ema(options.NormalEmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] emaSlow = candles.Ema(options.SlowEmaPeriod, CandleVariables.CLOSE).Result;
+			AdxResult adx = candles.Adx(options.AdxEmaPeriod);
+			
+			MacdIndicatorResult macd = candles.Macd(options.MacdFastPeriod, options.MacdSlowPeriod, options.MacdSignalPeriod);
 
 			for (int i = 0; i < candles.Count(); i++)
 			{
-				if (cci[i] < -100 && emaFast[i] > emaNormal[i] && emaFast[i] > emaSlow[i])
+				if (i == 0)
+				{
+					result.Add((candles[i], TradingAdvices.HOLD));
+				}
+				else if (emaFast[i] < emaSlow[i] && emaFast[i - 1] > emaSlow[i] && macd.Macd[i] < 0 && adx.PlusDi[i] > adx.MinusDi[i])
 				{
 					result.Add((candles[i], TradingAdvices.BUY));
 				}
-				else if (cci[i] > 100 && emaFast[i] < emaNormal[i] && emaFast[i] < emaSlow[i])
+				else if (emaFast[i] > emaSlow[i] && emaFast[i - 1] < emaSlow[i] && macd.Macd[i] > 0 && adx.PlusDi[i] < adx.MinusDi[i])
 				{
 					result.Add((candles[i], TradingAdvices.SELL));
 				}
@@ -45,7 +51,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public CciScalperStrategy(CciScalperStrategyOptions options) : base(options)
+		public EmaAdxMacdStrategy(EmaAdxMacdOptions options) : base(options)
 		{
 		}
 	}

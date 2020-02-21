@@ -18,7 +18,7 @@ namespace TechanCore.Indicators
                 result[i] = source[i].Close - source[i - options.Period].Close;    
             }
 
-            return new SeriesIndicatorResult() {Result = result};
+            return new SeriesIndicatorResult {Result = result};
         }
 
         public override SeriesIndicatorResult Get(decimal[] source, MomentumOptions options)

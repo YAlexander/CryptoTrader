@@ -1,6 +1,7 @@
 using System;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;

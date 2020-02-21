@@ -7,21 +7,22 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class EmaCrossStrategy : BaseStrategy<EmaCrossStrategyOptions>
+	public class BreakoutMaStrategy : BaseStrategy<BreakoutMaOptions>
 	{
-		public override string Name { get; } = "EMA Cross Strategy";
+		public override string Name { get; } = "Breakout MA Strategy";
 
-		public override int MinNumberOfCandles { get; } = 36;
+		public override int MinNumberOfCandles { get; } = 35;
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			EmaCrossStrategyOptions options = GetOptions;
+			BreakoutMaOptions options = GetOptions;
 			Validate(candles, options);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			decimal?[] emaShort = candles.Ema(options.FastEmaPeriod, CandleVariables.CLOSE).Result;
-			decimal?[] emaLong = candles.Ema(options.SlowEmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] sma = candles.Sma(options.SmaPeriod,CandleVariables.CLOSE).Result;
+			decimal?[] ema = candles.Ema(options.EmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] adx = candles.Adx(options.AdxPeriod).Adx;
 
 			for (int i = 0; i < candles.Length; i++)
 			{
@@ -29,11 +30,11 @@ namespace TechanCore.Strategies
 				{
 					result.Add((candles[i], TradingAdvices.HOLD));
 				}
-				else if (emaShort[i] < emaLong[i] && emaShort[i - 1] > emaLong[i])
+				else if (ema[i - 1] > sma[i - 1] && ema[i] < sma[i] && adx[i] > 25)
 				{
 					result.Add((candles[i], TradingAdvices.BUY));
 				}
-				else if (emaShort[i] > emaLong[i] && emaShort[i - 1] < emaLong[i])
+				else if (ema[i] > sma[i] && ema[i - 1] < sma[i - 1] && adx[i] > 25)
 				{
 					result.Add((candles[i], TradingAdvices.SELL));
 				}
@@ -46,7 +47,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public EmaCrossStrategy(EmaCrossStrategyOptions options) : base(options)
+		public BreakoutMaStrategy(BreakoutMaOptions options) : base(options)
 		{
 		}
 	}

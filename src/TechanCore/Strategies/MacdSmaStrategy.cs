@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Contracts;
 using Contracts.Enums;
+using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Strategies.Options;
 
@@ -19,9 +20,9 @@ namespace TechanCore.Strategies
 			Validate(candles, options);
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
-			var macd = candles.Macd(options.FastPeriod, options.SlowPeriod, options.SignalPeriod);
-			decimal?[] fastMa = candles.Sma(options.FastPeriod, CandleVariables.CLOSE).Result;
-			decimal?[] slowMa = candles.Sma(options.SlowPeriod, CandleVariables.CLOSE).Result;
+			var macd = candles.Macd(options.MacdFastPeriod, options.MacdSlowPeriod, options.MacdSignalPeriod);
+			decimal?[] fastMa = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] slowMa = candles.Sma(options.SlowSmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] sma = candles.Sma(options.SmaPeriod, CandleVariables.CLOSE).Result;
 
 			List<decimal> closes = candles.Select(x => x.Close).ToList();
