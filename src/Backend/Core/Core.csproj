@@ -16,6 +16,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <Folder Include="BusinessLogic\RiskManagers" />
       <Folder Include="Helpers\Mappers" />
     </ItemGroup>
 

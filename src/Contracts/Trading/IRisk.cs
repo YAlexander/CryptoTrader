@@ -4,6 +4,6 @@ namespace Contracts.Trading
 {
 	public interface IRisk
 	{
-		(int, bool) Get(ICandle[] candles);
+		Task Get(ICandle[] candles, IStrategyInfo info, decimal balance, ref IRiskResult result);
 	}
 }

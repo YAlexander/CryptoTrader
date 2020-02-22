@@ -39,7 +39,7 @@ namespace Core.BusinessLogic
 			context.Exchange = exchangeCode;
 			context.TradingPair = (asset1, asset2);
 
-			StrategyInfo strategyInfo = await _strategyInfoProcessor.GetStrategyInfo(exchangeCode, asset1, asset2);
+			IStrategyInfo strategyInfo = await _strategyInfoProcessor.GetStrategyInfo(exchangeCode, asset1, asset2);
 
 			context.TimeFrame = (Timeframes) strategyInfo.TimeFrame;
 
