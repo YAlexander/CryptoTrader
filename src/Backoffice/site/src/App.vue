@@ -1,10 +1,13 @@
 <template>
   <div id="app">
+    <div class="row header">
+      <div class="col-lg-12">Header</div>
+    </div>
     <div class="row">
-      <div id="chart-holder" class="col-lg-6">
+      <div id="chart-holder" class="col-lg-8">
         <TradingVue msg="Welcome to Your Vue.js App"/>
       </div>
-      <div class="col-lg-6">aaa</div>
+      <div class="col-lg-4">aaa</div>
     </div>
   </div>
 </template>
@@ -25,7 +28,9 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
+}
+
+#chart-holder {
+  margin-top: 50px;
 }
 </style>
