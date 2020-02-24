@@ -38,3 +38,7 @@ src/Backend/Persistence/bin/
 src/TechanCore/bin/
 src/Backend/Persistence.PostgreSQL/bin/
 src/Backend/Core/bin/
+src/Backoffice/Site/obj/Debug/netcoreapp3.1/staticwebassets/Site.StaticWebAssets.xml
+src/Backoffice/Site/obj/Debug/netcoreapp3.1/Site.RazorAssemblyInfo.cache
+src/Backoffice/Site/obj/
+src/Backoffice/Site/bin/
