@@ -3,19 +3,11 @@ using Orleans;
 using Orleans.Providers;
 using Orleans.Runtime;
 using Orleans.Storage;
-using Persistence;
 
 namespace Core.OrleansInfrastructure.StorageProviders
 {
-	public class CandleStorage : IStorageProvider
+	public class TradeStorage : IStorageProvider
 	{
-		private ICandlesProcessor _candlesProcessor;
-		
-		public CandleStorage(ICandlesProcessor candlesProcessor)
-		{
-			_candlesProcessor = candlesProcessor;
-		}
-		
 		public Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
 		{
 			throw new System.NotImplementedException();

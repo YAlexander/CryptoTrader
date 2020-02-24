@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Contracts;
 using Contracts.Enums;
 using Persistence.Entities;
 
-namespace Persistence
+namespace Persistence.PostgreSQL
 {
 	public class CandlesProcessor : BaseProcessor, ICandlesProcessor
 	{
@@ -16,6 +17,16 @@ namespace Persistence
 		}
 
 		public Task<IEnumerable<Candle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfCandles)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<long> Create(Candle candle)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<ICandle> Find(Exchanges exchange, Assets asset1, Assets asset2, DateTime time)
 		{
 			throw new NotImplementedException();
 		}
