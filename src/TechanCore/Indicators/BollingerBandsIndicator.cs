@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Contracts;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
@@ -13,7 +14,7 @@ namespace TechanCore.Indicators
         
         public override BollingerBandsResult Get(ICandle[] source, BollingerBandsOptions options)
         {
-            decimal[] typicalPrice = source.Select(x => (x.High + x.Low + x.Close) / 3).ToArray();
+            decimal[] typicalPrice = source.Hlc3();
             decimal?[] stdDevs = typicalPrice.StDev(options.Period).Result;
             
             decimal?[] middleBand = typicalPrice.Sma(options.Period).Result;

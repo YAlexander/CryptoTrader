@@ -9,12 +9,6 @@ namespace TechanCore.Helpers
 {
 	public static class CandleExtensions
 	{
-		public static List<decimal> Hl2(this IEnumerable<ICandle> source) =>
-			source.Select(x => (x.High + x.Low) / 2).ToList();
-
-		public static List<decimal> Hlc3(this IEnumerable<ICandle> source) =>
-			source.Select(x => (x.High + x.Low + x.Close) / 3).ToList();
-
 		public static IEnumerable<ICandle> HeikenAshi(this ICandle[] source)
 		{
 			if (source == null || !source.Any()) return source;
@@ -63,22 +57,22 @@ namespace TechanCore.Helpers
 			switch (type)
 			{
 				case MaTypes.SMA:
-					close = source.Select(x => x.Close).Sma(maPeriod).Result;
-					open = source.Select(x => x.Open).Sma(maPeriod).Result;
-					low = source.Select(x => x.Low).Sma(maPeriod).Result;
-					high = source.Select(x => x.High).Sma(maPeriod).Result;
+					close = source.Close().Sma(maPeriod).Result;
+					open = source.Open().Sma(maPeriod).Result;
+					low = source.Low().Sma(maPeriod).Result;
+					high = source.High().Sma(maPeriod).Result;
 					break;
 				case MaTypes.EMA:
-					close = source.Select(x => x.Close).Ema(maPeriod).Result;
-					open = source.Select(x => x.Open).Ema(maPeriod).Result;
-					low = source.Select(x => x.Low).Ema(maPeriod).Result;
-					high = source.Select(x => x.High).Ema(maPeriod).Result;
+					close = source.Close().Ema(maPeriod).Result;
+					open = source.Open().Ema(maPeriod).Result;
+					low = source.Low().Ema(maPeriod).Result;
+					high = source.High().Ema(maPeriod).Result;
 					break;
 				case MaTypes.WMA:
-					close = source.Select(x => x.Close).Wma(maPeriod).Result;
-					open = source.Select(x => x.Open).Wma(maPeriod).Result;
-					low = source.Select(x => x.Low).Wma(maPeriod).Result;
-					high = source.Select(x => x.High).Wma(maPeriod).Result;
+					close = source.Close().Wma(maPeriod).Result;
+					open = source.Open().Wma(maPeriod).Result;
+					low = source.Low().Wma(maPeriod).Result;
+					high = source.High().Wma(maPeriod).Result;
 					break;
 				default:
 					throw new Exception($"Unsupported MA type {type}");

@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Linq;
 using Contracts;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
 
@@ -12,7 +12,7 @@ namespace TechanCore.Indicators
         
         public override SeriesIndicatorResult Get(ICandle[] source, EmptyOption options)
         {
-            return new SeriesIndicatorResult { Result = source.Select(x => (decimal?)x.Volume).ToArray() };
+            return new SeriesIndicatorResult { Result = source.Volume().ToNullable() };
         }
 
         public override SeriesIndicatorResult Get(decimal[] source, EmptyOption options)

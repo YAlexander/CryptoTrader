@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Contracts;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
@@ -13,7 +14,7 @@ namespace TechanCore.Indicators
 		
 		public override SeriesIndicatorResult Get(ICandle[] source, AwesomeOscillatorOptions options)
 		{
-			decimal[] values = source.Select(x => (x.High + x.Low) / 2).ToArray();
+			decimal[] values = source.AverageExtremum();
 
 			decimal?[] smaFastData = values.Sma(options.FastSmaPeriod).Result;
 			decimal?[] smaSlowData = values.Sma(options.SlowSmaPeriod).Result;

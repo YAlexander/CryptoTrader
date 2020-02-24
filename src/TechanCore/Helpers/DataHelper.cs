@@ -14,7 +14,14 @@ namespace TechanCore.Helpers
 
 		public static decimal[] Close(this IEnumerable<ICandle> source) => source.Select(x => x.Close).ToArray();
 		
+		public static decimal[] Volume(this IEnumerable<ICandle> source) => source.Select(x => x.Volume).ToArray();
+		
 		public static decimal[] AverageExtremum(this IEnumerable<ICandle> source) => source.Select(x => (x.High + x.Low) / 2).ToArray();
+		
+		public static decimal[] Hlc3(this IEnumerable<ICandle> source) =>  source.Select(x => (x.High + x.Low + x.Close) / 3).ToArray();
+
+		public static decimal?[] ToNullable(this IEnumerable<decimal> source) => source.Select(x => (decimal?) x).ToArray();
+
 
 		public static IEnumerable<bool> Crossunder (this decimal?[] source, decimal?[] value)
 		{

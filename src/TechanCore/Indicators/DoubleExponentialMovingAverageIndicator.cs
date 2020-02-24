@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using Contracts;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
@@ -33,15 +34,13 @@ namespace TechanCore.Indicators
 
         public override SeriesIndicatorResult Get(ICandle[] source, DemaOptions options)
         {
-            decimal[] values = source.Select(x => x.Close).ToArray();
-
+            decimal[] values = source.Close();
             return Get(values, options);
         }
 
         public override SeriesIndicatorResult Get(decimal[] source, DemaOptions options)
         {
-            decimal?[] values = source.Select(x => (decimal?) x).ToArray();
-
+            decimal?[] values = source.ToNullable();
             return Get(values, options);
         }
     }

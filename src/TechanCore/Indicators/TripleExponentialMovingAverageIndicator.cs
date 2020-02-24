@@ -3,6 +3,7 @@ using System.Linq;
 using Contracts;
 using Contracts.Enums;
 using TechanCore.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
@@ -40,10 +41,10 @@ namespace TechanCore.Indicators
         {
             decimal[] values = options.CandleVariable switch
             {
-                CandleVariables.CLOSE => source.Select(x => x.Close).ToArray(),
-                CandleVariables.HIGH => source.Select(x => x.High).ToArray(),
-                CandleVariables.LOW => source.Select(x => x.Low).ToArray(),
-                CandleVariables.OPEN => source.Select(x => x.Open).ToArray(),
+                CandleVariables.CLOSE => source.Close(),
+                CandleVariables.HIGH => source.High(),
+                CandleVariables.LOW => source.Low(),
+                CandleVariables.OPEN => source.Open(),
                 _ => throw new Exception("Unknown CandleVariableCode")
             };
 
@@ -52,9 +53,8 @@ namespace TechanCore.Indicators
 
         public override SeriesIndicatorResult Get(decimal[] source, TemaOptions options)
         {
-            decimal?[] valuses = source.Select(x => (decimal?) x).ToArray();
-
-            return Get(valuses, options);
+            decimal?[] values = source.ToNullable();
+            return Get(values, options);
         }
     }
 }

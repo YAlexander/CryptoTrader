@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using Contracts;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
 
@@ -12,8 +13,7 @@ namespace TechanCore.Indicators
         
         public override SeriesIndicatorResult Get(ICandle[] source, MfiOptions options)
         {
-            decimal[] typicalPrices = source.Select(x => (x.High + x.Close + x.Low) / 3).ToArray();
-            
+            decimal[] typicalPrices = source.Hlc3();
             decimal[] moneyFlows = new decimal[source.Length];
             moneyFlows[0] = typicalPrices[0] * source[0].Volume;
                 

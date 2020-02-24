@@ -15,7 +15,7 @@ namespace TechanCore.Indicators
 		{
 			decimal?[] rsi = source.Rsi(options.RsiPeriod).Result;
 
-			decimal?[] ema1Source = rsi.Select(x => x).ToArray();
+			decimal?[] ema1Source = rsi.ToArray();
 			decimal?[] ema1 = ema1Source.Ema(options.EmaSlowPeriod).Result;
 			decimal?[] ema2 = ema1.Ema(options.EmaFastPeriod).Result;
 			decimal?[] sma = ema2.Sma(options.SmaPeriod).Result;
@@ -30,7 +30,7 @@ namespace TechanCore.Indicators
 				}
 			}
 
-			return new SeriesIndicatorResult() { Result = result};
+			return new SeriesIndicatorResult { Result = result};
 
 		}
 

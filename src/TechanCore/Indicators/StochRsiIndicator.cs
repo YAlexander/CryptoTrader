@@ -1,3 +1,4 @@
+using System;
 using System.Linq;
 using Contracts;
 using TechanCore.Indicators.Extensions;
@@ -30,12 +31,12 @@ namespace TechanCore.Indicators
 
 		public override SeriesIndicatorResult Get(decimal[] source, StochRsiOptions options)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public override SeriesIndicatorResult Get(decimal?[] source, StochRsiOptions options)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }

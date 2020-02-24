@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Contracts;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
@@ -14,8 +16,6 @@ namespace TechanCore.Indicators
         
         public override SeriesIndicatorResult Get(ICandle[] source, ParabolicSarOptions options)
         {
-            decimal?[] result = new decimal?[source.Length]; 
-            
             // Difference of High and Low
             List<decimal> differences = new List<decimal>();
             for (int i = 0; i < source.Length; i++)
@@ -29,8 +29,8 @@ namespace TechanCore.Indicators
 
             decimal?[] sarArr = new decimal?[source.Length];
 
-            decimal[] highList = source.Select(x => x.High).ToArray();
-            decimal[] lowList = source.Select(x => x.Low).ToArray();
+            decimal[] highList = source.High();
+            decimal[] lowList = source.Low();
 
             /* Find first non-NA value */
             int beg = 1;
@@ -112,12 +112,12 @@ namespace TechanCore.Indicators
 
         public override SeriesIndicatorResult Get(decimal[] source, ParabolicSarOptions options)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
 
         public override SeriesIndicatorResult Get(decimal?[] source, ParabolicSarOptions options)
         {
-            throw new System.NotImplementedException();
+            throw new NotImplementedException();
         }
     }
 }

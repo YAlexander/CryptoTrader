@@ -30,7 +30,7 @@ namespace TechanCore.Indicators
 
         public override SeriesIndicatorResult Get(decimal[] source, StandardDeviationOptions options)
         {
-            decimal?[] values = source.Select(x => (decimal?) x).ToArray();
+            decimal?[] values = source.ToNullable();
             return Get(values, options);
         }
 

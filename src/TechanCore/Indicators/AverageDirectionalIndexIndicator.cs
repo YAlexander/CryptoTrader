@@ -55,12 +55,12 @@ namespace TechanCore.Indicators
 
 		public override AdxResult Get(decimal[] source, AdxOptions options)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public override AdxResult Get(decimal?[] source, AdxOptions options)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }

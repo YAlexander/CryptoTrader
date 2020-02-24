@@ -12,6 +12,7 @@ namespace TechanCore.Indicators
         
         public override SeriesIndicatorResult Get(ICandle[] source, EmptyOption options)
         {
+            // 5 and 34 - values, recommended by indicator's author 
             decimal?[] awesomeValuse = source.AwesomeOscillator(5, 34).Result;
             decimal?[] sma = awesomeValuse.Sma(5).Result;
             

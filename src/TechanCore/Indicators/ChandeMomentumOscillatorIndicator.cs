@@ -33,7 +33,7 @@ namespace TechanCore.Indicators
                 else
                 {
                     upValues[i] = 0;
-                    downValues[i] =0;
+                    downValues[i] = 0;
                 }
 
                 if (i >= options.Period)
