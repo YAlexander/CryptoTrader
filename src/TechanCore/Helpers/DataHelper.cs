@@ -98,5 +98,81 @@ namespace TechanCore.Helpers
 
 			return result;
 		}
+		
+		public static IEnumerable<bool> Crossover (this decimal[] source, decimal?[] value)
+		{
+			List<bool> result = new List<bool>();
+
+			for (int i = 0; i < source.Length; i++)
+			{
+				if (i == 0)
+				{
+					result.Add(false);
+				}
+				else
+				{
+					result.Add(source[i] > value[i] && source[i - 1] <= value[i - 1]);
+				}
+			}
+
+			return result;
+		}
+		
+		public static IEnumerable<bool> Crossover (this decimal[] source, decimal[] value)
+		{
+			List<bool> result = new List<bool>();
+
+			for (int i = 0; i < source.Length; i++)
+			{
+				if (i == 0)
+				{
+					result.Add(false);
+				}
+				else
+				{
+					result.Add(source[i] > value[i] && source[i - 1] <= value[i - 1]);
+				}
+			}
+
+			return result;
+		}
+		
+		public static decimal?[] Lowest (this decimal?[] source, int period)
+		{
+			decimal?[] result = new decimal?[source.Length];
+
+			for (int i = 1; i <= source.Length; i++)
+			{
+				if (i < period)
+				{
+					result[i] = source.Take(i).Min();
+				}
+				else
+				{
+					result[i] = source.Skip(i - period).Take(period).Min();
+				}
+			}
+
+			return result;
+		}
+		
+		public static decimal?[] Highest (this decimal?[] source, int period)
+		{
+			decimal?[] result = new decimal?[source.Length];
+
+			for (int i = 1; i <= source.Length; i++)
+			{
+				if (i < period)
+				{
+					result[i] = source.Take(i).Max();
+				}
+				else
+				{
+					result[i] = source.Skip(i - period).Take(period).Max();
+				}
+			}
+
+			return result;
+		}
 	}
 }
