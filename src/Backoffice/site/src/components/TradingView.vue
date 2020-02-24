@@ -1,34 +1,9 @@
-<style>
-.trading-vue-legend {
-  color: yellow;
-  background-color: transparent;
-  top: 0px;
-}
-
-.trading-vue-legend span {
-  background-color: transparent !important;
-}
-
-.t-vue-ind,
-.trading-vue-ohlcv {
-  margin: 0;
-  padding: 0;
-}
-
-.trading-vue-chart {
-  top: 0px;
-}
-
-.trading-vue-legend {
-  visibility: hidden;
-}
-</style>
-
 <template>
   <trading-vue
     :data="chart"
     :overlays="overlays"
     :width="width"
+    :height="570"
     :color-back="colors.colorBack"
     :color-grid="colors.colorGrid"
     :color-text="colors.colorText"
@@ -58,15 +33,15 @@ export default {
   beforeDestroy() {
     window.removeEventListener("resize", this.onResize);
   },
-  width: 0,
   data() {
     return {
       chart: Data,
       width: this.width,
       colors: {
-        colorBack: "#fff",
+        colorBack: "#2b2a2a",
         colorGrid: "#242323",
-        colorText: "#eee"
+        colorText: "#eee",
+        font: "10px"
       },
       titleTxt: "",
       // Must import all overlays. But they won't displayed while no data
@@ -75,3 +50,29 @@ export default {
   }
 };
 </script>
+
+<style>
+#chart-holder {
+  padding-left: 15px;
+}
+.trading-vue-legend {
+  color: yellow;
+  background-color: transparent;
+  font-size: 8pt;
+  top: 0px;
+}
+
+.trading-vue-legend span {
+  background-color: transparent !important;
+}
+
+.t-vue-ind,
+.trading-vue-ohlcv {
+  margin: 0;
+  padding: 0;
+}
+
+.trading-vue-chart {
+  top: 0px;
+}
+</style>
