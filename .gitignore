@@ -42,3 +42,7 @@ src/Backoffice/Site/obj/Debug/netcoreapp3.1/staticwebassets/Site.StaticWebAssets
 src/Backoffice/Site/obj/Debug/netcoreapp3.1/Site.RazorAssemblyInfo.cache
 src/Backoffice/Site/obj/
 src/Backoffice/Site/bin/
+src/Backend/Abstractions/bin/
+src/Backend/Abstractions/obj/
+src/Backend/Silo/bin/
+src/Backend/Silo/obj/
