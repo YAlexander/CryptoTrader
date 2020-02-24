@@ -16,6 +16,11 @@ namespace Persistence.PostgreSQL
 			_candlesManager = candlesManager;
 		}
 
+		public Task<IEnumerable<Candle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to)
+		{
+			throw new NotImplementedException();
+		}
+
 		public Task<IEnumerable<Candle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfCandles)
 		{
 			throw new NotImplementedException();

@@ -11,6 +11,6 @@ namespace Core.BusinessLogic
 		public Timeframes TimeFrame { get; set; }
 		public ICandle[] Candles { get; set; }
 		public ITradingStrategy<IStrategyOption> Strategy { get; set; }
-		public IRisk[] Risks { get; set; }
+		public IRiskResult Risks { get; set; }
 	}
 }

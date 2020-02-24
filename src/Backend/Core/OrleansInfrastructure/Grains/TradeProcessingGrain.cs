@@ -10,15 +10,8 @@ using Orleans.Runtime;
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
-	public class TradeReceiver : Grain, ITradeReceiver
+	public class TradeProcessingGrain : Grain, ITradeProcessingGrain
 	{
-		private readonly IPersistentState<TradeState> _trade;
-		
-		 public TradeReceiver([PersistentState(nameof(trade), nameof(TradeState))] IPersistentState<TradeState> trade)
-		 {
-		 	_trade = trade;
-		 }
-
 		public Task<bool> Receive(ITradeInfo trade)
 		{
 			throw new NotImplementedException();

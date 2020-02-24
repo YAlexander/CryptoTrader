@@ -20,7 +20,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <Folder Include="BusinessLogic\RiskManagers" />
+      <Orleans_CodeGenInputs Remove="TypeCodes\TypeCodeBase.cs" />
     </ItemGroup>
 
 </Project>

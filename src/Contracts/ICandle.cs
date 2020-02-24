@@ -1,4 +1,5 @@
 ﻿using System;
+using Contracts.Enums;
 
 namespace Contracts
 {
@@ -8,6 +9,8 @@ namespace Contracts
 		/// Candle time
 		/// </summary>
 		DateTime Time { get; set; }
+		
+		Timeframes TimeFrame { get; set; }
 		
 		/// <summary>
 		/// High price

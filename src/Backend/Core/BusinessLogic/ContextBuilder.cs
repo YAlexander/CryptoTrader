@@ -20,12 +20,14 @@ namespace Core.BusinessLogic
 		private readonly IStrategyInfoProcessor _strategyInfoProcessor;
 		private readonly IEnumerable<IStrategyOptionsManager<IStrategyOption>> _strategyOptionManagers;
 		private readonly StrategiesHelper _strategiesHelper;
+		private IEnumerable<IRisk> _risks;
 		
 		public TradingContextBuilder (
 			ICandlesProcessor candlesProcessor,
 			IStrategyInfoProcessor strategyInfoProcessor,
 			IEnumerable<IStrategyOptionsManager<IStrategyOption>> strategyOptionManagers,
-			StrategiesHelper strategiesHelper)
+			StrategiesHelper strategiesHelper,
+			IEnumerable<IRisk> risks)
 		{
 			_candlesProcessor = candlesProcessor;
 			_strategyInfoProcessor = strategyInfoProcessor;
@@ -65,9 +67,14 @@ namespace Core.BusinessLogic
 			
 			IStrategyOption options = await optionManager.GetOptions(exchangeCode, asset1, asset2, strategyInfo.Class);
 			context.Strategy = _strategiesHelper.Get(strategyInfo.Class, options);
-			
-			// TODO: Add risk management
 
+			// TODO: get asset balance
+			decimal[] balances = Array.Empty<decimal>();
+			
+			IRiskResult riskResult = null;
+			IEnumerable<Task> tasks = _risks.Select(x => new Task(() => x.Get(groupedCandles, strategyInfo, balances, ref riskResult)));
+			await Task.WhenAll(tasks);
+			context.Risks = riskResult;
 			return context;
 		}
 	}

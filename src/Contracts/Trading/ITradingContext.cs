@@ -15,7 +15,7 @@ namespace Contracts.Trading
 
 		ITradingStrategy<IStrategyOption> Strategy { get; set; }
 		
-		IRisk[] Risks { get; set; }
+		IRiskResult Risks { get; set; }
 		
 		//List<IOrder> Orders { get; set; }
 		

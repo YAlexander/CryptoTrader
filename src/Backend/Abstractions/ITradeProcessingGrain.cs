@@ -4,7 +4,7 @@ using Orleans;
 
 namespace Abstractions
 {
-	public interface ITradeReceiver : IGrainWithIntegerKey
+	public interface ITradeProcessingGrain : IGrainWithIntegerKey
 	{
 		Task<bool> Receive(ITradeInfo trade);
 	}
