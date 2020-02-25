@@ -4,14 +4,13 @@ using Contracts.Trading;
 
 namespace Core.BusinessLogic.RiskManagers
 {
-    public class TakeProfitRisk : IRisk
+    public class TakeProfitRisk : IRisk<decimal?>
     {
-        public Task Get(ICandle[] candles, IStrategyInfo info, decimal[] balances, ref IRiskResult result)
+        public async Task<decimal?> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
         {
-            decimal tp = 0;
-            result.TakeProfitPrice = tp;
+            decimal? tp = 0;
 
-            return Task.CompletedTask;
+            return tp;
         }
     }
 }

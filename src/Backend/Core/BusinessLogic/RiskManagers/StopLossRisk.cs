@@ -4,9 +4,9 @@ using Contracts.Trading;
 
 namespace Core.BusinessLogic.RiskManagers
 {
-    public class StopLossRiskManager : IRisk
+    public class StopLossRiskManager : IRisk<decimal?>
     {
-        public Task Get(ICandle[] candles, IStrategyInfo info, decimal[] balances, ref IRiskResult result)
+        public async Task<decimal?> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
         {
             throw new System.NotImplementedException();
         }

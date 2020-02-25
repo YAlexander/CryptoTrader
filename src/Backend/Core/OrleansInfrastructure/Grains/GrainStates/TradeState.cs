@@ -19,6 +19,7 @@ namespace Core.OrleansInfrastructure.Grains.GrainStates
 		public decimal? AskPrice { get; set; }
 		public decimal? Volume { get; set; }
 		public long? StrategyId { get; set; }
+		public long?[] OrderIds { get; set; }
 		public long Id { get; set; }
 		public DateTime Created { get; set; }
 		public DateTime Updated { get; set; }

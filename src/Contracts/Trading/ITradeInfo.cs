@@ -35,5 +35,7 @@ namespace Contracts.Trading
         decimal? Volume { get; set; }
         
         long? StrategyId { get; set; }
+        
+        long?[] OrderIds { get; set; }
     }
 }

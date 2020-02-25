@@ -2,8 +2,8 @@
 
 namespace Contracts.Trading
 {
-	public interface IRisk
+	public interface IRisk<T>
 	{
-		Task Get (ICandle[] candles, IStrategyInfo info, decimal[] balances, ref IRiskResult result);
+		Task<T> Get (ICandle[] candles, IStrategyInfo info, decimal[] balances);
 	}
 }

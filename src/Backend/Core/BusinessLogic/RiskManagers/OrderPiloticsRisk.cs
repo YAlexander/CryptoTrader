@@ -1,12 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Contracts;
+using Contracts.Enums;
 using Contracts.Trading;
 
 namespace Core.BusinessLogic.RiskManagers
 {
-    public class OrderPiloticsRisk : IRisk
+    public class OrderPoliticsRisk : IRisk<FillPolitics>
     {
-        public Task Get(ICandle[] candles, IStrategyInfo info, decimal[] balances, ref IRiskResult result)
+        public async Task<FillPolitics> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
         {
             throw new System.NotImplementedException();
         }
