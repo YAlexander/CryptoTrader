@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "CandlesWorker": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}

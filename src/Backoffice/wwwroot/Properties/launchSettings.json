@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "TradingProcessor": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "DOTNET_ENVIRONMENT": "Development"
+      }
+    }
+  }
+}
