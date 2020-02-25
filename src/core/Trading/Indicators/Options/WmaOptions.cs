@@ -1,0 +1,19 @@
+﻿using core.Abstractions;
+using core.Abstractions.TypeCodes;
+
+namespace core.Trading.Indicators.Options
+{
+	public class WmaOptions : IIndicatorOptions
+	{
+		public int Period { get; }
+		public ICandleVariableCode Type { get; }
+
+		public WmaOptions (int period, ICandleVariableCode type)
+		{
+			Period = period;
+			Type = type;
+		}
+
+		public dynamic Options => this;
+	}
+}
