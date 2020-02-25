@@ -2,7 +2,7 @@
 
 namespace Contracts.Trading
 {
-	public interface IRisk<T>
+	public interface ITradingConstraint<T>
 	{
 		Task<T> Get (ICandle[] candles, IStrategyInfo info, decimal[] balances);
 	}

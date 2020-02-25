@@ -2,9 +2,9 @@
 using Contracts;
 using Contracts.Trading;
 
-namespace Core.BusinessLogic.RiskManagers
+namespace Core.BusinessLogic.TradingConstraints
 {
-    public class StopLossRiskManager : IRisk<decimal?>
+    public class StopLossConstraint : ITradingConstraint<decimal?>
     {
         public async Task<decimal?> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
         {

@@ -3,12 +3,12 @@ using Contracts;
 using Contracts.Trading;
 using Persistence;
 
-namespace Core.BusinessLogic.RiskManagers
+namespace Core.BusinessLogic.TradingConstraints
 {
-    public class MaxOrderAmountRiskManager : IRisk<decimal>
+    public class MaxAmountConstraint : ITradingConstraint<decimal>
     {
         private readonly ITradesManager _tradesManager;
-        public MaxOrderAmountRiskManager(ITradesManager tradesManager)
+        public MaxAmountConstraint (ITradesManager tradesManager)
         {
             _tradesManager = tradesManager;
         }
