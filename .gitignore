@@ -1,0 +1,14 @@
+.idea/
+src/Backend/Abstractions/obj/
+src/Backend/Core/obj/
+src/Backend/Persistence.PostgreSQL/obj/
+src/Backend/Persistence/obj/
+src/Backend/Silo/obj/
+src/Backoffice/site/node_modules/
+src/Contracts/bin/
+src/Contracts/obj/
+src/Services/Binance/bin/
+src/Services/Binance/obj/
+src/Services/Bitmex/obj/
+src/TechanCore/obj/
+src/Backoffice/site/.vscode/
