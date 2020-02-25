@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <UserSecretsId>dotnet-Binance-79492936-0CD2-4C72-8C44-824DF967C622</UserSecretsId>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="Binance.Net" Version="5.0.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.1" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.2" />
+        <PackageReference Include="Microsoft.Orleans.Client" Version="3.1.0" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Backend\Abstractions\Abstractions.csproj" />
+      <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
+    </ItemGroup>
+</Project>
