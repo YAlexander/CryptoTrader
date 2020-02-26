@@ -6,7 +6,7 @@ using Persistence.Entities;
 namespace Core.OrleansInfrastructure.Grains.GrainStates
 {
 	[Serializable]
-	public class TradeState : ITradeInfo, IEntity
+	public class DealState : ITradeInfo
 	{
 		public DateTime OpenDate { get; set; }
 		public DateTime CloseDate { get; set; }

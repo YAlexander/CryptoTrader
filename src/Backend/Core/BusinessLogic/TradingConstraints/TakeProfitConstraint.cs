@@ -1,16 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Contracts;
 using Contracts.Trading;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-    public class TakeProfitConstraint : ITradingConstraint<decimal?>
+    public class TakeProfitConstraint : ITradingConstraint
     {
-        public async Task<decimal?> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
+        public async Task<ITradingContext> Set(ITradingContext context)
         {
-            decimal? tp = 0;
-
-            return tp;
+            return context;
         }
     }
 }

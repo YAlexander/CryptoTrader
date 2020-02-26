@@ -5,7 +5,7 @@ using Persistence;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-    public class MaxAmountConstraint : ITradingConstraint<decimal>
+    public class MaxAmountConstraint : ITradingConstraint
     {
         private readonly ITradesManager _tradesManager;
         public MaxAmountConstraint (ITradesManager tradesManager)
@@ -13,7 +13,7 @@ namespace Core.BusinessLogic.TradingConstraints
             _tradesManager = tradesManager;
         }
         
-        public async Task<decimal> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
+        public async Task<ITradingContext> Set (ITradingContext context)
         {
             // Fmax = 1 / g * (P / B - (1 - P) / A)
             // g - leverage
@@ -25,11 +25,8 @@ namespace Core.BusinessLogic.TradingConstraints
             // x - deal amount
             // K - total funds
 
-            int totalTrades = await _tradesManager.GetNumberOfProfitableDeals(info.Exchange, info.Asset1Code, info.Asset2Code);
-
-            
-            
-            throw new System.NotImplementedException();
+            //int totalTrades = await _tradesManager.GetNumberOfProfitableDeals(info.Exchange, info.Asset1Code, info.Asset2Code);
+            return context;
         }
     }
 }
