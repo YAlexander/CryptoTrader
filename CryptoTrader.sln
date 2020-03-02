@@ -20,8 +20,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Persistence", "src\Backend\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TechanCore", "src\TechanCore\TechanCore.csproj", "{ABFACAC0-06E5-4730-9E45-75AE52FD1444}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Site", "src\Backoffice\Site\Site.csproj", "{B143994A-7A57-43C4-BA8C-FDB633AEF8BD}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Silo", "src\Backend\Silo\Silo.csproj", "{8CDBB6E0-1F20-48DC-BDB1-919BD98BF5B9}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Abstractions", "src\Backend\Abstractions\Abstractions.csproj", "{39363D2E-8C7D-4678-BA10-1D3B9614C6EE}"
