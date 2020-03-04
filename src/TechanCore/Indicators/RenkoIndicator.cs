@@ -30,7 +30,7 @@ namespace TechanCore.Indicators
             
             for (int i = options.AtrPeriod + 1; i < source.Length; i++)
             {
-                int bricksCount = (int)(Math.Floor(Math.Abs(source[i - 1].Close - source[i].Close)) / atr[i]);
+                int bricksCount = Math.Abs((int)((source[i].Close - source[i - 1].Close) / atr[i].Value));
 
                 RenkoBrickType bricksColor;
                 if (source[i].Close > source[i - 1].Close && bricksCount > 0)
@@ -52,8 +52,11 @@ namespace TechanCore.Indicators
                     brick.Time = source[i].Time;
 
                     // TODO: Review High/Low logic
-                    brick.High = (int)(source[i].High / atr[i].Value);
-                    brick.Low = (int)(source[i].Low / atr[i].Value);
+                    if (j == bricksCount - 1)
+                    {
+                        brick.High = (int) (source[i].High / atr[i].Value);
+                        brick.Low = (int) (source[i].Low / atr[i].Value);
+                    }
 
                     if (bricksColor == RenkoBrickType.WHITE)
                     {
