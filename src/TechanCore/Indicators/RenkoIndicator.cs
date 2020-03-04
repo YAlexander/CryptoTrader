@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Contracts;
 using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
@@ -17,27 +18,35 @@ namespace TechanCore.Indicators
             List<RenkoBrick> result = new List<RenkoBrick>();
             decimal?[] atr = source.Atr(options.AtrPeriod).Result;
 
-            
-            result.Add(new RenkoBrick()
+            for (int i = 0; i < source.Length; i++)
             {
-                Type = RenkoBrickType.WHITE,
-                High = (int)source[options.AtrPeriod].High / atr[options.AtrPeriod].Value,
-                Low = (int)source[options.AtrPeriod].Low / atr[options.AtrPeriod].Value,
-                Price = source[options.AtrPeriod].Close,
-                Time = source[options.AtrPeriod].Time
-            });
-            
-            
-            for (int i = options.AtrPeriod + 1; i < source.Length; i++)
-            {
-                int bricksCount = Math.Abs((int)((source[i].Close - source[i - 1].Close) / atr[i].Value));
+                if (atr[i] == null)
+                {
+                    continue;
+                }
+
+                if (!result.Any())
+                {
+                    result.Add(new RenkoBrick()
+                    {
+                        Type = RenkoBrickType.WHITE,
+                        High = (int)source[i].High / atr[i].Value,
+                        Low = (int)source[i].Low / atr[i].Value,
+                        Price = source[i].Close,
+                        Time = source[i].Time
+                    });
+                    
+                    continue;
+                }
+                
+                int bricksCount = Math.Abs((int)((source[i].Close - result.Last().Price) / atr[i].Value));
 
                 RenkoBrickType bricksColor;
-                if (source[i].Close > source[i - 1].Close && bricksCount > 0)
+                if (source[i].Close > result.Last().Price && bricksCount > 0)
                 {
                     bricksColor = RenkoBrickType.WHITE;
                 }
-                else if (source[i].Close < source[i - 1].Close && bricksCount > 0)
+                else if (source[i].Close < result.Last().Price && bricksCount > 0)
                 {
                     bricksColor = RenkoBrickType.BLACK;
                 }
@@ -61,12 +70,12 @@ namespace TechanCore.Indicators
                     if (bricksColor == RenkoBrickType.WHITE)
                     {
                         brick.Type = RenkoBrickType.WHITE;
-                        brick.Price = result[i - 1].Price + atr[i].Value;
+                        brick.Price = result.Last().Price + atr[i].Value;
                     }
                     else
                     {
-                        brick.Type = RenkoBrickType.WHITE;
-                        brick.Price = result[i - 1].Price + atr[i].Value;
+                        brick.Type = RenkoBrickType.BLACK;
+                        brick.Price = result.Last().Price - atr[i].Value;
                     }
                     
                     result.Add(brick);
