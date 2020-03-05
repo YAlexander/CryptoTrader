@@ -32,10 +32,6 @@ namespace TechanCore.Indicators
                 {
                     result[i] = smaMax[i] / (smaMax[i] + smaMin[i]);
                 }
-                else
-                {
-                    result[i] = null;
-                }
             }
 
             return new SeriesIndicatorResult { Result = result };

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Contracts;
-using Contracts.Enums;
 using TechanCore.Enums;
 using TechanCore.Helpers;
 using TechanCore.Indicators.Options;
@@ -17,23 +16,9 @@ namespace TechanCore.Indicators
 		{
 			decimal?[] result = new decimal?[source.Length];
 			
-			for (int i = 0; i < source.Length; i++)
-			{   
-				if (i >= options.Period - 1)
-				{
-					decimal? sum = 0;
-					for (int j = i; j >= i - (options.Period - 1); j--)
-					{
-						sum += source[j];
-					}
-					
-					decimal? avg = sum / options.Period;
-					result[i] = avg;
-				}
-				else
-				{
-					result[i] = null;
-				}
+			for (int i = options.Period; i < source.Length; i++)
+			{
+				result[i] = source.Skip(i - options.Period).Take(options.Period).Average();
 			}
 
 			return new SeriesIndicatorResult { Result = result};

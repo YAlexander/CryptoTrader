@@ -13,14 +13,14 @@ namespace TechanCore.Indicators
         public override SeriesIndicatorResult Get(ICandle[] source, EmptyOption options)
         {
             // 5 and 34 - values, recommended by indicator's author 
-            decimal?[] awesomeValuse = source.AwesomeOscillator(5, 34).Result;
-            decimal?[] sma = awesomeValuse.Sma(5).Result;
+            decimal?[] awesomeValues = source.AwesomeOscillator(5, 34).Result;
+            decimal?[] sma = awesomeValues.Sma(5).Result;
             
             decimal?[] result = new decimal?[source.Length];
 
             for (int i = 5; i < source.Length; i++)
             {
-                result[i] = awesomeValuse[i] - sma[i];
+                result[i] = awesomeValues[i] - sma[i];
             }
             
             return new SeriesIndicatorResult { Result = result };

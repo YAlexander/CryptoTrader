@@ -24,9 +24,9 @@ namespace TechanCore.Indicators
 
 			for (int i = 0; i < sma.Length; i++)
 			{
-				if (sma[i] != null && ema2[i] != null)
+				if (sma[i].HasValue && ema2[i].HasValue)
 				{
-					result[i] = ema2[i] - sma[i];
+					result[i] = ema2[i].Value - sma[i].Value;
 				}
 			}
 

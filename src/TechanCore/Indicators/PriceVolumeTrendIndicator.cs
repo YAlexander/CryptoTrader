@@ -12,17 +12,11 @@ namespace TechanCore.Indicators
         public override SeriesIndicatorResult Get(ICandle[] source, EmptyOption options)
         {
             decimal?[] result = new decimal?[source.Length];
+            result[1] = (source[1].Close - source[0].Close) / source[0].Close * source[1].Volume;
             
-            for (int i = 1; i < source.Length; i++)
-            {
-                if (i > 1)
-                {
-                    result[i] = ((source[i].Close - source[i - 1].Close) / source[i - 1].Close) * source[i].Volume +  result[i - 1];
-                }
-                else
-                {
-                    result[i] = ((source[i].Close - source[i - 1].Close) / source[i - 1].Close) * source[i].Volume;
-                }
+            for (int i = 2; i < source.Length; i++)
+            { 
+                result[i] = ((source[i].Close - source[i - 1].Close) / source[i - 1].Close) * source[i].Volume +  result[i - 1];
             }
 
             return new SeriesIndicatorResult { Result = result };

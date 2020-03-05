@@ -24,15 +24,10 @@ namespace TechanCore.Indicators
             
             for (int i = 0; i < source.Length; i++)
             {
-                if (i >= options.Period - 1)
+                if (i > options.Period)
                 {
                     upperBand[i] = middleBand[i] + (decimal)options.DeviationUp * stdDevs[i];
                     lowerBand[i] = middleBand[i] + (decimal)options.DeviationDown * stdDevs[i];
-                }
-                else
-                {
-                    upperBand[i] = null;
-                    lowerBand[i] = null;
                 }
             }
 

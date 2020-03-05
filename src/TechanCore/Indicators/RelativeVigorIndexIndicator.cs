@@ -31,10 +31,6 @@ namespace TechanCore.Indicators
                 {
                     signal[i] = (rvi[i] + 2 * rvi[i - 1] + 2 * rvi[i - 2] + rvi[i - 3]) / 6;
                 }
-                else
-                {
-                    signal[i] = null;
-                }
             }
             
             return new RelativeVigorIndexResult { Rvi = rvi, Signal = signal };

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Linq;
 using Contracts;
-using Contracts.Enums;
 using TechanCore.Enums;
 using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
@@ -22,15 +20,11 @@ namespace TechanCore.Indicators
             
             decimal?[] result = new decimal?[source.Length];
 
-            for (int i = 0; i < source.Length; i++)
+            for (int i = options.Period; i < source.Length; i++)
             {
-                if (i >= options.Period)
+                if (firstEma[i].HasValue && secondEma[i].HasValue && thirdEma[i].HasValue)
                 {
-                    result[i] = 3 * firstEma[i] - 3 * secondEma[i] + thirdEma[i];
-                }
-                else
-                {
-                    result[i] = null;
+                    result[i] = 3 * firstEma[i].Value - 3 * secondEma[i].Value + thirdEma[i].Value;
                 }
             }
             

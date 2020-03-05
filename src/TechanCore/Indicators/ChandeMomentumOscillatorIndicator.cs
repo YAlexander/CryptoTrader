@@ -48,10 +48,6 @@ namespace TechanCore.Indicators
                     
                     result[i] = 100 * (upTotal - downTotal) / (upTotal + downTotal);
                 }
-                else
-                {
-                    result[i] = null;
-                }
             }
             
             return new SeriesIndicatorResult { Result = result };
