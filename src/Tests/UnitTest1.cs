@@ -48,7 +48,7 @@ namespace Tests
             RenkoOptions options = new RenkoOptions() { AtrPeriod = 14 };
             RenkoIndicator indicator = new RenkoIndicator();
 
-            var source = candles.GroupCandles(Timeframes.HOUR);
+            var source = candles.GroupCandles(Timeframes.FIVE_MINUTES);
             
             var bricks = indicator.Get(source.ToArray(), options).Bricks;
 

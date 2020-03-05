@@ -14,5 +14,19 @@ namespace TechanCore.Indicators.Extensions
 			MacdOptions options = new MacdOptions { FastPeriod = fastPeriod, SlowPeriod = slowPeriod, SignalPeriod = signalPeriod};
 			return macd.Get(source.ToArray(), options);
 		}
+		
+		public static MacdIndicatorResult Macd (this IEnumerable<decimal> source, int fastPeriod, int slowPeriod, int signalPeriod)
+		{
+			MacdIndicator macd = new MacdIndicator();
+			MacdOptions options = new MacdOptions { FastPeriod = fastPeriod, SlowPeriod = slowPeriod, SignalPeriod = signalPeriod};
+			return macd.Get(source.ToArray(), options);
+		}
+		
+		public static MacdIndicatorResult Macd (this IEnumerable<decimal?> source, int fastPeriod, int slowPeriod, int signalPeriod)
+		{
+			MacdIndicator macd = new MacdIndicator();
+			MacdOptions options = new MacdOptions { FastPeriod = fastPeriod, SlowPeriod = slowPeriod, SignalPeriod = signalPeriod};
+			return macd.Get(source.ToArray(), options);
+		}
 	}
 }
