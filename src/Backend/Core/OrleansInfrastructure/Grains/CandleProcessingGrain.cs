@@ -21,11 +21,15 @@ namespace Core.OrleansInfrastructure.Grains
 			_candlesProcessor = candlesProcessor;
 		}
 		
-		public async Task<long?> Create(Exchanges exchange, Assets asset1, Assets asset2, ICandle candle)
+		public async Task<long?> Create(ICandle candle)
 		{
+			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
+			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
+			
 			Candle newCandle = new Candle();
-			newCandle.Exchange = exchange;
-			newCandle.Asset1 = asset1;
+			newCandle.Exchange = (Exchanges)primaryKey;
+			newCandle.Asset1 = secondaryKey.Asset1;
+			newCandle.Asset2 = secondaryKey.Asset2;
 			newCandle.Time = candle.Time;
 			newCandle.High = candle.High;
 			newCandle.Low = candle.Low;
@@ -38,14 +42,20 @@ namespace Core.OrleansInfrastructure.Grains
 			return await _candlesProcessor.Create(newCandle);
 		}
 
-		public async Task<IEnumerable<ICandle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to)
+		public async Task<IEnumerable<ICandle>> Get(DateTime from, DateTime to)
 		{
-			return await _candlesProcessor.GetCandles(exchange, asset1, asset2, from, to);
+			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
+			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
+
+			return await _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, from, to);
 		}
 
-		public Task<IEnumerable<ICandle>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles)
+		public async Task<IEnumerable<ICandle>> Get(int numberOfLastCandles)
 		{
-			throw new NotImplementedException();
+			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
+			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
+
+			return await _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, numberOfLastCandles);
 		}
 	}
 }
