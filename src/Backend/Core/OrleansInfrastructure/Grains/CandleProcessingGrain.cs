@@ -12,6 +12,7 @@ using Persistence.Entities;
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
+	[ImplicitStreamSubscription(nameof(Candle))]
 	public class CandleProcessingGrain : Grain, ICandleProcessingGrain
 	{
 		private readonly ICandlesProcessor _candlesProcessor;

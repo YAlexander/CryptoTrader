@@ -39,7 +39,7 @@ namespace Silo
                             CaptureMessageProperties = true
                         }))
                         //.ConfigureServices(services => { services.AddSingleton<IConfigurationRoot>(configuration); })
-                        //.AddSimpleMessageStreamProvider(Constants.SMS_PROVIDER)
+                        .AddSimpleMessageStreamProvider("SMSProvider")
                         // .AddGenericGrainStorage<TraderStorageProvider>(nameof(TraderStorageProvider), opt =>
                         // {
                         // 	opt.Configure(options => { options.ConnectionString = ""; });
