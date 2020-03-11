@@ -13,7 +13,7 @@ namespace Core.OrleansInfrastructure.Grains
 	    private readonly IPersistentState<Candle> _candle;
 
 	    public CandleGrain(
-		    [PersistentState(nameof(candle), "cartStore")] IPersistentState<Candle> candle
+		    [PersistentState(nameof(Candle), "cartStore")] IPersistentState<Candle> candle
 		    )
 	    {
 		    _candle = candle;

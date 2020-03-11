@@ -7,6 +7,7 @@ using Contracts.Trading;
 using Core.BusinessLogic;
 using Core.Helpers;
 using Orleans;
+using Persistence.Helpers;
 
 namespace Core.OrleansInfrastructure.Grains
 {
@@ -32,18 +33,10 @@ namespace Core.OrleansInfrastructure.Grains
             IEnumerable<ICandle> candles = await candlesProcessingGrain.Get(numberOfCandles);
 
             context.Candles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);
- 
-            // TODO: Optios decoder. (Via OptionsHelper) Strategy options will be stored in StrategyInfo
-            // IStrategyOptionsManager<IStrategyOption> optionManager = _strategyOptionManagers.SingleOrDefault(x => x.StrategyName.Equals(strategyInfo.Class));
-            //if (optionManager == null)
-            // {
-            //     throw new Exception($"Options for strategy {strategyInfo.StrategyName} wasn't found");
-            //} 
-            //
-            
-            //IStrategyOption options = await optionManager.GetOptions(exchangeCode, asset1, asset2, strategyInfo.Class);
-            //context.Strategy = _strategiesHelper.Get(strategyInfo.Class, options);
-            ////
+
+            var options = OptionsHelper.Decode(strategyInfo);
+            context.Strategy = StrategiesHelper.Get(strategyInfo.Class, options.options); 
+
             // // TODO: get asset balance
             //// decimal[] balances = Array.Empty<decimal>();
             ////
