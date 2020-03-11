@@ -1,4 +1,6 @@
-﻿using System.Text.Json;
+﻿using System;
+using System.Text.Json;
+using Contracts.Trading;
 
 namespace Persistence.Helpers
 {
@@ -12,6 +14,11 @@ namespace Persistence.Helpers
         public string Serialize(T obj)
         {
             return JsonSerializer.Serialize(obj);
+        }
+
+        (T options, T defaultOptions) Decode(IStrategyInfo info)
+        {
+            throw new NotImplementedException();
         }
     }
 }

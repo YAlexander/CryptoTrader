@@ -22,41 +22,20 @@ namespace Core.OrleansInfrastructure.Grains
 			_candlesProcessor = candlesProcessor;
 		}
 		
-		public async Task<long?> Create(ICandle candle)
+		public Task<IEnumerable<ICandle>> Get(DateTime from, DateTime to)
 		{
 			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
 			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
-			
-			Candle newCandle = new Candle();
-			newCandle.Exchange = (Exchanges)primaryKey;
-			newCandle.Asset1 = secondaryKey.Asset1;
-			newCandle.Asset2 = secondaryKey.Asset2;
-			newCandle.Time = candle.Time;
-			newCandle.High = candle.High;
-			newCandle.Low = candle.Low;
-			newCandle.Open = candle.Open;
-			newCandle.Close = candle.Close;
-			newCandle.Volume = candle.Volume;
-			newCandle.Trades = candle.Trades;
-			newCandle.TimeFrame = candle.TimeFrame;
-			
-			return await _candlesProcessor.Create(newCandle);
+
+			return _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, from, to);
 		}
 
-		public async Task<IEnumerable<ICandle>> Get(DateTime from, DateTime to)
+		public Task<IEnumerable<ICandle>> Get(int numberOfLastCandles)
 		{
 			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
 			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
 
-			return await _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, from, to);
-		}
-
-		public async Task<IEnumerable<ICandle>> Get(int numberOfLastCandles)
-		{
-			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
-			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
-
-			return await _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, numberOfLastCandles);
+			return _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, numberOfLastCandles);
 		}
 	}
 }

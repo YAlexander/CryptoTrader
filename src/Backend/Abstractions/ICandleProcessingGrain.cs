@@ -9,9 +9,6 @@ namespace Abstractions
 	// For Grain identity we use Exchange code as primary key and GrainKeyExtension as key extension
 	public interface ICandleProcessingGrain : IGrainWithIntegerCompoundKey
 	{
-		// TODO: Move to CandleGrain
-		Task <long?> Create (ICandle candle);
-
 		Task<IEnumerable<ICandle>> Get (DateTime from, DateTime to);
 		
 		Task<IEnumerable<ICandle>> Get (int numberOfLastCandles);

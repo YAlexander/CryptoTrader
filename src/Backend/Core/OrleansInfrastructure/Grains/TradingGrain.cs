@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Abstractions;
 using Contracts;
@@ -8,8 +7,6 @@ using Contracts.Trading;
 using Core.BusinessLogic;
 using Core.Helpers;
 using Orleans;
-using TechanCore.Enums;
-using TechanCore.Helpers;
 
 namespace Core.OrleansInfrastructure.Grains
 {
@@ -34,17 +31,9 @@ namespace Core.OrleansInfrastructure.Grains
             ICandleProcessingGrain candlesProcessingGrain = GrainFactory.GetGrain<ICandleProcessingGrain>(primaryKey, keyExtension);
             IEnumerable<ICandle> candles = await candlesProcessingGrain.Get(numberOfCandles);
 
-            ICandle[] groupedCandles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);
-
-            if (strategyInfo.UseHeikenAshiCandles)
-            {
-                 groupedCandles = strategyInfo.SmoothHeikenAshiCandles 
-                     ? groupedCandles.HeikenAshiSmoothed(MaTypes.EMA, 14).ToArray() 
-                     : groupedCandles.HeikenAshi().ToArray();
-            }
-            
-            context.Candles = groupedCandles;
-            
+            context.Candles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);
+ 
+            // TODO: Optios decoder. (Via OptionsHelper) Strategy options will be stored in StrategyInfo
             // IStrategyOptionsManager<IStrategyOption> optionManager = _strategyOptionManagers.SingleOrDefault(x => x.StrategyName.Equals(strategyInfo.Class));
             //if (optionManager == null)
             // {
@@ -63,7 +52,6 @@ namespace Core.OrleansInfrastructure.Grains
             // return context;
 
             TradingAdvices res = context.Strategy.Forecast(context.Candles);
-
         }
     }
 }

@@ -8,16 +8,15 @@ namespace Contracts.Trading
 		Assets Asset1Code { get; set; }
 		Assets Asset2Code { get; set; }
 		
-		int StrategyId { get; set; }
 		string StrategyName { get; set; }
+		string StrategyClass { get; set; }
 		
 		string Options { get; set; }
 		string DefaultOptions { get; set; }
 		
 		string Class { get; set; }
 		int TimeFrame { get; set; }
-		bool UseHeikenAshiCandles { get; set; }
-		bool SmoothHeikenAshiCandles { get; set; }
+
 		bool TradeOnFlat { get; set; }
 		
 		bool UseTrailingStop { get; set; }
