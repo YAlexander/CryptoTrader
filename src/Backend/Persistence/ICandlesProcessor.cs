@@ -13,6 +13,6 @@ namespace Persistence
 
 		Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles);
 
-		Task<long> Create (Candle candle);
+		Task<ICandle> Create (Candle candle);
 	}
 }

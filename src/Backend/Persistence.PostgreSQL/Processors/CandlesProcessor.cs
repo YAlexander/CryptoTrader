@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Contracts;
 using Contracts.Enums;
 using Persistence.Entities;
+using Persistence.Managers;
 
-namespace Persistence.PostgreSQL
+namespace Persistence.PostgreSQL.Processors
 {
 	public class CandlesProcessor : BaseProcessor, ICandlesProcessor
 	{
@@ -21,14 +22,14 @@ namespace Persistence.PostgreSQL
 			throw new NotImplementedException();
 		}
 
-		public Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfCandles)
+		public async Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfCandles)
 		{
-			throw new NotImplementedException();
+			return await WithConnection((connection, transaction) => _candlesManager.Get(exchange, asset1, asset2, numberOfCandles, connection, transaction));
 		}
 
-		public Task<long> Create(Candle candle)
+		public async Task<ICandle> Create(Candle candle)
 		{
-			throw new NotImplementedException();
+			return await WithConnection((connection, transaction) => _candlesManager.Create(candle, connection, transaction));
 		}
 
 		public Task<ICandle> Find(Exchanges exchange, Assets asset1, Assets asset2, DateTime time)

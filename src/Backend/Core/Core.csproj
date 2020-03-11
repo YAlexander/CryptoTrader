@@ -21,6 +21,9 @@
 
     <ItemGroup>
       <Orleans_CodeGenInputs Remove="TypeCodes\TypeCodeBase.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\CandleStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\OrderStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\TradeStorage.cs" />
     </ItemGroup>
 
 </Project>

@@ -2,14 +2,42 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Contracts;
 using Contracts.Enums;
-using Dapper;
 using Persistence.Entities;
+using Persistence.Managers;
 
-namespace Persistence.DbManagers
+namespace Persistence.PostgreSQL.DbManagers
 {
 	public class CandlesManager : ICandlesManager
 	{
+		public Task<IEnumerable<ICandle>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Candle> Create(Candle obj, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			throw new NotImplementedException();
+		}
+
+		public Task<Candle> Update(Candle obj, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			throw new NotImplementedException();
+		}
+
+		#region queries
+		
+		
+
+		#endregion
+
+		/*
 		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to,  Timeframes period, IDbConnection connection, IDbTransaction transaction)
 		{
 			return connection.QueryAsync<Candle>(BuildCandlestick, new
@@ -71,5 +99,6 @@ namespace Persistence.DbManagers
 						rows between unbounded preceding and unbounded following)
 				order by intervals.start
 		";
+	*/
 	}
 }
