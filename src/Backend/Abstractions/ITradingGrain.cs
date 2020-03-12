@@ -5,6 +5,5 @@ namespace Abstractions
 {
 	public interface ITradingGrain : IGrainWithIntegerCompoundKey
 	{
-		Task Process();
 	}
 }

@@ -13,7 +13,7 @@ namespace Persistence.PostgreSQL.DbManagers
 	{
 		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles, IDbConnection connection, IDbTransaction transaction = null)
 		{
-			return connection.QueryAsync<Candle>(string.Format(GetCandles, exchange), new
+			return connection.QueryAsync<Candle>(string.Format(GetLastCandles, exchange), new
 			{
 				asset1 = asset1,
 				asset2 = asset2,
@@ -21,9 +21,25 @@ namespace Persistence.PostgreSQL.DbManagers
 			}, transaction);
 		}
 
-		public Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime time, IDbConnection connection, IDbTransaction transaction = null)
 		{
-			throw new NotImplementedException();
+			return connection.QueryFirstAsync<Candle>(string.Format(GetLastCandles, exchange), new
+			{
+				asset1 = asset1,
+				asset2 = asset2,
+				time = time
+			}, transaction);
+		}
+
+		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to, IDbConnection connection, IDbTransaction transaction = null)
+		{
+			return connection.QueryAsync<Candle>(string.Format(GetLastCandles, exchange), new
+			{
+				asset1 = asset1,
+				asset2 = asset2,
+				from = from,
+				to = to
+			}, transaction);
 		}
 
 		public Task<Candle> Create(Candle candle, IDbConnection connection, IDbTransaction transaction = null)
@@ -52,7 +68,7 @@ namespace Persistence.PostgreSQL.DbManagers
 
 		#region queries
 
-		private const string GetCandles = @"
+		private const string GetLastCandles = @"
 				select 
 					*
 				from
@@ -65,6 +81,32 @@ namespace Persistence.PostgreSQL.DbManagers
 				limit @numberOfCandles;
 		";
 		
+		private const string GetCandle = @"
+				select 
+					*
+				from
+					{0}.Candles
+				where 
+					asset1 = @asset1
+				and
+					asset2 = @asset2
+				and 
+					time = @time
+		";
+		
+		private const string GetCandlesByDates = @"
+				select 
+					*
+				from
+					{0}.Candles
+				where 
+					asset1 = @asset1
+				and
+					asset2 = @asset2
+				and 
+					time between @from and @to
+		";
+
 		private const string CreateCandle = @"
 				insert into {0}.Candles 
 									(

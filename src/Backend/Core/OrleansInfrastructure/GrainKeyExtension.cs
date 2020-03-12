@@ -1,4 +1,5 @@
-﻿using Contracts.Enums;
+﻿using System;
+using Contracts.Enums;
 
 namespace Core.OrleansInfrastructure
 {
@@ -7,5 +8,6 @@ namespace Core.OrleansInfrastructure
     {
         public Assets Asset1 { get; set; }
         public Assets Asset2 { get; set; }
+        public DateTime? Time { get; set; }
     }
 }

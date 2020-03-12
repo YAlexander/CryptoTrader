@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abstractions;
 using Contracts;
@@ -7,13 +8,16 @@ using Contracts.Trading;
 using Core.BusinessLogic;
 using Core.Helpers;
 using Orleans;
+using Orleans.Streams;
+using Persistence.Entities;
 using Persistence.Helpers;
 
 namespace Core.OrleansInfrastructure.Grains
 {
-    public class TradingGrain: Grain, ITradingGrain
+    [ImplicitStreamSubscription(nameof(Candle))]
+    public class TradingGrain: Grain, ITradingGrain, IAsyncObserver<Candle>
     {
-        public async Task Process()
+        public async Task OnNextAsync(Candle item, StreamSequenceToken token = null)
         {
             long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
             GrainKeyExtension secondaryKey = keyExtension.ToExtended();
@@ -45,6 +49,16 @@ namespace Core.OrleansInfrastructure.Grains
             // return context;
 
             TradingAdvices res = context.Strategy.Forecast(context.Candles);
+        }
+
+        public Task OnCompletedAsync()
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task OnErrorAsync(Exception ex)
+        {
+            return Task.CompletedTask;
         }
     }
 }
