@@ -46,6 +46,8 @@ namespace Core.OrleansInfrastructure.Grains
             long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
             GrainKeyExtension secondaryKey = keyExtension.ToExtended();
 
+            // TODO: Check if we have open position
+            
             ITradingContext context = new TradingContext();
             context.Exchange = (Exchanges)primaryKey;
             context.TradingPair = (secondaryKey.Asset1, secondaryKey.Asset2);

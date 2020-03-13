@@ -27,6 +27,9 @@ namespace Core.OrleansInfrastructure.Grains
 		public async Task OnNextAsync(ITradingContext item, StreamSequenceToken token = null)
 		{
 			Order order = new Order();
+			order.Exchange = item.Exchange;
+			order.Asset1 = item.TradingPair.asset1;
+			order.Asset2 = item.TradingPair.asset2;
 		}
 
 		public Task OnCompletedAsync()
