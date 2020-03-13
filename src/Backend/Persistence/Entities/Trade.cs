@@ -1,10 +1,9 @@
-﻿using Contracts.Trading;
-using Persistence.Entities;
-
-namespace Core.OrleansInfrastructure.Grains.GrainStates
+﻿namespace Persistence.Entities
 {
-	public class Fill : BaseEntity, IFill
+	public class Trade : BaseEntity
 	{
+		public long OrderId { get; set; }
+		
 		public decimal Price { get; set; }
 		public decimal Quantity { get; set; }
 		public decimal Fee { get; set; }

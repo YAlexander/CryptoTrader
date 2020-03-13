@@ -4,6 +4,7 @@ using Contracts.Enums;
 
 namespace Persistence.Entities
 {
+	[Serializable]
 	public class Candle : BaseEntity, ICandle
 	{
 		public Exchanges Exchange { get; set; }

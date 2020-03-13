@@ -1,6 +1,6 @@
 ﻿namespace Contracts.Enums
 {
-    public enum TradePositions
+    public enum DealPositions
     {
         LONG,
         SHORT

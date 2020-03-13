@@ -23,5 +23,6 @@ namespace Core.BusinessLogic
 		public DateTime? DisableTradingTill { get; set; }
 		public bool CreateReverseOrder { get; set; }
 		public List<IAccount> Funds { get; set; }
+		public TradingAdvices TradingAdvice { get; set; }
 	}
 }

@@ -37,5 +37,7 @@ namespace Contracts.Trading
 		//List<IOrder> Orders { get; set; }
 		
 		List<IAccount> Funds { get; set; }
+		
+		TradingAdvices TradingAdvice { get; set; }
 	}
 }

@@ -17,14 +17,14 @@ namespace Persistence.PostgreSQL.Processors
 			_candlesManager = candlesManager;
 		}
 
-		public Task<ICandle> GetCandle(Exchanges exchange, Assets asset1, Assets asset2, DateTime time)
+		public async Task<ICandle> GetCandle(Exchanges exchange, Assets asset1, Assets asset2, DateTime time)
 		{
-			throw new NotImplementedException();
+			return await WithConnection((connection, transaction) => _candlesManager.Get(exchange, asset1, asset2, time, connection, transaction));
 		}
 
-		public Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to)
+		public async Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to)
 		{
-			throw new NotImplementedException();
+			return await WithConnection((connection, transaction) => _candlesManager.Get(exchange, asset1, asset2, from, to, connection, transaction));
 		}
 
 		public async Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfCandles)
@@ -35,11 +35,6 @@ namespace Persistence.PostgreSQL.Processors
 		public async Task<ICandle> Create(Candle candle)
 		{
 			return await WithConnection((connection, transaction) => _candlesManager.Create(candle, connection, transaction));
-		}
-		
-		public Task<ICandle> Find(Exchanges exchange, Assets asset1, Assets asset2, DateTime time)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }
