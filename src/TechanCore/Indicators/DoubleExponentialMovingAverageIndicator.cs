@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Contracts;
+﻿using Contracts;
 using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
@@ -19,13 +18,9 @@ namespace TechanCore.Indicators
 
             for (int i = 0; i < source.Length; i++)
             {
-                if (i >= options.Period)
+                if (emaFirst[i].HasValue && emaSecond[i].HasValue)
                 {
-                    result[i] = 2 * emaFirst[i] - emaSecond[i];
-                }
-                else
-                {
-                    result[i] = null;
+                    result[i] = 2 * emaFirst[i].Value - emaSecond[i].Value;
                 }
             }
             

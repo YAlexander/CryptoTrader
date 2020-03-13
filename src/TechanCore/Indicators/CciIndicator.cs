@@ -23,12 +23,12 @@ namespace TechanCore.Indicators
 
             decimal?[] smaList = cciSourceValues.Sma(options.Period).Result;
 
-            for (int i = 0; i < source.Length; i++)
+            for (int i = 0; i < source.Length - 1; i++)
             {
-                if (i >= options.Period - 1)
+                if (i >= options.Period)
                 {
                     decimal? total = 0m;
-                    for (int j = i; j >= i - (options.Period - 1); j--)
+                    for (int j = i; j >= i - options.Period; j--)
                     {
                         total += Math.Abs(smaList[i].Value - cciSourceValues[j].Value);
                     }

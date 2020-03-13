@@ -1,7 +1,6 @@
-using System;
+using System.Linq;
 using Contracts;
-using Contracts.Enums;
-using TechanCore.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
@@ -14,35 +13,43 @@ namespace TechanCore.Indicators
 		
 		public override MacdIndicatorResult Get(ICandle[] source, MacdOptions options)
 		{
+			decimal[] values = source.Select(x => x.Close).ToArray();
+			return Get(values, options);
+		}
+		
+		public override MacdIndicatorResult Get(decimal[] source, MacdOptions options)
+		{
+			decimal?[] values = source.ToNullable();
+			return Get(values, options);
+		}
+
+		public override MacdIndicatorResult Get(decimal?[] source, MacdOptions options)
+		{
 			decimal?[] macd = new decimal?[source.Length];
 			decimal?[] hist = new decimal?[source.Length];
 			
-			decimal?[] fastEma = source.Ema(options.FastPeriod, CandleVariables.CLOSE).Result;
-			decimal?[] slowEma = source.Ema(options.SlowPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] fastEma = source.Ema(options.FastPeriod).Result;
+			decimal?[] slowEma = source.Ema(options.SlowPeriod).Result;
 
 			for (int i = 0; i < source.Length; i++)
 			{
-				macd[i] = (fastEma[i] - slowEma[i]) ?? 0;
+				if (fastEma[i].HasValue && slowEma[i].HasValue)
+				{
+					macd[i] = fastEma[i] - slowEma[i];
+				}
 			}
 
 			decimal?[] signal = macd.Ema(options.SignalPeriod).Result;
 
 			for (int i = 0; i < source.Length; i++)
 			{
-				hist[i] = macd[i] - signal[i];
+				if (macd[i].HasValue && signal[i].HasValue)
+				{
+					hist[i] = macd[i] - signal[i];
+				}
 			}
 			
 			return new MacdIndicatorResult { Macd = macd, Signal = signal, Hist = hist};
-		}
-		
-		public override MacdIndicatorResult Get(decimal[] source, MacdOptions options)
-		{
-			throw new NotImplementedException();
-		}
-
-		public override MacdIndicatorResult Get(decimal?[] source, MacdOptions options)
-		{
-			throw new NotImplementedException();
 		}
 	}
 }

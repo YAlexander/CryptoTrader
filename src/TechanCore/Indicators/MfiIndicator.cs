@@ -33,10 +33,6 @@ namespace TechanCore.Indicators
 
                     mfiResult[i] = 100 - 100 / (1 + positiveFlow / negativeFlow);
                 }
-                else
-                {
-                    mfiResult[i] = null;
-                }
             }
             
             return new SeriesIndicatorResult { Result = mfiResult };

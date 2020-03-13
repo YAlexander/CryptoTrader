@@ -25,6 +25,11 @@
 		/// <summary>
 		/// Stop market
 		/// </summary>
-		SMT
+		SMT,
+
+		/// <summary>
+		/// One cancel other
+		/// </summary>
+		OCO
 	}
 }

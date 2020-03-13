@@ -9,7 +9,7 @@ namespace Core.Helpers
 {
 	public static class CandleHelpers
 	{
-		public static ICandle[] GroupCandles(this IEnumerable<Candle> candles, Timeframes timeFrame)
+		public static ICandle[] GroupCandles(this IEnumerable<ICandle> candles, Timeframes timeFrame)
 		{
 			TimeSpan interval = timeFrame switch
 			{

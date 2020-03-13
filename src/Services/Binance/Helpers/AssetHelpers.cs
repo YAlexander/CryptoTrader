@@ -13,7 +13,7 @@ namespace Binance.Helpers
 				return ExchangeAssetCodes[asset];
 			}
 			
-			throw new Exception($"Unsupported asset {asset.ToString()}");
+			throw new Exception($"Unsupported asset {asset}");
 		}
 		
 		private static readonly Dictionary<Assets, string> ExchangeAssetCodes = new Dictionary<Assets, string>()

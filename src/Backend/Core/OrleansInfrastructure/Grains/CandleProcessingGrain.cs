@@ -12,6 +12,7 @@ using Persistence.Entities;
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
+	[ImplicitStreamSubscription(nameof(Candle))]
 	public class CandleProcessingGrain : Grain, ICandleProcessingGrain
 	{
 		private readonly ICandlesProcessor _candlesProcessor;
@@ -21,31 +22,20 @@ namespace Core.OrleansInfrastructure.Grains
 			_candlesProcessor = candlesProcessor;
 		}
 		
-		public async Task<long?> Create(Exchanges exchange, Assets asset1, Assets asset2, ICandle candle)
+		public Task<IEnumerable<ICandle>> Get(DateTime from, DateTime to)
 		{
-			Candle newCandle = new Candle();
-			newCandle.Exchange = exchange;
-			newCandle.Asset1 = asset1;
-			newCandle.Time = candle.Time;
-			newCandle.High = candle.High;
-			newCandle.Low = candle.Low;
-			newCandle.Open = candle.Open;
-			newCandle.Close = candle.Close;
-			newCandle.Volume = candle.Volume;
-			newCandle.Trades = candle.Trades;
-			newCandle.TimeFrame = candle.TimeFrame;
-			
-			return await _candlesProcessor.Create(newCandle);
+			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
+			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
+
+			return _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, from, to);
 		}
 
-		public async Task<IEnumerable<ICandle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to)
+		public Task<IEnumerable<ICandle>> Get(int numberOfLastCandles)
 		{
-			return await _candlesProcessor.GetCandles(exchange, asset1, asset2, from, to);
-		}
+			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
+			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
 
-		public Task<IEnumerable<ICandle>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles)
-		{
-			throw new NotImplementedException();
+			return _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, numberOfLastCandles);
 		}
 	}
 }

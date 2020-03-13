@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Contracts;
 using TechanCore.Enums;
 using TechanCore.Helpers;
@@ -16,29 +17,22 @@ namespace TechanCore.Indicators
         {
             decimal?[] result = new decimal?[source.Length];
 
-            int weightSum = 0;
-            for (int i = 1; i <= options.Period; i++)
-            {
-                weightSum += i;
-            }
+            int weightSum = Enumerable.Range(0, options.Period).Sum();
             
             for (int i = 0; i < source.Length; i++)
             {
-                if (i >= options.Period - 1)
+                if (i >= options.Period)
                 {
                     decimal? wma = 0m;
                     int weight = 1;
                     
-                    for (int j = i - (options.Period - 1); j <= i; j++)
+                    for (int j = i - options.Period; j < i; j--)
                     {
                         wma += (weight / weightSum) * source[i];
                         weight++;
                     }
+                    
                     result[i] = wma;
-                }
-                else
-                {
-                    result[i] = null;
                 }
             }
 			

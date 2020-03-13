@@ -37,11 +37,11 @@ namespace TechanCore.Indicators
 		public override SeriesIndicatorResult Get(decimal?[] source, EmaOptions options)
 		{
 			decimal?[] result = new decimal?[source.Length];
-			decimal multiplier = (decimal)2 / (options.Period + 1);
+			decimal multiplier = (decimal)2 / options.Period;
 			
 			for (int i = 0; i < source.Length; i++)
 			{
-				if (i >= options.Period - 1)
+				if (i > options.Period)
 				{
 					if (result[i - 1].HasValue)
 					{
@@ -52,17 +52,13 @@ namespace TechanCore.Indicators
 					{
 						decimal? sum = 0;
 						
-						for (int j = i; j >= i - (options.Period - 1); j--)
+						for (int j = i; j > i - options.Period; j--)
 						{
 							sum += source[i];
 						}
 						
 						result[i] = sum / options.Period;
 					}
-				}
-				else
-				{
-					result[i] = null;
 				}
 			}
 			

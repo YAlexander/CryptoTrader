@@ -9,10 +9,12 @@ namespace Persistence
 {
 	public interface ICandlesProcessor
 	{
-		Task<IEnumerable<Candle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to);
+		Task<ICandle> GetCandle(Exchanges exchange, Assets asset1, Assets asset2, DateTime time);
 
-		Task<IEnumerable<Candle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles);
+		Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to);
 
-		Task<long> Create (Candle candle);
+		Task<IEnumerable<ICandle>> GetCandles(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles);
+
+		Task<ICandle> Create (Candle candle);
 	}
 }

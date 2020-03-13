@@ -1,12 +1,45 @@
+using System;
+using System.Threading.Tasks;
 using Abstractions;
+using Contracts.Trading;
 using Orleans;
 using Orleans.Concurrency;
-using Orleans.Runtime;
+using Orleans.Streams;
+using Persistence.Entities;
 
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
-	public class OrderRProcessingGrain : Grain, IOrderProcessingGrain
+	[ImplicitStreamSubscription(nameof(ITradingContext))]
+	public class OrderProcessingGrain : Grain, IOrderProcessingGrain, IAsyncObserver<ITradingContext>
 	{
+		private IStreamProvider _streamProvider;
+
+		public override async Task OnActivateAsync()
+		{
+			_streamProvider = GetStreamProvider("SMSProvider");
+			IAsyncStream<ITradingContext> stream = _streamProvider.GetStream<ITradingContext>(this.GetPrimaryKey(), nameof(ITradingContext));
+			await stream.SubscribeAsync(OnNextAsync);
+
+			await base.OnActivateAsync();
+		}
+
+		public async Task OnNextAsync(ITradingContext item, StreamSequenceToken token = null)
+		{
+			Order order = new Order();
+			order.Exchange = item.Exchange;
+			order.Asset1 = item.TradingPair.asset1;
+			order.Asset2 = item.TradingPair.asset2;
+		}
+
+		public Task OnCompletedAsync()
+		{
+			return Task.CompletedTask;
+		}
+
+		public Task OnErrorAsync(Exception ex)
+		{
+			return Task.CompletedTask;
+		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Contracts;
 using TechanCore.Enums;
 using TechanCore.Helpers;
@@ -43,13 +42,8 @@ namespace TechanCore.Indicators
             {   
                 if (sma[i].HasValue)
                 {
-                    lowerLine[i] = sma[i] - sma[i].Value * (decimal)options.DownwardFactor;
-                    upperLine[i] = sma[i] + sma[i].Value * (decimal)options.UpwardFactor;
-                }
-                else
-                {
-                    lowerLine[i] = null;
-                    upperLine[i] = null;
+                    lowerLine[i] = sma[i].Value - sma[i].Value * (decimal)options.DownwardFactor;
+                    upperLine[i] = sma[i].Value + sma[i].Value * (decimal)options.UpwardFactor;
                 }
             }
             

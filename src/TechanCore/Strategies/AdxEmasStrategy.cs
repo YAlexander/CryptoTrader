@@ -7,7 +7,7 @@ using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class AdxEmasStrategy : BaseStrategy<AdxSmasStrategyOptions>
+	public class AdxEmasStrategy : BaseStrategy<AdxEmasStrategyOptions>
 	{
 		public override string Name { get; } = "ADX Emas Strategy";
 
@@ -15,7 +15,7 @@ namespace TechanCore.Strategies
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
 		{
-			AdxSmasStrategyOptions options = GetOptions;
+			AdxEmasStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
 			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
@@ -53,7 +53,7 @@ namespace TechanCore.Strategies
 			return result;
 		}
 
-		public AdxEmasStrategy(AdxSmasStrategyOptions options) : base(options)
+		public AdxEmasStrategy(AdxEmasStrategyOptions options) : base(options)
 		{
 		}
 	}

@@ -1,15 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Contracts;
-using Contracts.Enums;
 using Contracts.Trading;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-    public class OrderFillPoliticsConstraint : ITradingConstraint<FillPolitics>
+    public class OrderFillPoliticsConstraint : ITradingConstraint
     {
-        public async Task<FillPolitics> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
+        public async Task<ITradingContext> Set (ITradingContext context)
         {
-            throw new System.NotImplementedException();
+            return context;
         }
     }
 }

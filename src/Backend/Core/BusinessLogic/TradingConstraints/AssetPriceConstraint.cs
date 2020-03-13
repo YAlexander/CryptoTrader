@@ -1,14 +1,13 @@
 ﻿using System.Threading.Tasks;
-using Contracts;
 using Contracts.Trading;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-    public class AssetPriceConstraint : ITradingConstraint<decimal>
+    public class AssetPriceConstraint : ITradingConstraint
     {
-        public async Task<decimal> Get(ICandle[] candles, IStrategyInfo info, decimal[] balances)
+        public async Task<ITradingContext> Set (ITradingContext context)
         {
-            throw new System.NotImplementedException();
+            return context;
         }
     }
 }

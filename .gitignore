@@ -46,3 +46,5 @@ src/Backend/Abstractions/bin/
 src/Backend/Abstractions/obj/
 src/Backend/Silo/bin/
 src/Backend/Silo/obj/
+src/Common/obj/
+src/Common/bin/

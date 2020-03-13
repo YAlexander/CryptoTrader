@@ -6,16 +6,17 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Binance.Net" Version="5.0.4" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.1" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.1" />
+        <PackageReference Include="Binance.Net" Version="5.1.0-alpha4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.2" />
-        <PackageReference Include="Microsoft.Orleans.Client" Version="3.1.0" />
+        <PackageReference Include="Microsoft.Orleans.Client" Version="3.1.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Backend\Abstractions\Abstractions.csproj" />
+      <ProjectReference Include="..\..\Backend\Persistence\Persistence.csproj" />
       <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
     </ItemGroup>
 </Project>

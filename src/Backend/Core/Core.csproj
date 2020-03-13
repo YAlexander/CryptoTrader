@@ -14,13 +14,16 @@
     <ItemGroup>
       <PackageReference Include="Cryptowatcher.TA-LIb-Core" Version="1.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="3.1.2" />
-      <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.1.0" />
-      <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.1.0" />
+      <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.1.2" />
+      <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.1.2" />
       <PackageReference Include="System.Text.Json" Version="4.7.1" />
     </ItemGroup>
 
     <ItemGroup>
       <Orleans_CodeGenInputs Remove="TypeCodes\TypeCodeBase.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\CandleStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\OrderStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\TradeStorage.cs" />
     </ItemGroup>
 
 </Project>
