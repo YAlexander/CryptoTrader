@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,7 +6,6 @@ using Abstractions;
 using Binance.Helpers;
 using Binance.Net;
 using Common;
-using Contracts;
 using Contracts.Enums;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
@@ -19,15 +18,15 @@ using Persistence.Entities;
 
 namespace Binance
 {
-    public class CandlesWorker : BackgroundService
+    public class TradesWorker : BackgroundService
     {
-        private readonly ILogger<CandlesWorker> _logger;
+        private readonly ILogger<TradesWorker> _logger;
         private readonly ISettingsProcessor _exchangeSettingsProcessor;
         private readonly IOptions<Settings> _settings;
         private readonly IClusterClient _orleansClient;
 
-        public CandlesWorker(
-	        ILogger<CandlesWorker> logger,
+        public TradesWorker(
+	        ILogger<TradesWorker> logger,
 	        ISettingsProcessor exchangeSettingsProcessor,
 	        IOptions<Settings> settings,
 	        OrleansClient orleansClient)
@@ -63,25 +62,20 @@ namespace Binance
 				{
 					using (var client = new BinanceSocketClient())
 					{
-						CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
+						CallResult<UpdateSubscription> successTrades  = client.SubscribeToTradeUpdates(pair.ToPair(), async (data) =>
 						{
-								if (data.Data.Final)
-								{
-									Candle candle = data.Data.Map(pair);
-									
-									GrainKeyExtension keyExtension = new GrainKeyExtension();
-									keyExtension.Asset1 = candle.Asset1;
-									keyExtension.Asset2 = candle.Asset2;
-									keyExtension.Time = candle.Time;
-									
-									ICandleGrain grain = _orleansClient.GetGrain<ICandleGrain>((long)pair.Exchange, keyExtension.ToString());
-									await grain.Set(candle);
-								}
+							GrainKeyExtension keyExtension = new GrainKeyExtension();
+							keyExtension.Asset1 = pair.Asset1;
+							keyExtension.Asset2 = pair.Asset2;
+
+							Trade trade = data.Map(pair);
+							ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long)pair.Exchange, keyExtension.ToString());
+							await grain.Set(trade);						
 						});
 
-						if (!successKline.Success)
+						if (!successTrades .Success)
 						{
-							_logger.LogError($"{successKline.Error.Message} for {pair.Exchange} {pair.Asset1}{pair.Asset2}" );
+							_logger.LogError($"{successTrades .Error.Message} for {pair.Exchange} {pair.Asset1}{pair.Asset2}" );
 						}
 
 						while (!stoppingToken.IsCancellationRequested)

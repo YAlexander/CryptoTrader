@@ -67,6 +67,20 @@ namespace Binance.Helpers
 			}
 		}
 
+		public static Trade Map (this BinanceStreamTrade binanceTrade, IExchangeSettings pair)
+		{
+			// TODO: Validate trade symbol
+			Trade trade = new Trade();
+			trade.Exchange = pair.Exchange;
+			trade.Asset1 = pair.Asset1;
+			trade.Asset2 = pair.Asset2;
+			trade.Time = binanceTrade.TradeTime;
+			trade.Price = binanceTrade.Price;
+			trade.Quantity = binanceTrade.Quantity;
+			
+			return trade;
+		}
+		
 		public static Candle Map (this BinanceStreamKline binanceCandle, IExchangeSettings pair)
 		{
 			Candle candle = new Candle();

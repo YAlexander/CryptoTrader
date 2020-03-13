@@ -17,6 +17,7 @@
     <ItemGroup>
       <ProjectReference Include="..\..\Backend\Abstractions\Abstractions.csproj" />
       <ProjectReference Include="..\..\Backend\Persistence\Persistence.csproj" />
+      <ProjectReference Include="..\..\Common\Common.csproj" />
       <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
     </ItemGroup>
 </Project>

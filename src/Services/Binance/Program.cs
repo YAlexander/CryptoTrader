@@ -1,3 +1,4 @@
+using Common;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
@@ -10,8 +11,13 @@ namespace Binance
             CreateHostBuilder(args).Build().Run();
         }
 
-        public static IHostBuilder CreateHostBuilder(string[] args) =>
+        private static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
-                .ConfigureServices((hostContext, services) => { services.AddHostedService<CandlesWorker>(); });
+                .ConfigureServices((hostContext, services) =>
+                {
+                    services.AddSingleton<OrleansClient>();
+                    services.AddHostedService<CandlesWorker>();
+                    services.AddHostedService<TradesWorker>();
+                });
     }
 }
