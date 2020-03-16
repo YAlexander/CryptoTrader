@@ -7,6 +7,7 @@ namespace Persistence
 {
 	public interface ISettingsProcessor
 	{
-		public Task<IEnumerable<IExchangeSettings>> Get(Exchanges exchange);
+		Task<IEnumerable<IExchangeSettings>> Get(Exchanges exchange);
+		Task<IExchangeSettings> Get(Exchanges exchange, Assets asset1, Assets asset2);
 	}
 }

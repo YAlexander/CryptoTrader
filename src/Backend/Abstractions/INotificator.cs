@@ -1,9 +1,10 @@
-﻿using Orleans;
+﻿using System.Threading.Tasks;
+using Orleans;
 
 namespace Abstractions
 {
-	public interface INotificator : IGrainObserver
+	public interface INotificator<T> : IGrainObserver where T : class
 	{
-		void ReceiveMessage(INotification notification);
+		Task ReceiveMessage(INotification<T> notification);
 	}
 }

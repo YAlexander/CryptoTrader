@@ -2,11 +2,11 @@
 
 namespace Abstractions
 {
-	public interface INotification
+	public interface INotification<T>
 	{
 		DateTime Created { get; set; }
 		DateTime? Expired { get; set; }
 		
-		object Payload { get; set; }
+		T Payload { get; set; }
 	}
 }

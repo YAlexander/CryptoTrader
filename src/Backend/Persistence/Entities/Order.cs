@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using Contracts.Enums;
+using Contracts.Trading;
 
 namespace Persistence.Entities
 {
 	[Serializable]
-	public class Order : BaseEntity
+	public class Order : BaseEntity, IOrder
 	{
 		public long? ParentOrderId { get; set; }
 		public long DealId { get; set; }
@@ -31,7 +32,7 @@ namespace Persistence.Entities
 		public decimal? StopLoss { get; set; }
 		public decimal? TakeProfit { get; set; }
 		
-		public List<Order> ChildOrders { get; set; } = new List<Order>();
-		public List<Trade> Trades { get; set; } = new List<Trade>();
+		public List<IOrder> ChildOrders { get; set; } = new List<IOrder>();
+		public List<ITrade> Trades { get; set; } = new List<ITrade>();
 	}
 }

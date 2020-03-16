@@ -33,8 +33,8 @@ namespace Contracts.Trading
 		DateTime? DisableTradingTill { get; set; }		
 		
 		bool CreateReverseOrder { get; set; }
-		
-		//List<IOrder> Orders { get; set; }
+
+		// TODO: Add Deal and Orders entity
 		
 		List<IAccount> Funds { get; set; }
 		

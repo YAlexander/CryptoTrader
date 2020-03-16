@@ -13,6 +13,11 @@ namespace Persistence.PostgreSQL.Processors
 			return await WithConnection<IEnumerable<IExchangeSettings>>((connection, transaction) => { return _settingsManager.Get(exchange, connection, transaction); });
 		}
 
+		public Task<IExchangeSettings> Get(Exchanges exchange, Assets asset1, Assets asset2)
+		{
+			throw new System.NotImplementedException();
+		}
+
 		private readonly IExchangeSettingsManager _settingsManager;
 		
 		public ExchangeSettingsProcessor(string connectionString, IExchangeSettingsManager settingsManager) : base(connectionString)

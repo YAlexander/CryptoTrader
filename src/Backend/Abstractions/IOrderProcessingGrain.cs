@@ -1,12 +1,13 @@
 using System.Threading.Tasks;
+using Contracts.Trading;
 using Orleans;
 
 namespace Abstractions
 {
 	public interface IOrderProcessingGrain : IGrainWithIntegerKey
 	{
-		Task Subscribe(INotificator observer);
+		Task Subscribe(IOrderNotificator observer);
 
-		Task UnSubscribe(INotificator observer);
+		Task UnSubscribe(IOrderNotificator observer);
 	}
 }

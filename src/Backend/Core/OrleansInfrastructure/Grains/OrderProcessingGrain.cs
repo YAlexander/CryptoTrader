@@ -15,7 +15,7 @@ namespace Core.OrleansInfrastructure.Grains
 	public class OrderProcessingGrain : Grain, IOrderProcessingGrain, IAsyncObserver<ITradingContext>
 	{
 		private IStreamProvider _streamProvider;
-		private GrainObserverManager<INotificator> _subsManager;
+		private GrainObserverManager<IOrderNotificator> _subsManager;
 
 		public override async Task OnActivateAsync()
 		{
@@ -23,26 +23,26 @@ namespace Core.OrleansInfrastructure.Grains
 			IAsyncStream<ITradingContext> stream = _streamProvider.GetStream<ITradingContext>(this.GetPrimaryKey(), nameof(ITradingContext));
 			await stream.SubscribeAsync(OnNextAsync);
 			
-			_subsManager = new GrainObserverManager<INotificator>();
+			_subsManager = new GrainObserverManager<IOrderNotificator>();
 			await base.OnActivateAsync();
 		}
 
-		public async Task OnNextAsync(ITradingContext item, StreamSequenceToken token = null)
+		public async Task OnNextAsync(ITradingContext context, StreamSequenceToken token = null)
 		{
 			// TODO: Process order
 
 			Order order = new Order();
-			order.Exchange = item.Exchange;
-			order.Asset1 = item.TradingPair.asset1;
-			order.Asset2 = item.TradingPair.asset2;
+			order.Exchange = context.Exchange;
+			order.Asset1 = context.TradingPair.asset1;
+			order.Asset2 = context.TradingPair.asset2;
 
-			INotification notification = new Notification();
+			INotification<IOrder> notification = new Notification<IOrder>();
 			notification.Payload = order;
 
 			await this.SendUpdateMessage(notification);
 		}
 		
-		private Task SendUpdateMessage(INotification message)
+		private Task SendUpdateMessage(INotification<IOrder> message)
 		{
 			_subsManager.Notify(s => s.ReceiveMessage(message));
 			return Task.CompletedTask;
@@ -58,13 +58,13 @@ namespace Core.OrleansInfrastructure.Grains
 			return Task.CompletedTask;
 		}
 		
-		public Task Subscribe(INotificator observer)
+		public Task Subscribe(IOrderNotificator observer)
 		{
 			_subsManager.Subscribe(observer);
 			return Task.CompletedTask;
 		}
 
-		public Task UnSubscribe(INotificator observer)
+		public Task UnSubscribe(IOrderNotificator observer)
 		{ 
 			_subsManager.Unsubscribe(observer);
 			return Task.CompletedTask;

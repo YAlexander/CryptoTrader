@@ -1,12 +1,14 @@
-﻿using Abstractions;
+﻿using System;
+using System.Threading.Tasks;
+using Abstractions;
 
 namespace Common
 {
-	public class Notificator : INotificator
+	public abstract class Notificator<T> : INotificator<T> where T : class
 	{
-		public void ReceiveMessage(INotification notification)
+		public Task ReceiveMessage(INotification<T> notification)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }
