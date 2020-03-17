@@ -6,31 +6,36 @@ namespace Contracts.Trading
 {
 	public interface IOrder
 	{
-		public long? ParentOrderId { get; set; }
-		public long DealId { get; set; }
+		long? ParentOrderId { get; set; }
+		long DealId { get; set; }
 		
-		public string ExchangeOrderId { get; set; }
+		string ExchangeOrderId { get; set; }
 		
-		public OrderStatus Status { get; set; }
-		public DateTime? Expires { get; set; }
+		OrderStatus Status { get; set; }
+		DateTime? Expires { get; set; }
 
-		public Exchanges Exchange { get; set; }
-		public Assets Asset1 { get; set; }
-		public Assets Asset2 { get; set; }
+		Exchanges Exchange { get; set; }
+		Assets Asset1 { get; set; }
+		Assets Asset2 { get; set; }
 
-		public OrderSides OrderSide { get; set; }
-		public OrderType OrderType { get; set; }
-		public FillPolitics Politics { get; set; }
+		OrderSides OrderSide { get; set; }
+		OrderType OrderType { get; set; }
+		FillPolitics Politics { get; set; }
 		
-		public bool IsVirtual { get; set; }
+		bool IsVirtual { get; set; }
 		
-		public decimal Amount { get; set; }
-		public decimal? Limit { get; set; }
-		public decimal? StopLimit { get; set; }
-		public decimal? StopLoss { get; set; }
-		public decimal? TakeProfit { get; set; }
+		decimal Amount { get; set; }
+		decimal? Limit { get; set; }
+		decimal? StopLimit { get; set; }
+		decimal? StopLoss { get; set; }
+		decimal? TakeProfit { get; set; }
 		
-		public List<IOrder> ChildOrders { get; set; }
-		public List<ITrade> Trades { get; set; }
+		List<IOrder> ChildOrders { get; set; }
+		List<ITrade> Trades { get; set; }
+		
+		bool CreateRequired { get; set; }
+		bool UpdateRequired { get; set; }
+		bool CancelRequired { get; set; }
+		string ErrorDetails { get; set; }
 	}
 }

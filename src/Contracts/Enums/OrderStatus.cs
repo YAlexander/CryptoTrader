@@ -9,6 +9,6 @@ namespace Contracts.Enums
 		CANCELED,
 		REJECTED,
 		EXPIRED,
-		ERROR
+		EXCEPTION
 	}
 }

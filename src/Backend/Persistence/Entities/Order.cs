@@ -34,5 +34,11 @@ namespace Persistence.Entities
 		
 		public List<IOrder> ChildOrders { get; set; } = new List<IOrder>();
 		public List<ITrade> Trades { get; set; } = new List<ITrade>();
+		
+		public bool CreateRequired { get; set; }
+		public bool UpdateRequired { get; set; }
+		public bool CancelRequired { get; set; }
+		
+		public string ErrorDetails { get; set; }
 	}
 }

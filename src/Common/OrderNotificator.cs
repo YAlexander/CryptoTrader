@@ -8,19 +8,29 @@ namespace Common
 {
 	public class OrderNotificator : IOrderNotificator
 	{
-		private readonly ISettingsProcessor _exchangeSettingsProcessor;
-
-		public OrderNotificator(ISettingsProcessor exchangeSettingsProcessor)
+		private readonly IExchangeOrderProcessor _orderProcessor;
+		
+		public OrderNotificator(IExchangeOrderProcessor orderProcessor)
 		{
-			_exchangeSettingsProcessor = exchangeSettingsProcessor;
+			_orderProcessor = orderProcessor;
 		}
 		
 		public async Task ReceiveMessage(INotification<IOrder> notification)
 		{
 			IOrder order = notification.Payload;
-			IExchangeSettings pairConfig = await _exchangeSettingsProcessor.Get(order.Exchange, order.Asset1, order.Asset2);
-			
-			
+
+			if (order.CreateRequired)
+			{
+				await _orderProcessor.PlaceOrder(order);
+			}
+			else if(order.UpdateRequired)
+			{
+				await _orderProcessor.UpdateOrder(order);
+			}
+			else
+			{
+				await _orderProcessor.CancelOrder(order.ExchangeOrderId);
+			}
 		}
 	}
 }
