@@ -45,7 +45,7 @@ namespace Core.OrleansInfrastructure.Grains
                 
 			IStreamProvider streamProvider = this.GetStreamProvider("SMSProvider");
 			IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle));
-			await stream.OnNextAsync(_candle.State);
+			await stream.OnNextAsync(newCandle);
         }
 
 	    public Task<ICandle> Get()

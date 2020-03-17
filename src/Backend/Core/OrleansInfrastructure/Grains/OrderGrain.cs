@@ -17,10 +17,17 @@ namespace Core.OrleansInfrastructure.Grains
 		{
 			_order = order;
 		}
-
-		public Task<bool> Receive(IOrder order)
+		
+		public async Task Receive(IOrder order)
 		{
-			throw new System.NotImplementedException();
+			_order.State = (Order) order;
+			await _order.WriteStateAsync();
+		}
+
+		public async Task Update(IOrder order)
+		{
+			_order.State = (Order)order;
+			await _order.WriteStateAsync();
 		}
 	}
 }

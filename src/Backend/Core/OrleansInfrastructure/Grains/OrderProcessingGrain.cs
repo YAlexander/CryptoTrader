@@ -16,7 +16,7 @@ namespace Core.OrleansInfrastructure.Grains
 	{
 		private IStreamProvider _streamProvider;
 		private GrainObserverManager<IOrderNotificator> _subsManager;
-
+		
 		public override async Task OnActivateAsync()
 		{
 			_streamProvider = GetStreamProvider("SMSProvider");
@@ -42,10 +42,9 @@ namespace Core.OrleansInfrastructure.Grains
 			await this.SendUpdateMessage(notification);
 		}
 		
-		private Task SendUpdateMessage(INotification<IOrder> message)
+		private async Task SendUpdateMessage(INotification<IOrder> message)
 		{
-			_subsManager.Notify(s => s.ReceiveMessage(message));
-			return Task.CompletedTask;
+			await _subsManager.Notify(s => s.ReceiveMessage(message));
 		}
 
 		public Task OnCompletedAsync()
@@ -57,7 +56,19 @@ namespace Core.OrleansInfrastructure.Grains
 		{
 			return Task.CompletedTask;
 		}
-		
+
+		public async Task Update(IOrder order)
+		{
+			GrainKeyExtension extension = new GrainKeyExtension();
+			extension.Exchange = order.Exchange;
+			extension.Asset1 = order.Asset1;
+			extension.Asset2 = order.Asset2;
+			extension.Id = order.OrderId;
+
+			IOrderGrain grain = GrainFactory.GetGrain<IOrderGrain>((int)order.Exchange, extension.ToString());
+			await grain.Update(order);
+		}
+
 		public Task Subscribe(IOrderNotificator observer)
 		{
 			_subsManager.Subscribe(observer);

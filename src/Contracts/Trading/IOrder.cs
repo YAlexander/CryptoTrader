@@ -6,6 +6,7 @@ namespace Contracts.Trading
 {
 	public interface IOrder
 	{
+		public Guid OrderId { get; set; }
 		long? ParentOrderId { get; set; }
 		long DealId { get; set; }
 		

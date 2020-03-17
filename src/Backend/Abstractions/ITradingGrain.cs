@@ -4,7 +4,7 @@ using Orleans;
 
 namespace Abstractions
 {
-	public interface ITradingGrain : IGrainWithIntegerCompoundKey
+	public interface ITradingGrain : IGrainWithGuidCompoundKey
 	{
 		Task<ITradingContext> GetContext();
 	}

@@ -25,11 +25,17 @@ namespace Core.OrleansInfrastructure.Grains
         
         public async Task OnNextAsync(Candle item, StreamSequenceToken token = null)
         {
-            ITradingContext context = await BuildContext();
-            
-            IStreamProvider streamProvider = this.GetStreamProvider("SMSProvider");
-            IAsyncStream<ITradingContext> stream = streamProvider.GetStream<ITradingContext>(Guid.NewGuid(), nameof(ITradingContext));
-            await stream.OnNextAsync(context);
+            var guid = this.GetPrimaryKey();
+            var candlesStreamProvider = GetStreamProvider("SMSProvider");
+            var candlesStream = candlesStreamProvider.GetStream<Candle>(guid, nameof(Candle));
+            await candlesStream.SubscribeAsync<Candle>(async (data, token) =>
+            {
+                ITradingContext context = await BuildContext();
+                
+                var streamProvider = GetStreamProvider("SMSProvider");
+                IAsyncStream<ITradingContext> stream = streamProvider.GetStream<ITradingContext>(guid, nameof(ITradingContext));
+                await stream.OnNextAsync(context);
+            });
         }
 
         public Task OnCompletedAsync()
@@ -44,23 +50,23 @@ namespace Core.OrleansInfrastructure.Grains
 
         private async Task<ITradingContext> BuildContext()
         {
-            long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
+            Guid primaryKey = this.GetPrimaryKey(out string keyExtension);
             GrainKeyExtension secondaryKey = keyExtension.ToExtended();
 
             // TODO: Check if we have open position
             
             ITradingContext context = new TradingContext();
-            context.Exchange = (Exchanges)primaryKey;
+            context.Exchange = secondaryKey.Exchange;
             context.TradingPair = (secondaryKey.Asset1, secondaryKey.Asset2);
 
-            IStrategyGrain strategyInfoGrain = GrainFactory.GetGrain<IStrategyGrain>(primaryKey, keyExtension);
+            IStrategyGrain strategyInfoGrain = GrainFactory.GetGrain<IStrategyGrain>((int)secondaryKey.Exchange, keyExtension);
             IStrategyInfo strategyInfo = await strategyInfoGrain.Get();
 
             context.TimeFrame = (Timeframes) strategyInfo.TimeFrame;
             
             int numberOfCandles = strategyInfo.TimeFrame * context.Strategy.MinNumberOfCandles;
 
-            ICandleProcessingGrain candlesProcessingGrain = GrainFactory.GetGrain<ICandleProcessingGrain>(primaryKey, keyExtension);
+            ICandleProcessingGrain candlesProcessingGrain = GrainFactory.GetGrain<ICandleProcessingGrain>((int)secondaryKey.Exchange, keyExtension);
             IEnumerable<ICandle> candles = await candlesProcessingGrain.Get(numberOfCandles);
 
             context.Candles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);

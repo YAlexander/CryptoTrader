@@ -4,10 +4,8 @@ using Orleans;
 
 namespace Abstractions
 {
-	public interface IOrderProcessingGrain : IGrainWithIntegerKey
+	public interface IOrderProcessingGrain : IGrainWithGuidKey
 	{
-		Task Subscribe(IOrderNotificator observer);
-
-		Task UnSubscribe(IOrderNotificator observer);
+		Task Update(IOrder order);
 	}
 }

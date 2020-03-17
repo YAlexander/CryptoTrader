@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Abstractions;
 using Common;
+using Contracts.Enums;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
@@ -13,7 +14,7 @@ namespace Binance
     {
         private readonly ILogger<TradingMonitor> _logger;
         private readonly IClusterClient _orleansClient;
-        private readonly IOrderNotificator _notificator;
+        private IOrderNotificator _notificator;
         
         public TradingMonitor(
 	        ILogger<TradingMonitor> logger,
@@ -31,7 +32,7 @@ namespace Binance
 			{
 				try
 				{
-					IOrderProcessingGrain grain = _orleansClient.GetGrain<IOrderProcessingGrain>(0);
+					INotificationGrain grain = _orleansClient.GetGrain<INotificationGrain>((int)Exchanges.BINANCE);
 
 					IOrderNotificator obj = await _orleansClient.CreateObjectReference<IOrderNotificator>(_notificator);
 					await grain.Subscribe(obj);
