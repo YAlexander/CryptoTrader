@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Contracts;
-using Contracts.Enums;
 using Persistence.Entities;
+using TechanCore;
+using TechanCore.Enums;
 
 namespace Core.Helpers
 {

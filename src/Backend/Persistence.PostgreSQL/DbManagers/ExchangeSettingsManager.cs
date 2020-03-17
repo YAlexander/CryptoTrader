@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using Contracts.Enums;
+using Abstractions.Enums;
 using Dapper;
 using Persistence.Entities;
 using Persistence.Managers;

@@ -1,5 +1,4 @@
-﻿using System;
-using Contracts.Trading;
+﻿using Common.Trading;
 
 namespace Abstractions
 {

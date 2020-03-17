@@ -1,7 +1,7 @@
 ﻿using System;
-using Contracts.Enums;
+using Abstractions.Enums;
 
-namespace Contracts.Trading
+namespace Abstractions
 {
 	public interface ITrade
 	{

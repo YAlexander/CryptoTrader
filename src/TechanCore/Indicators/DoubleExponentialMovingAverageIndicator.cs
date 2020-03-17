@@ -1,5 +1,4 @@
-﻿using Contracts;
-using TechanCore.Helpers;
+﻿using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;

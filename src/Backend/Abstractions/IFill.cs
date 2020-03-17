@@ -1,4 +1,4 @@
-﻿namespace Contracts.Trading
+﻿namespace Abstractions
 {
 	public interface IFill
 	{

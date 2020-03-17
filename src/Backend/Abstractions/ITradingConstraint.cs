@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Common.Trading;
 
-namespace Contracts.Trading
+namespace Abstractions
 {
 	public interface ITradingConstraint
 	{

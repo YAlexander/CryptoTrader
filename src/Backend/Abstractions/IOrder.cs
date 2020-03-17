@@ -1,8 +1,9 @@
 using System;
 using System.Collections.Generic;
-using Contracts.Enums;
+using Abstractions;
+using Abstractions.Enums;
 
-namespace Contracts.Trading
+namespace Common.Trading
 {
 	public interface IOrder
 	{

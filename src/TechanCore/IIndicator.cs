@@ -1,4 +1,4 @@
-﻿namespace Contracts.Trading
+﻿namespace TechanCore
 {
 	public interface IIndicator<in T, out TK> where T : IOptionsSet where TK : IResultSet
 	{

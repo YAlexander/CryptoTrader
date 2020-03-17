@@ -1,4 +1,4 @@
-﻿using Contracts.Enums;
+﻿using Abstractions.Enums;
 
 namespace Persistence.Entities
 {

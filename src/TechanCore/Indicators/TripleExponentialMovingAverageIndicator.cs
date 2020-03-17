@@ -1,5 +1,4 @@
 ﻿using System;
-using Contracts;
 using TechanCore.Enums;
 using TechanCore.Helpers;
 using TechanCore.Indicators.Extensions;

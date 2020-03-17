@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using Abstractions;
 using Common;
-using Contracts.Trading;
+using Common.Trading;
 using Orleans;
 using Orleans.Concurrency;
 using Orleans.Streams;

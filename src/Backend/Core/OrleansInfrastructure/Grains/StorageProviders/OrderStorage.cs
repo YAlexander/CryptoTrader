@@ -1,12 +1,11 @@
 ﻿using System.Threading.Tasks;
+using Abstractions.Enums;
 using Common;
-using Contracts.Enums;
-using Contracts.Trading;
+using Common.Trading;
 using Orleans;
 using Orleans.Runtime;
 using Orleans.Storage;
 using Persistence;
-using Persistence.Entities;
 
 namespace Core.OrleansInfrastructure.Grains.StorageProviders
 {

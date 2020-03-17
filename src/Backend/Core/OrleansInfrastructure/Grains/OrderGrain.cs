@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 using Abstractions;
-using Contracts.Trading;
+using Common.Trading;
 using Orleans;
 using Orleans.Runtime;
 using Persistence.Entities;

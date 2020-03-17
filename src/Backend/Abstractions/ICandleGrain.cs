@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using Contracts;
 using Orleans;
+using TechanCore;
 
 namespace Abstractions
 {

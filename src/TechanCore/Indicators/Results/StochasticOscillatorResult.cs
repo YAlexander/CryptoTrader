@@ -1,5 +1,3 @@
-using Contracts.Trading;
-
 namespace TechanCore.Indicators.Results
 {
 	public class StochasticOscillatorResult : IResultSet

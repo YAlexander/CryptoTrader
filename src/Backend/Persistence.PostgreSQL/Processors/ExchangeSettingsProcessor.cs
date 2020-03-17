@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contracts.Enums;
+using Abstractions.Enums;
 using Persistence.Entities;
 using Persistence.Managers;
 

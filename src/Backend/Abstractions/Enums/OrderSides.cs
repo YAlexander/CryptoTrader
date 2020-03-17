@@ -1,4 +1,4 @@
-﻿namespace Contracts.Enums
+﻿namespace Abstractions.Enums
 {
     public enum OrderSides
     {

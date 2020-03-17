@@ -1,4 +1,5 @@
-﻿using Contracts.Enums;
+﻿using Abstractions.Enums;
+using TechanCore.Enums;
 
 namespace Persistence.Entities
 {

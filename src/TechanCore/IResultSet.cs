@@ -1,4 +1,4 @@
-﻿namespace Contracts.Trading
+﻿namespace TechanCore
 {
 	public interface IResultSet
 	{

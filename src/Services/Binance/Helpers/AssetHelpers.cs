@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contracts.Enums;
+using Abstractions.Enums;
 
 namespace Binance.Helpers
 {

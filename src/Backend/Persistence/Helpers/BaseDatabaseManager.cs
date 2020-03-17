@@ -1,6 +1,5 @@
 using System.Data;
 using System.Threading.Tasks;
-using Contracts.Enums;
 
 namespace Persistence.Helpers
 {

@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Contracts;
-using Contracts.Trading;
+using Abstractions;
 using Persistence;
 
 namespace Core.BusinessLogic.TradingConstraints

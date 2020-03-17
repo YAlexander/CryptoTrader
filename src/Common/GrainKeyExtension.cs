@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text.Json;
-using Contracts.Enums;
+using Abstractions.Enums;
 
 namespace Common
 {

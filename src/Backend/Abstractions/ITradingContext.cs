@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contracts.Enums;
+using Abstractions.Enums;
+using TechanCore;
+using TechanCore.Enums;
 
-namespace Contracts.Trading
+namespace Abstractions
 {
 	public interface ITradingContext
 	{

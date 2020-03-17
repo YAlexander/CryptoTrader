@@ -1,5 +1,4 @@
 using System.Linq;
-using Contracts;
 using TechanCore.Helpers;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;

@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Contracts;
-using Contracts.Enums;
+using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Results;
 using TechanCore.Strategies.Options;

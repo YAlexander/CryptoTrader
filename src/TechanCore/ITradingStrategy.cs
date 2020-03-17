@@ -1,6 +1,6 @@
-using Contracts.Enums;
+using TechanCore.Enums;
 
-namespace Contracts.Trading
+namespace TechanCore
 {
 	public interface ITradingStrategy<out T> where T : IStrategyOption
 	{

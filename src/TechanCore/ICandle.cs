@@ -1,7 +1,7 @@
 ﻿using System;
-using Contracts.Enums;
+using TechanCore.Enums;
 
-namespace Contracts
+namespace TechanCore
 {
 	public interface ICandle
 	{ 

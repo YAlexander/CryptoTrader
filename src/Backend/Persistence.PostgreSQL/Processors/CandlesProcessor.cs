@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Contracts;
-using Contracts.Enums;
+using Abstractions.Enums;
 using Persistence.Entities;
 using Persistence.Managers;
+using TechanCore;
 
 namespace Persistence.PostgreSQL.Processors
 {

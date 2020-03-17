@@ -1,7 +1,8 @@
 ﻿using System;
+using Abstractions.Enums;
 using Binance.Net.Objects;
-using Contracts.Enums;
 using Persistence.Entities;
+using TechanCore.Enums;
 
 namespace Binance.Helpers
 {

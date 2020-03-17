@@ -1,6 +1,7 @@
 ﻿using System;
-using Contracts;
-using Contracts.Enums;
+using Abstractions.Enums;
+using TechanCore;
+using TechanCore.Enums;
 
 namespace Persistence.Entities
 {

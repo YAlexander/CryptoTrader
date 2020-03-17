@@ -3,15 +3,14 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abstractions;
 using Common;
-using Contracts;
-using Contracts.Enums;
-using Contracts.Trading;
 using Core.BusinessLogic;
 using Core.Helpers;
 using Orleans;
 using Orleans.Streams;
 using Persistence.Entities;
 using Persistence.Helpers;
+using TechanCore;
+using TechanCore.Enums;
 
 namespace Core.OrleansInfrastructure.Grains
 {

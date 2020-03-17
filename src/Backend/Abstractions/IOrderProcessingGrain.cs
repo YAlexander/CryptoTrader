@@ -1,5 +1,5 @@
 using System.Threading.Tasks;
-using Contracts.Trading;
+using Common.Trading;
 using Orleans;
 
 namespace Abstractions

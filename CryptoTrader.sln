@@ -8,8 +8,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Binance", "src\Services\Bin
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Bitmex", "src\Services\Bitmex\Bitmex.csproj", "{5E07B446-E64B-4090-A024-30E8E5A45810}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contracts", "src\Contracts\Contracts.csproj", "{27295D0D-8C2F-4492-840E-A853B299D45A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Core", "src\Backend\Core\Core.csproj", "{4DCEF526-AF4C-4F83-84C2-AEA6DB92E89B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Backoffice", "Backoffice", "{794924B1-C9EC-46EB-B61F-8FF02000EB14}"
@@ -53,10 +51,6 @@ Global
 		{5E07B446-E64B-4090-A024-30E8E5A45810}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E07B446-E64B-4090-A024-30E8E5A45810}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5E07B446-E64B-4090-A024-30E8E5A45810}.Release|Any CPU.Build.0 = Release|Any CPU
-		{27295D0D-8C2F-4492-840E-A853B299D45A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{27295D0D-8C2F-4492-840E-A853B299D45A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{27295D0D-8C2F-4492-840E-A853B299D45A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{27295D0D-8C2F-4492-840E-A853B299D45A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4DCEF526-AF4C-4F83-84C2-AEA6DB92E89B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4DCEF526-AF4C-4F83-84C2-AEA6DB92E89B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4DCEF526-AF4C-4F83-84C2-AEA6DB92E89B}.Release|Any CPU.ActiveCfg = Release|Any CPU

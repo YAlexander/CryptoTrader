@@ -1,5 +1,3 @@
-using Contracts.Trading;
-
 namespace TechanCore.Strategies.Options
 {
 	public class MacdCrossStrategyOptions : IStrategyOption

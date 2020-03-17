@@ -1,7 +1,4 @@
-﻿using Contracts;
-using Contracts.Trading;
-
-namespace TechanCore.Indicators
+﻿namespace TechanCore.Indicators
 {
 	public abstract class BaseIndicator<T, TK> : IIndicator<T, TK> where T : IOptionsSet where TK: IResultSet
 	{

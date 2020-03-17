@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Abstractions;
+using Abstractions.Enums;
 using Common;
-using Contracts;
-using Contracts.Enums;
 using Orleans;
 using Orleans.Runtime;
 using Orleans.Streams;
 using Persistence.Entities;
+using TechanCore;
 
 namespace Core.OrleansInfrastructure.Grains
 {
