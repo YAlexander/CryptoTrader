@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Orleans;
+using Orleans.Streams;
 using Persistence;
 using Persistence.Entities;
 
@@ -24,17 +25,20 @@ namespace Binance
         private readonly ISettingsProcessor _exchangeSettingsProcessor;
         private readonly IOptions<Settings> _settings;
         private readonly IClusterClient _orleansClient;
+        private ICandlesProcessor _candlesProcessor;
 
         public CandlesWorker(
 	        ILogger<CandlesWorker> logger,
 	        ISettingsProcessor exchangeSettingsProcessor,
 	        IOptions<Settings> settings,
+	        ICandlesProcessor candlesProcessor,
 	        OrleansClient orleansClient)
         {
             _logger = logger;
             _exchangeSettingsProcessor = exchangeSettingsProcessor;
             _settings = settings;
             _orleansClient = orleansClient.Client;
+            _candlesProcessor = candlesProcessor;
         }
 
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
@@ -68,13 +72,11 @@ namespace Binance
 								{
 									Candle candle = data.Data.Map(pair);
 									
-									GrainKeyExtension keyExtension = new GrainKeyExtension();
-									keyExtension.Asset1 = candle.Asset1;
-									keyExtension.Asset2 = candle.Asset2;
-									keyExtension.Time = candle.Time;
+									await _candlesProcessor.Create(candle);
 									
-									ICandleGrain grain = _orleansClient.GetGrain<ICandleGrain>((long)pair.Exchange, keyExtension.ToString());
-									await grain.Set(candle);
+									IStreamProvider streamProvider = _orleansClient.GetStreamProvider("SMSProvider");
+									IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle));
+									await stream.OnNextAsync(candle);
 								}
 						});
 
