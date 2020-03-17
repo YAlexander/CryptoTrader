@@ -65,7 +65,7 @@ namespace Core.OrleansInfrastructure.Grains
 			extension.Asset2 = order.Asset2;
 			extension.Id = order.OrderId;
 
-			IOrderGrain grain = GrainFactory.GetGrain<IOrderGrain>((int)order.Exchange, extension.ToString());
+			IOrderGrain grain = GrainFactory.GetGrain<IOrderGrain>(order.OrderId, extension.ToString());
 			await grain.Update(order);
 		}
 
