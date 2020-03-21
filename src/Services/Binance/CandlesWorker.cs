@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Abstractions;
 using Abstractions.Enums;
 using Binance.Helpers;
 using Binance.Net;
-using Common;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Hosting;
@@ -23,21 +21,21 @@ namespace Binance
     {
         private readonly ILogger<CandlesWorker> _logger;
         private readonly ISettingsProcessor _exchangeSettingsProcessor;
-        private readonly IOptions<Settings> _settings;
+        private readonly IOptions<AppSettings> _settings;
         private readonly IClusterClient _orleansClient;
-        private ICandlesProcessor _candlesProcessor;
+        private readonly ICandlesProcessor _candlesProcessor;
 
         public CandlesWorker(
 	        ILogger<CandlesWorker> logger,
 	        ISettingsProcessor exchangeSettingsProcessor,
-	        IOptions<Settings> settings,
+	        IOptions<AppSettings> settings,
 	        ICandlesProcessor candlesProcessor,
-	        OrleansClient orleansClient)
+	        IClusterClient orleansClient)
         {
             _logger = logger;
             _exchangeSettingsProcessor = exchangeSettingsProcessor;
             _settings = settings;
-            _orleansClient = orleansClient.Client;
+            _orleansClient = orleansClient;
             _candlesProcessor = candlesProcessor;
         }
 

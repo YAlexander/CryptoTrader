@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Abstractions;
 using Abstractions.Enums;
-using Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
@@ -18,11 +17,11 @@ namespace Binance
         
         public TradingMonitor(
 	        ILogger<TradingMonitor> logger,
-	        OrleansClient orleansClient,
+	        IClusterClient orleansClient,
 	        IOrderNotificator notificator)
         {
             _logger = logger;
-            _orleansClient = orleansClient.Client;
+            _orleansClient = orleansClient;
             _notificator = notificator;
         }
 

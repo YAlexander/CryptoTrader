@@ -1,6 +1,11 @@
+using Abstractions;
 using Common;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Persistence;
+using Persistence.Managers;
+using Persistence.PostgreSQL.Processors;
 
 namespace Binance
 {
@@ -15,9 +20,23 @@ namespace Binance
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
+                    IConfiguration configuration = hostContext.Configuration;
+
+                    services.AddOptions();
+                    services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
+                    services.Configure<DatabaseOptions>(configuration.GetSection($"{nameof(AppSettings)}:{nameof(DatabaseOptions)}"));
+
                     services.AddSingleton<OrleansClient>();
+                    services.AddSingleton<IHostedService>(_ => _.GetService<OrleansClient>());
+                    services.AddSingleton(_ => _.GetService<OrleansClient>().Client);
+                    
+                    services.AddTransient<ICandlesManager, ICandlesManager>();
+                    services.AddTransient<IExchangeOrderProcessor, BinanceOrderProcessor>();
+                    services.AddTransient<ICandlesProcessor, CandlesProcessor>();
+                    
                     services.AddHostedService<CandlesWorker>();
                     services.AddHostedService<TradesWorker>();
+                    services.AddHostedService<TradingMonitor>();
                 });
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abstractions.Enums;
+using Common;
 using Persistence.Entities;
 using Persistence.Managers;
 using TechanCore;
@@ -12,7 +13,7 @@ namespace Persistence.PostgreSQL.Processors
 	{
 		private readonly ICandlesManager _candlesManager;
 		
-		public CandlesProcessor(string connectionString, ICandlesManager candlesManager) : base(connectionString)
+		public CandlesProcessor(DatabaseOptions databaseOptions, ICandlesManager candlesManager) : base(databaseOptions.CryptoTradingConnectionString)
 		{
 			_candlesManager = candlesManager;
 		}

@@ -16,6 +16,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Backend\Abstractions\Abstractions.csproj" />
+      <ProjectReference Include="..\..\Backend\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
       <ProjectReference Include="..\..\Backend\Persistence\Persistence.csproj" />
       <ProjectReference Include="..\..\Common\Common.csproj" />
     </ItemGroup>

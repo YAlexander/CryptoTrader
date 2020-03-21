@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Orleans;
 using Orleans.Runtime;
 
@@ -11,17 +12,29 @@ namespace Common
     public class OrleansClient : IHostedService
     {
         private readonly ILogger<OrleansClient> _logger;
-
-        public OrleansClient(ILogger<OrleansClient> logger, ILoggerProvider loggerProvider)
+        private readonly ILoggerProvider _loggerProvider;
+        private IOptions<DatabaseOptions> _settings;
+        
+        private IClusterClient _client;
+        public IClusterClient Client
         {
-            _logger = logger;
-            Client = new ClientBuilder()
-                .UseLocalhostClustering()
-                .ConfigureLogging(builder => builder.AddProvider(loggerProvider))
-                .Build();
+            get
+            {
+                if (!_client.IsInitialized)
+                {
+                    _client = Init();
+                }
+
+                return _client;
+            }
         }
 
-        public IClusterClient Client { get; }
+        public OrleansClient(IOptions<DatabaseOptions> settings, ILogger<OrleansClient> logger, ILoggerProvider loggerProvider)
+        {
+            _logger = logger;
+            _loggerProvider = loggerProvider;
+            _settings = settings;
+        }
 
         public Task StartAsync(CancellationToken cancellationToken)
         {
@@ -74,6 +87,15 @@ namespace Common
             {
                 _logger.LogWarning(error, "Error while gracefully disconnecting from Orleans cluster. Will ignore and continue to shutdown.");
             }
+        }
+        
+        
+        private IClusterClient Init()
+        {
+            return new ClientBuilder()
+                .UseLocalhostClustering()
+                .ConfigureLogging(builder => builder.AddProvider(_loggerProvider))
+                .Build();
         }
     }
 }

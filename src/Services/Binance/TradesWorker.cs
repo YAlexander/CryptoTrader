@@ -22,19 +22,19 @@ namespace Binance
     {
         private readonly ILogger<TradesWorker> _logger;
         private readonly ISettingsProcessor _exchangeSettingsProcessor;
-        private readonly IOptions<Settings> _settings;
+        private readonly IOptions<AppSettings> _settings;
         private readonly IClusterClient _orleansClient;
 
         public TradesWorker(
 	        ILogger<TradesWorker> logger,
 	        ISettingsProcessor exchangeSettingsProcessor,
-	        IOptions<Settings> settings,
-	        OrleansClient orleansClient)
+	        IOptions<AppSettings> settings,
+	        IClusterClient orleansClient)
         {
             _logger = logger;
             _exchangeSettingsProcessor = exchangeSettingsProcessor;
             _settings = settings;
-            _orleansClient = orleansClient.Client;
+            _orleansClient = orleansClient;
         }
 
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
