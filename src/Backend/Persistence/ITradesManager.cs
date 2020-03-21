@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Contracts.Enums;
+using Abstractions.Enums;
 
 namespace Persistence
 {

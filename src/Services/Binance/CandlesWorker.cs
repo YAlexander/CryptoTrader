@@ -2,14 +2,16 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Abstractions.Enums;
 using Binance.Helpers;
 using Binance.Net;
-using Contracts.Enums;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Orleans;
+using Orleans.Streams;
 using Persistence;
 using Persistence.Entities;
 
@@ -19,13 +21,22 @@ namespace Binance
     {
         private readonly ILogger<CandlesWorker> _logger;
         private readonly ISettingsProcessor _exchangeSettingsProcessor;
-        private readonly IOptions<Settings> _settings;
+        private readonly IOptions<AppSettings> _settings;
+        private readonly IClusterClient _orleansClient;
+        private readonly ICandlesProcessor _candlesProcessor;
 
-        public CandlesWorker(ILogger<CandlesWorker> logger, ISettingsProcessor exchangeSettingsProcessor, IOptions<Settings> settings)
+        public CandlesWorker(
+	        ILogger<CandlesWorker> logger,
+	        ISettingsProcessor exchangeSettingsProcessor,
+	        IOptions<AppSettings> settings,
+	        ICandlesProcessor candlesProcessor,
+	        IClusterClient orleansClient)
         {
             _logger = logger;
             _exchangeSettingsProcessor = exchangeSettingsProcessor;
             _settings = settings;
+            _orleansClient = orleansClient;
+            _candlesProcessor = candlesProcessor;
         }
 
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
@@ -53,11 +64,17 @@ namespace Binance
 				{
 					using (var client = new BinanceSocketClient())
 					{
-						CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), (data) =>
+						CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
 						{
 								if (data.Data.Final)
 								{
-									// TODO: Add Orleans call
+									Candle candle = data.Data.Map(pair);
+									
+									await _candlesProcessor.Create(candle);
+									
+									IStreamProvider streamProvider = _orleansClient.GetStreamProvider("SMSProvider");
+									IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle));
+									await stream.OnNextAsync(candle);
 								}
 						});
 

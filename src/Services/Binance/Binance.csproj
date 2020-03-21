@@ -6,17 +6,18 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Binance.Net" Version="5.1.0-alpha4" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.2" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="3.1.2" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="3.1.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="3.1.2" />
-        <PackageReference Include="Microsoft.Orleans.Client" Version="3.1.2" />
+        <PackageReference Include="Binance.Net" Version="5.1.0-alpha7" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.1.20120.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0-preview.1.20120.4" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0-preview.1.20120.4" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.1.20120.4" />
+        <PackageReference Include="Microsoft.Orleans.Client" Version="3.9.0-ci.20200315.2" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\..\Backend\Abstractions\Abstractions.csproj" />
+      <ProjectReference Include="..\..\Backend\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
       <ProjectReference Include="..\..\Backend\Persistence\Persistence.csproj" />
-      <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
+      <ProjectReference Include="..\..\Common\Common.csproj" />
     </ItemGroup>
 </Project>

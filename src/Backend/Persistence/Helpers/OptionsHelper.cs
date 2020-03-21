@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
-using Contracts.Trading;
+using Abstractions;
+using TechanCore;
 using TechanCore.Strategies;
 using TechanCore.Strategies.Options;
 

@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Contracts;
-using Contracts.Enums;
-using Contracts.Trading;
+using Abstractions;
+using Abstractions.Enums;
+using TechanCore;
+using TechanCore.Enums;
 
 namespace Core.BusinessLogic
 {

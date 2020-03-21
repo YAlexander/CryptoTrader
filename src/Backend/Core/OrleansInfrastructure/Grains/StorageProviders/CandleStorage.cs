@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
-using Contracts.Enums;
+using Abstractions.Enums;
+using Common;
 using Orleans;
 using Orleans.Runtime;
 using Orleans.Storage;

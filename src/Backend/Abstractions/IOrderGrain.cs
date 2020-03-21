@@ -1,11 +1,12 @@
 using System.Threading.Tasks;
-using Contracts.Trading;
+using Common.Trading;
 using Orleans;
 
 namespace Abstractions
 {
-	public interface IOrderGrain : IGrainWithIntegerCompoundKey
+	public interface IOrderGrain : IGrainWithGuidCompoundKey
 	{
-		Task<bool> Receive(IOrder order);
+		Task Receive(IOrder order);
+		Task Update(IOrder order);
 	}
 }

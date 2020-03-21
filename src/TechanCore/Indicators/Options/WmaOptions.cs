@@ -1,6 +1,4 @@
-﻿using Contracts.Enums;
-using Contracts.Trading;
-using TechanCore.Enums;
+﻿using TechanCore.Enums;
 
 namespace TechanCore.Indicators.Options
 {

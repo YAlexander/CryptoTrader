@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using Contracts;
-using Contracts.Enums;
-using Contracts.Trading;
-using TechanCore.Indicators.Options;
+using TechanCore.Enums;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies

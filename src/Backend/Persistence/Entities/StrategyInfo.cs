@@ -1,5 +1,5 @@
-﻿using Contracts.Enums;
-using Contracts.Trading;
+﻿using Abstractions;
+using Abstractions.Enums;
 
 namespace Persistence.Entities
 {

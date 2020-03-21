@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using Contracts;
-using Contracts.Trading;
 
 namespace TechanCore.Indicators.Results
 {

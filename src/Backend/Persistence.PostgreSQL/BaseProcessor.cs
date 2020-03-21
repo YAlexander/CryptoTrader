@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data;
 using System.Threading.Tasks;
-using Contracts;
+using Abstractions;
 using Npgsql;
 
 namespace Persistence.PostgreSQL

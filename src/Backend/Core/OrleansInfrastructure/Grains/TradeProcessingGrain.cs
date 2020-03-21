@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 using Abstractions;
-using Contracts.Trading;
+using Common.Trading;
 using Orleans;
 using Orleans.Concurrency;
 
@@ -10,7 +10,7 @@ namespace Core.OrleansInfrastructure.Grains
 	[StatelessWorker]
 	public class TradeProcessingGrain : Grain, ITradeProcessingGrain
 	{
-		public Task Receive(ITrade trade)
+		public Task Set(ITrade trade)
 		{
 			throw new NotImplementedException();
 		}

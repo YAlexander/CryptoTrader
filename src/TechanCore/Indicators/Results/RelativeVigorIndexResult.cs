@@ -1,6 +1,4 @@
-﻿using Contracts.Trading;
-
-namespace TechanCore.Indicators.Results
+﻿namespace TechanCore.Indicators.Results
 {
     public class RelativeVigorIndexResult : IResultSet
     {

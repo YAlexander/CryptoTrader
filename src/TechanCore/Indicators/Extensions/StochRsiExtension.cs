@@ -1,6 +1,5 @@
 using System.Collections.Generic;
 using System.Linq;
-using Contracts;
 using TechanCore.Indicators.Options;
 using TechanCore.Indicators.Results;
 
