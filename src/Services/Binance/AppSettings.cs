@@ -7,6 +7,6 @@ namespace Binance
 		public string ApiKey { get; set; } 
 		public string ApiSecret { get; set; }
 		
-		public DatabaseOptions ConnectionStrings { get; set; }
+		public DatabaseOptions DatabaseOptions { get; set; }
 	} 
 }

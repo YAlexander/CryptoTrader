@@ -20,7 +20,7 @@ namespace Common
         {
             get
             {
-                if (!_client.IsInitialized)
+                if (_client == null || !_client.IsInitialized)
                 {
                     _client = Init();
                 }

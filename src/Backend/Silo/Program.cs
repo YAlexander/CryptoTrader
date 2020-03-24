@@ -56,7 +56,6 @@ namespace Silo
                             CaptureMessageTemplates = true,
                             CaptureMessageProperties = true
                         }))
-                        //.ConfigureServices(services => { services.AddSingleton<IConfigurationRoot>(configuration); })
                         .AddSimpleMessageStreamProvider(Constants.MessageStreamProvider)
                         // .AddGenericGrainStorage<TraderStorageProvider>(nameof(TraderStorageProvider), opt =>
                         // {
@@ -64,7 +63,7 @@ namespace Silo
                         // })
                         .UseAdoNetReminderService(options =>
                         {
-                            options.ConnectionString = "";
+                            options.ConnectionString = appSettings.DatabaseOptions.SystemConnectionString;
                             options.Invariant = appSettings.ClusterInvariant;
                         })
                         .Configure<GrainVersioningOptions>(options =>
