@@ -2,7 +2,8 @@
 {
 	public class DatabaseOptions
 	{
-			public string SystemConnectionString { get; set; }
-			public string CryptoTradingConnectionString { get; set; }
+		public bool MigrateDatabaseOnStart { get; set; }
+		public string SystemConnectionString { get; set; }
+		public string CryptoTradingConnectionString { get; set; }
 	}
 }

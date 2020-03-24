@@ -16,4 +16,8 @@
         <PackageReference Include="NLog.Extensions.Logging" Version="1.6.2" />
         <PackageReference Include="OrleansDashboard" Version="3.0.8" />
     </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
+    </ItemGroup>
 </Project>
