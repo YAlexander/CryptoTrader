@@ -64,13 +64,17 @@ namespace Binance
 					{
 						CallResult<UpdateSubscription> successTrades  = client.SubscribeToTradeUpdates(pair.ToPair(), async (data) =>
 						{
-							GrainKeyExtension keyExtension = new GrainKeyExtension();
-							keyExtension.Asset1 = pair.Asset1;
-							keyExtension.Asset2 = pair.Asset2;
+							if (_orleansClient.IsInitialized)
+							{
+								GrainKeyExtension keyExtension = new GrainKeyExtension();
+								keyExtension.Exchange = pair.Exchange;
+								keyExtension.Asset1 = pair.Asset1;
+								keyExtension.Asset2 = pair.Asset2;
 
-							Trade trade = data.Map(pair);
-							ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long)pair.Exchange, keyExtension.ToString());
-							await grain.Set(trade);						
+								Trade trade = data.Map(pair);
+								ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long) pair.Exchange,  keyExtension.ToString());
+								await grain.Set(trade);
+							}
 						});
 
 						if (!successTrades .Success)

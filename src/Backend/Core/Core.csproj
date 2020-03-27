@@ -6,7 +6,6 @@
 
     <ItemGroup>
       <ProjectReference Include="..\..\Common\Common.csproj" />
-      <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\..\TechanCore\TechanCore.csproj" />
       <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
       <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
@@ -15,8 +14,8 @@
     <ItemGroup>
       <PackageReference Include="Cryptowatcher.TA-LIb-Core" Version="1.0.0" />
       <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0-preview.1.20120.4" />
-      <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.9.0-ci.20200315.2" />
-      <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.9.0-ci.20200315.2" />
+      <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.9.0-ci.20200321.1" />
+      <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.9.0-ci.20200321.1" />
       <PackageReference Include="System.Text.Json" Version="5.0.0-preview.1.20120.5" />
     </ItemGroup>
 

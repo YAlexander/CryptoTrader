@@ -10,7 +10,7 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0-preview.1.20120.4" />
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0-preview.1.20120.4" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.1.20120.4" />
-        <PackageReference Include="Microsoft.Orleans.Client" Version="3.9.0-ci.20200315.2" />
+        <PackageReference Include="Microsoft.Orleans.Client" Version="3.9.0-ci.20200321.1" />
     </ItemGroup>
 
     <ItemGroup>

@@ -71,10 +71,13 @@ namespace Binance
 									Candle candle = data.Data.Map(pair);
 									
 									await _candlesProcessor.Create(candle);
-									
-									IStreamProvider streamProvider = _orleansClient.GetStreamProvider("SMSProvider");
-									IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle));
-									await stream.OnNextAsync(candle);
+
+									if (_orleansClient.IsInitialized)
+									{
+										IStreamProvider streamProvider = _orleansClient.GetStreamProvider("SMSProvider");
+										IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle));
+										await stream.OnNextAsync(candle);
+									}
 								}
 						});
 
