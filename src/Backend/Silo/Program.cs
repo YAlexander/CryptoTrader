@@ -1,3 +1,4 @@
+using System.IO;
 using System.Net;
 using Common;
 using Microsoft.Extensions.Configuration;
@@ -24,15 +25,10 @@ namespace Silo
             Host.CreateDefaultBuilder(args)
                 .ConfigureServices((hostContext, services) =>
                 {
-                    DatabaseOptions dbOptions = new DatabaseOptions();
-                    hostContext.Configuration.GetSection("AppSettings:DatabaseOptions").Bind(dbOptions);
-
-                    if (dbOptions.MigrateDatabaseOnStart)
-                    {
-                        EvolveMigrator migrator = new EvolveMigrator();
-                        migrator.Migrate(dbOptions.SystemConnectionString, "Migrations/System", false);
-                    }
-
+                    services.AddOptions();
+                    services.Configure<AppSettings>(hostContext.Configuration.GetSection(nameof(AppSettings)));
+                    services.Configure<DatabaseOptions>(hostContext.Configuration.GetSection(nameof(DatabaseOptions)));
+                    
                     services.AddHostedService<Worker>();
                 })
                 .UseOrleans((context, builder) =>
