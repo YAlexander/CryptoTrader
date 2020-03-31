@@ -44,9 +44,56 @@ namespace Persistence.PostgreSQL.DbManagers
 
 		public Task<Candle> Create(Candle candle, IDbConnection connection, IDbTransaction transaction = null)
 		{
-			return connection.QueryFirstAsync<Candle>(string.Format(CreateCandle, candle.Exchange, candle.Asset1, candle.Asset2),
+			string query = $@"
+				insert into {candle.Exchange}.Candles 
+					(
+						created,
+						exchange,
+						asset1,
+						asset2,
+						time,
+						timeFrame,
+						high,
+						low,
+						open,
+						close,
+						volume,
+						trades
+					)
+					select									
+						@created,
+						@exchange,
+						@asset1,
+						@asset2,
+						@time,
+						@timeFrame,
+						@high,
+						@low,
+						@open,
+						@close,
+						@volume,
+						@trades
+					where 
+						not exists 
+						(
+							select 
+								1 
+							from 
+								{candle.Exchange}.Candles 
+							where 
+								asset1 = @asset1
+							and
+								asset2 = @asset2
+							and
+								time = @time  										
+						)
+						returning *;
+				";
+
+			return connection.QueryFirstAsync<Candle>(query,
 				new
 						{
+							created = DateTime.Now,
 							exchange = (int)candle.Exchange,
 							asset1 = (int)candle.Asset1,
 							asset2 = (int)candle.Asset2,
@@ -106,55 +153,6 @@ namespace Persistence.PostgreSQL.DbManagers
 				and 
 					time between @from and @to
 		";
-
-		private const string CreateCandle = @"
-				insert into {0}.Candles 
-									(
-										created,
-										updated,
-										exchange,
-										asset1,
-										asset2,
-										time,
-										timeFrame,
-										high,
-										low,
-										open,
-										close,
-										volume,
-										trades
-									)
-									select									
-										@created,
-										@updated,
-										@exchange,
-										@asset1,
-										@asset2,
-										@time,
-										@timeFrame,
-										@high,
-										@low,
-										@open,
-										@close,
-										@volume,
-										@trades
-									where 
-										not exists 
-										(
-											select 
-												1 
-											from 
-												{0}.Candles 
-											where 
-												asset1 = @asset1
-											and
-											 	asset2 = @asset2
-											and
-											 	time = @time  										
-										)
-									returning *;
-		";
-		
 		#endregion
 	}
 }

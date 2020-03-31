@@ -1,4 +1,3 @@
-using System.IO;
 using System.Net;
 using Common;
 using Microsoft.Extensions.Configuration;
@@ -10,7 +9,6 @@ using Orleans.Configuration;
 using Orleans.Hosting;
 using Orleans.Versions.Compatibility;
 using Orleans.Versions.Selector;
-using Persistence.PostgreSQL;
 
 namespace Silo
 {
@@ -33,8 +31,7 @@ namespace Silo
                 })
                 .UseOrleans((context, builder) =>
                 {
-                    AppSettings appSettings = new AppSettings();
-                    context.Configuration.GetSection("AppSettings:DatabaseOptions").Bind(appSettings);
+                    AppSettings appSettings = context.Configuration.GetSection(nameof(AppSettings)).Get<AppSettings>();
                     
                     builder.UseAdoNetClustering(options =>
                         {
@@ -46,7 +43,7 @@ namespace Silo
                             options.ClusterId = appSettings.ClusterId;
                             options.ServiceId = appSettings.ServiceId;
                         })
-                        .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Any)
+                        .Configure<EndpointOptions>(options => options.AdvertisedIPAddress = IPAddress.Loopback)
                         .ConfigureLogging(logging => logging.AddNLog(new NLogProviderOptions
                         {
                             CaptureMessageTemplates = true,

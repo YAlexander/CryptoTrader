@@ -8,6 +8,6 @@ namespace Persistence.Managers
 {
 	public interface IExchangeSettingsManager
 	{
-		Task<IEnumerable<IExchangeSettings>> Get(Exchanges exchange, IDbConnection connection, IDbTransaction transaction = null);
+		Task<IEnumerable<ExchangeSettings>> Get(Exchanges exchange, IDbConnection connection, IDbTransaction transaction = null);
 	}
 }

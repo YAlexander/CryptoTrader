@@ -3,7 +3,7 @@ using TechanCore.Enums;
 
 namespace Persistence.Entities
 {
-	public interface IExchangeSettings
+	public class ExchangeSettings
 	{
 		public Exchanges Exchange { get; set; }
 		

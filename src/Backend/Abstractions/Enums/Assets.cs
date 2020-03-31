@@ -5,71 +5,71 @@
 		/// <summary>
 		/// Bitcoin
 		/// </summary>
-		BTC,
+		BTC = 0,
 
 		/// <summary>
 		/// Ethereum
 		/// </summary>
-		ETH,
+		ETH = 1,
 
 		/// <summary>
 		/// Ripple
 		/// </summary>
-		XRP,
+		XRP = 2,
 
 		/// <summary>
 		/// Bitcoin Cash
 		/// </summary>
-		BCH,
+		BCH = 3,
 
 		/// <summary>
 		/// EOS
 		/// </summary>
-		EOS,
+		EOS = 4,
 
 		/// <summary>
 		/// Litecoin
 		/// </summary>
-		LTC,
+		LTC = 5,
 
 		/// <summary>
 		/// Stellar
 		/// </summary>
-		XLM,
+		XLM = 6,
 
 		/// <summary>
 		/// Tether
 		/// </summary>
-		USDT,
+		USDT = 7,
 
 		/// <summary>
 		/// Monero
 		/// </summary>
-		XMR,
+		XMR = 8,
 
 		/// <summary>
 		/// Dash
 		/// </summary>
-		DASH,
+		DASH = 9,
 
 		/// <summary>
 		/// Binance Coin
 		/// </summary>
-		BNB,
+		BNB = 10,
 
 		/// <summary>
 		/// Ethereum Classic
 		/// </summary>
-		ETC,
+		ETC = 11,
 		
 		/// <summary>
 		/// TrueUSD
 		/// </summary>
-		TUSD,
+		TUSD = 12,
 
 		/// <summary>
 		/// USD Coin
 		/// </summary>
-		USDC
+		USDC = 13
 	}
 }

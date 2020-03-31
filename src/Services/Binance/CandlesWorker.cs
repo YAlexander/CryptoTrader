@@ -41,10 +41,10 @@ namespace Binance
 
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
 		{
-			IEnumerable<IExchangeSettings> exchangeSettings = await _exchangeSettingsProcessor.Get(Exchanges.BINANCE);
+			IEnumerable<ExchangeSettings> exchangeSettings = await _exchangeSettingsProcessor.Get(Exchanges.BINANCE);
 			
 			List<Task> tasks = new List<Task>();
-			foreach (IExchangeSettings pair in exchangeSettings)
+			foreach (ExchangeSettings pair in exchangeSettings)
 			{
 				if (pair.IsEnabled)
 				{
@@ -56,7 +56,7 @@ namespace Binance
 			await Task.WhenAll(tasks.ToArray());
 		}
 
-		private async Task DoWork (IExchangeSettings pair, CancellationToken stoppingToken)
+		private async Task DoWork (ExchangeSettings pair, CancellationToken stoppingToken)
 		{
 			while (!stoppingToken.IsCancellationRequested)
 			{
