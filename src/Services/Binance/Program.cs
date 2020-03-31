@@ -37,11 +37,12 @@ namespace Binance
                     services.AddTransient<ICandlesManager, CandlesManager>();
                     services.AddTransient<IExchangeOrderProcessor, BinanceOrderProcessor>();
                     services.AddTransient<ICandlesProcessor, CandlesProcessor>();
-                    
-                    services.AddHostedService<CandlesWorker>();
-                    services.AddHostedService<TradesWorker>();
-                    services.AddHostedService<TradingMonitor>();
+
                     services.AddSingleton<IHostedService>(_ => _.GetService<OrleansClient>());
+
+                    services.AddHostedService<CandlesWorker>();
+                    //services.AddHostedService<TradesWorker>();
+                    //services.AddHostedService<TradingMonitor>();
                 });
     }
 }

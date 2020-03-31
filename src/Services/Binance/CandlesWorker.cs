@@ -14,6 +14,7 @@ using Orleans;
 using Orleans.Streams;
 using Persistence;
 using Persistence.Entities;
+using TechanCore;
 
 namespace Binance
 {
@@ -69,15 +70,16 @@ namespace Binance
 								if (data.Data.Final)
 								{
 									Candle candle = data.Data.Map(pair);
-									
 									await _candlesProcessor.Create(candle);
 
-									if (_orleansClient.IsInitialized)
+									if (!_orleansClient.IsInitialized)
 									{
-										IStreamProvider streamProvider = _orleansClient.GetStreamProvider("SMSProvider");
-										IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle));
-										await stream.OnNextAsync(candle);
+										await _orleansClient.Connect();
 									}
+
+									IStreamProvider streamProvider = _orleansClient.GetStreamProvider("SMSProvider");
+									IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle)); 
+									await stream.OnNextAsync(candle);
 								}
 						});
 

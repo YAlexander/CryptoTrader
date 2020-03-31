@@ -31,17 +31,19 @@ namespace Binance
 			{
 				try
 				{
-					if(_orleansClient.IsInitialized)
+					if (!_orleansClient.IsInitialized)
 					{
-						INotificationGrain grain = _orleansClient.GetGrain<INotificationGrain>((int)Exchanges.BINANCE);
+						await _orleansClient.Connect();
+					}
 
-						IOrderNotificator obj = await _orleansClient.CreateObjectReference<IOrderNotificator>(_notificator);
-						await grain.Subscribe(obj);
+					INotificationGrain grain = _orleansClient.GetGrain<INotificationGrain>((int)Exchanges.BINANCE);
 
-						while (!stoppingToken.IsCancellationRequested)
-						{
-							await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
-						}
+					IOrderNotificator obj = await _orleansClient.CreateObjectReference<IOrderNotificator>(_notificator);
+					await grain.Subscribe(obj);
+
+					while (!stoppingToken.IsCancellationRequested) 
+					{
+						await Task.Delay(TimeSpan.FromSeconds(5), stoppingToken);
 					}
 				}
 				catch (Exception ex)

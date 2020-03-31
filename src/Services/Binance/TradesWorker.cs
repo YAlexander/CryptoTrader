@@ -40,7 +40,12 @@ namespace Binance
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
 		{
 			IEnumerable<ExchangeSettings> exchangeSettings = await _exchangeSettingsProcessor.Get(Exchanges.BINANCE);
-	
+
+			if (!_orleansClient.IsInitialized)
+			{
+				await _orleansClient.Connect();
+			}
+
 			List<Task> tasks = new List<Task>();
 			foreach (ExchangeSettings pair in exchangeSettings)
 			{
