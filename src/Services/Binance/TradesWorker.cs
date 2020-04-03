@@ -41,11 +41,6 @@ namespace Binance
 		{
 			IEnumerable<ExchangeSettings> exchangeSettings = await _exchangeSettingsProcessor.Get(Exchanges.BINANCE);
 
-			if (!_orleansClient.IsInitialized)
-			{
-				await _orleansClient.Connect();
-			}
-
 			List<Task> tasks = new List<Task>();
 			foreach (ExchangeSettings pair in exchangeSettings)
 			{
@@ -69,17 +64,18 @@ namespace Binance
 					{
 						CallResult<UpdateSubscription> successTrades  = client.SubscribeToTradeUpdates(pair.ToPair(), async (data) =>
 						{
-							if (_orleansClient.IsInitialized)
+							if (!_orleansClient.IsInitialized)
 							{
-								GrainKeyExtension keyExtension = new GrainKeyExtension();
-								keyExtension.Exchange = pair.Exchange;
-								keyExtension.Asset1 = pair.Asset1;
-								keyExtension.Asset2 = pair.Asset2;
-
-								Trade trade = data.Map(pair);
-								ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long) pair.Exchange,  keyExtension.ToString());
-								await grain.Set(trade);
+								await _orleansClient.Connect();
 							}
+
+							GrainKeyExtension keyExtension = new GrainKeyExtension(); 
+							keyExtension.Exchange = pair.Exchange; 
+							keyExtension.Asset1 = pair.Asset1; 
+							keyExtension.Asset2 = pair.Asset2;
+							
+							ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long) pair.Exchange,  keyExtension.ToString());
+							await grain.Set(data.Map(pair));
 						});
 
 						if (!successTrades .Success)

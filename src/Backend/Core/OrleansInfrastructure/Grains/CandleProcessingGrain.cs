@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 using Abstractions;
 using Abstractions.Enums;
 using Common;
+using Microsoft.Extensions.Logging;
 using Orleans;
 using Orleans.Concurrency;
+using Orleans.Streams;
 using Persistence;
 using Persistence.Entities;
 using TechanCore;
@@ -13,7 +16,6 @@ using TechanCore;
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
-	[ImplicitStreamSubscription(nameof(Candle))]
 	public class CandleProcessingGrain : Grain, ICandleProcessingGrain
 	{
 		private readonly ICandlesProcessor _candlesProcessor;

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Abstractions;
 using Common;
 using Common.Trading;
+using Core.BusinessLogic;
 using Orleans;
 using Orleans.Concurrency;
 using Orleans.Streams;
@@ -11,23 +12,20 @@ using Persistence.Entities;
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
-	[ImplicitStreamSubscription(nameof(ITradingContext))]
-	public class OrderProcessingGrain : Grain, IOrderProcessingGrain, IAsyncObserver<ITradingContext>
+	[ImplicitStreamSubscription(nameof(TradingContext))]
+	public class OrderProcessingGrain : Grain, IOrderProcessingGrain
 	{
-		private IStreamProvider _streamProvider;
+		private IStreamProvider streamProvider;
 		private GrainObserverManager<IOrderNotificator> _subsManager;
 		
 		public override async Task OnActivateAsync()
 		{
-			_streamProvider = GetStreamProvider("SMSProvider");
-			IAsyncStream<ITradingContext> stream = _streamProvider.GetStream<ITradingContext>(this.GetPrimaryKey(), nameof(ITradingContext));
+			streamProvider = GetStreamProvider(Constants.MessageStreamProvider);
+			IAsyncStream<TradingContext> stream = streamProvider.GetStream<TradingContext>(this.GetPrimaryKey(), nameof(TradingContext));
 			await stream.SubscribeAsync(OnNextAsync);
-			
-			_subsManager = new GrainObserverManager<IOrderNotificator>();
-			await base.OnActivateAsync();
 		}
 
-		public async Task OnNextAsync(ITradingContext context, StreamSequenceToken token = null)
+		private async Task OnNextAsync(TradingContext context, StreamSequenceToken token = null)
 		{
 			// TODO: Process order
 

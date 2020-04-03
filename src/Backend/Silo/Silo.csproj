@@ -5,6 +5,12 @@
         <UserSecretsId>dotnet-Silo-DBBA5655-B5DD-4706-A7BC-207E872801E7</UserSecretsId>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
     <ItemGroup>
         <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.1.20120.4" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.1.20120.4" />
@@ -18,6 +24,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
       <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
     </ItemGroup>
 </Project>

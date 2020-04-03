@@ -13,32 +13,75 @@ namespace Persistence.PostgreSQL.DbManagers
 	{
 		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles, IDbConnection connection, IDbTransaction transaction = null)
 		{
-			return connection.QueryAsync<Candle>(string.Format(GetLastCandles, exchange), new
+			string query = $@"
+				select 
+					*
+				from
+					{exchange}.Candles
+				where 
+					asset1 = @asset1
+				and
+					asset2 = @asset2
+				order by time desc
+				limit @numberOfCandles;
+			";
+
+			return connection.QueryAsync<Candle>(string.Format(query, exchange), new
 			{
-				asset1 = asset1,
-				asset2 = asset2,
+				asset1,
+				asset2,
 				numberOfCandles = numberOfLastCandles
 			}, transaction);
 		}
 
 		public Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime time, IDbConnection connection, IDbTransaction transaction = null)
 		{
-			return connection.QueryFirstAsync<Candle>(string.Format(GetLastCandles, exchange), new
+			string query = $@"
+				select 
+					*
+				from
+					{exchange}.Candles
+				where 
+					asset1 = @asset1
+				and
+					asset2 = @asset2
+				and
+					time = @time
+				order by time desc
+				limit @numberOfCandles;
+			";
+
+			return connection.QueryFirstAsync<Candle>(query, new
 			{
-				asset1 = asset1,
-				asset2 = asset2,
-				time = time
+				asset1,
+				asset2,
+				time
 			}, transaction);
 		}
 
-		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime @from, DateTime to, IDbConnection connection, IDbTransaction transaction = null)
 		{
-			return connection.QueryAsync<Candle>(string.Format(GetLastCandles, exchange), new
+			string query = $@"
+				select 
+					*
+				from
+					{exchange}.Candles
+				where
+ 					asset1 = @asset1
+				and
+					asset2 = @asset2
+				and
+					time between @from and @to
+				order by time desc
+				limit @numberOfCandles;
+			";
+
+			return connection.QueryAsync<Candle>(query, new
 			{
-				asset1 = asset1,
-				asset2 = asset2,
-				from = from,
-				to = to
+				asset1,
+				asset2,
+				from,
+				to
 			}, transaction);
 		}
 
@@ -112,47 +155,5 @@ namespace Persistence.PostgreSQL.DbManagers
 		{
 			throw new NotImplementedException();
 		}
-
-		#region queries
-
-		private const string GetLastCandles = @"
-				select 
-					*
-				from
-					{0}.Candles
-				where 
-					asset1 = @asset1
-				and
-					asset2 = @asset2
-				order by time desc
-				limit @numberOfCandles;
-		";
-		
-		private const string GetCandle = @"
-				select 
-					*
-				from
-					{0}.Candles
-				where 
-					asset1 = @asset1
-				and
-					asset2 = @asset2
-				and 
-					time = @time
-		";
-		
-		private const string GetCandlesByDates = @"
-				select 
-					*
-				from
-					{0}.Candles
-				where 
-					asset1 = @asset1
-				and
-					asset2 = @asset2
-				and 
-					time between @from and @to
-		";
-		#endregion
 	}
 }
