@@ -1,4 +1,4 @@
-﻿namespace Abstractions
+﻿namespace Abstractions.Entities
 {
 	public interface IFill
 	{

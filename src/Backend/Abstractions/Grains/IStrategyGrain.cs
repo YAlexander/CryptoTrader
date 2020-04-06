@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Common.Trading;
+using Abstractions.Entities;
 using Orleans;
 
-namespace Abstractions
+namespace Abstractions.Grains
 {
     public interface IStrategyGrain : IGrainWithIntegerCompoundKey
     {

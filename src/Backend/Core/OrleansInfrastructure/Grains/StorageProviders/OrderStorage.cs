@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
+using Abstractions.Entities;
 using Abstractions.Enums;
 using Common;
-using Common.Trading;
 using Orleans;
 using Orleans.Runtime;
 using Orleans.Storage;

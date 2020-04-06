@@ -12,6 +12,7 @@ using Orleans.Hosting;
 using Orleans.Runtime;
 using Orleans.Versions.Compatibility;
 using Orleans.Versions.Selector;
+using Persistence.PostgreSQL.DbManagers;
 using Persistence.PostgreSQL.Providers;
 
 namespace Silo
@@ -61,7 +62,7 @@ namespace Silo
                         	optionsBuilder.Invariant = appSettings.ClusterInvariant;
                          	optionsBuilder.UseJsonFormat = true;
                         })
-                        .AddGenericGrainStorage<OrdersStorageProvider>(nameof(OrdersStorageProvider), opt =>
+                        .AddGenericGrainStorage<OrdersStorageProvider, OrdersManager>(nameof(OrdersStorageProvider), opt =>
                         {
                             opt.Configure(options =>
                                 {

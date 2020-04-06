@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Abstractions;
-using Common.Trading;
+using Abstractions.Entities;
+using Abstractions.Grains;
 using Orleans;
 
 namespace Common
@@ -19,7 +20,7 @@ namespace Common
 		public async Task ReceiveMessage(INotification<IOrder> notification)
 		{
 			IOrder order = notification.Payload;
-			INotificationGrain grain = _client.GetGrain<INotificationGrain>((int)order.Exchange);
+			IOrderProcessingGrain grain = _client.GetGrain<IOrderProcessingGrain>((int)order.Exchange);
 
 			if (order.CreateRequired)
 			{

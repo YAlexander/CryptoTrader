@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Abstractions.Enums;
 using Orleans;
 
-namespace Abstractions
+namespace Abstractions.Grains
 {
 	public interface ITradingGrain : IGrainWithGuidKey
 	{

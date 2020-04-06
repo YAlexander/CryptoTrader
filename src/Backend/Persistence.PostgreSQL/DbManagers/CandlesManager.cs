@@ -6,6 +6,7 @@ using Abstractions.Enums;
 using Dapper;
 using Persistence.Entities;
 using Persistence.Managers;
+using TechanCore;
 
 namespace Persistence.PostgreSQL.DbManagers
 {

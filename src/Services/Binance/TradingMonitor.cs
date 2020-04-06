@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Abstractions;
 using Abstractions.Enums;
+using Abstractions.Grains;
+using Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Orleans;
@@ -36,8 +38,7 @@ namespace Binance
 						await _orleansClient.Connect();
 					}
 
-					INotificationGrain grain = _orleansClient.GetGrain<INotificationGrain>((int)Exchanges.BINANCE);
-
+					IOrderProcessingGrain grain = _orleansClient.GetGrain<IOrderProcessingGrain>((int)Exchanges.BINANCE);
 					IOrderNotificator obj = await _orleansClient.CreateObjectReference<IOrderNotificator>(_notificator);
 					await grain.Subscribe(obj);
 

@@ -2,7 +2,7 @@
 
 namespace Abstractions.Storages
 {
-	public interface IOrderStorageProvider : IGrainStorage
+	public interface IDealStorageProvider : IGrainStorage
 	{
 	}
 }
