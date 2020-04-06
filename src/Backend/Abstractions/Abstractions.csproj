@@ -12,6 +12,7 @@
 
     <ItemGroup>
       <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.9.0-ci.20200321.1" />
+      <PackageReference Include="Microsoft.Orleans.Core" Version="3.9.0-ci.20200321.1" />
       <PackageReference Include="Microsoft.Orleans.Core.Abstractions" Version="3.9.0-ci.20200321.1" />
     </ItemGroup>
 

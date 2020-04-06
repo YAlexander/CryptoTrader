@@ -1,6 +1,7 @@
 using System.Net;
 using Common;
 using Core.OrleansInfrastructure.Grains;
+using Core.OrleansInfrastructure.Grains.StorageProviders;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -8,8 +9,10 @@ using NLog.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
+using Orleans.Runtime;
 using Orleans.Versions.Compatibility;
 using Orleans.Versions.Selector;
+using Persistence.PostgreSQL.Providers;
 
 namespace Silo
 {
@@ -52,17 +55,19 @@ namespace Silo
                         }))
                         .AddSimpleMessageStreamProvider(Constants.MessageStreamProvider)
                         .ConfigureApplicationParts(parts => parts.AddApplicationPart(typeof(TradingGrain).Assembly).WithReferences())
-                        //.AddMemoryGrainStorage(name: "PubSubStore")
                         .AddAdoNetGrainStorage(Constants.PubSubStorage, optionsBuilder =>
                         {
                             optionsBuilder.ConnectionString = appSettings.DatabaseOptions.SystemConnectionString;
                         	optionsBuilder.Invariant = appSettings.ClusterInvariant;
                          	optionsBuilder.UseJsonFormat = true;
                         })
-                        // .AddGenericGrainStorage<TraderStorageProvider>(nameof(TraderStorageProvider), opt =>
-                        // {
-                        // 	opt.Configure(options => { options.ConnectionString = ""; });
-                        // })
+                        .AddGenericGrainStorage<OrdersStorageProvider>(nameof(OrdersStorageProvider), opt =>
+                        {
+                            opt.Configure(options =>
+                                {
+                                    options.CryptoTradingConnectionString = appSettings.DatabaseOptions.CryptoTradingConnectionString;
+                                });
+                        })
                         .UseAdoNetReminderService(options =>
                         {
                             options.ConnectionString = appSettings.DatabaseOptions.SystemConnectionString;

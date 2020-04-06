@@ -30,6 +30,8 @@
       <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\CandleStorage.cs" />
       <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\OrderStorage.cs" />
       <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\TradeStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\Grains\StorageProviders\CandleStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\Grains\StorageProviders\OrderStorage.cs" />
     </ItemGroup>
 
 </Project>

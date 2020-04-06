@@ -4,6 +4,7 @@ using Common.Trading;
 using Orleans;
 using Orleans.Runtime;
 using Persistence.Entities;
+using Persistence.PostgreSQL.Providers;
 
 namespace Core.OrleansInfrastructure.Grains
 {
@@ -12,7 +13,7 @@ namespace Core.OrleansInfrastructure.Grains
 		private readonly IPersistentState<Order> _order;
 
 		public OrderGrain(
-			[PersistentState(nameof(Order), "orderStore")] IPersistentState<Order> order
+			[PersistentState(nameof(Order), nameof(OrdersStorageProvider))] IPersistentState<Order> order
 		)
 		{
 			_order = order;
