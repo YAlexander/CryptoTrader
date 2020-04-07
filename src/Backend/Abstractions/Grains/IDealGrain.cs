@@ -2,7 +2,8 @@
 
 namespace Abstractions.Grains
 {
-	public interface IDealGrain : IGrainWithIntegerKey
+	public interface IDealGrain : IGrainWithIntegerCompoundKey
 	{
+		
 	}
 }

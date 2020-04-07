@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
+using Abstractions.Entities;
 using Abstractions.Enums;
 
 namespace Persistence.Entities
 {
-	public class Deal : BaseEntity
+	public class Deal : BaseEntity, IDeal
 	{
 		public Exchanges Exchange { get; set; }
 		public Assets Asset1 { get; set; }

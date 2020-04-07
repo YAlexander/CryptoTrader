@@ -12,6 +12,9 @@
         <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0-preview.1.20120.4" />
         <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.1.20120.4" />
         <PackageReference Include="Microsoft.Orleans.Client" Version="3.9.0-ci.20200321.1" />
+        <PackageReference Include="MyNatsClient" Version="0.14.1" />
+        <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.14.1" />
+        <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
     </ItemGroup>
 
     <ItemGroup>

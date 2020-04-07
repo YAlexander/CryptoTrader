@@ -9,7 +9,6 @@ using NLog.Extensions.Logging;
 using Orleans;
 using Orleans.Configuration;
 using Orleans.Hosting;
-using Orleans.Runtime;
 using Orleans.Versions.Compatibility;
 using Orleans.Versions.Selector;
 using Persistence.PostgreSQL.DbManagers;
@@ -32,7 +31,11 @@ namespace Silo
                     services.Configure<AppSettings>(hostContext.Configuration.GetSection(nameof(AppSettings)));
                     services.Configure<DatabaseOptions>(hostContext.Configuration.GetSection(nameof(DatabaseOptions)));
                     
-                    services.AddHostedService<Worker>();
+                    services.AddSingleton<OrleansClient>();
+                    services.AddSingleton(_ => _.GetService<OrleansClient>().Client);
+                    services.AddSingleton<IHostedService>(_ => _.GetService<OrleansClient>());
+                    
+                    services.AddHostedService<CandlesMonitor>();
                 })
                 .UseOrleans((context, builder) =>
                 {
@@ -63,6 +66,13 @@ namespace Silo
                          	optionsBuilder.UseJsonFormat = true;
                         })
                         .AddGenericGrainStorage<OrdersStorageProvider, OrdersManager>(nameof(OrdersStorageProvider), opt =>
+                        {
+                            opt.Configure(options =>
+                                {
+                                    options.CryptoTradingConnectionString = appSettings.DatabaseOptions.CryptoTradingConnectionString;
+                                });
+                        })
+                        .AddGenericGrainStorage<DealsStorageProvider, DealsManager>(nameof(DealsStorageProvider), opt => 
                         {
                             opt.Configure(options =>
                                 {
