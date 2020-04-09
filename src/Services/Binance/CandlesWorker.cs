@@ -10,12 +10,10 @@ using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Orleans;
-using Orleans.Streams;
+using MyNatsClient;
+using MyNatsClient.Encodings.Json;
 using Persistence;
 using Persistence.Entities;
-using TechanCore;
-using Constants = Common.Constants;
 
 namespace Binance
 {
@@ -24,21 +22,16 @@ namespace Binance
         private readonly ILogger<CandlesWorker> _logger;
         private readonly ISettingsProcessor _exchangeSettingsProcessor;
         private readonly IOptions<AppSettings> _settings;
-        private readonly IClusterClient _orleansClient;
-        private readonly ICandlesProcessor _candlesProcessor;
 
         public CandlesWorker(
 	        ILogger<CandlesWorker> logger,
 	        ISettingsProcessor exchangeSettingsProcessor,
-	        IOptions<AppSettings> settings,
-	        ICandlesProcessor candlesProcessor,
-	        IClusterClient orleansClient)
+	        IOptions<AppSettings> settings
+	        )
         {
             _logger = logger;
             _exchangeSettingsProcessor = exchangeSettingsProcessor;
             _settings = settings;
-            _orleansClient = orleansClient;
-            _candlesProcessor = candlesProcessor;
         }
 
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
@@ -64,36 +57,35 @@ namespace Binance
 			{
 				try
 				{
-					using (var client = new BinanceSocketClient())
-					{
-						CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
+
+						using (BinanceSocketClient client = new BinanceSocketClient())
 						{
+							CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
+							{ 
 								if (data.Data.Final)
 								{
-									ICandle candle = await _candlesProcessor.Create(data.Data.Map(pair));
-
-									if (!_orleansClient.IsInitialized)
+									using NatsClient natsClient = new NatsClient(new ConnectionInfo(_settings.Value.NatsHost, _settings.Value.NatsPort));
 									{
-										await _orleansClient.Connect();
+										await natsClient.ConnectAsync();
+
+										Candle candle = data.Data.Map(pair);
+										await natsClient.PubAsJsonAsync(nameof(Candle), candle);
+										_logger.LogTrace($"Received candle {candle.Exchange}, {candle.Asset1}/{candle.Asset2}, {candle.TimeFrame}");
+
+										natsClient.Disconnect();
 									}
-
-									IStreamProvider streamProvider = _orleansClient.GetStreamProvider(Constants.MessageStreamProvider);
-									IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle)); 
-									await stream.OnNextAsync((Candle)candle);
-									
-									Console.WriteLine("Received candle");
 								}
-						});
+							});
+							
+							if (!successKline.Success)
+							{
+								_logger.LogError($"{successKline.Error.Message} for {pair.Exchange} {pair.Asset1}{pair.Asset2}" );
+							}
 
-						if (!successKline.Success)
-						{
-							_logger.LogError($"{successKline.Error.Message} for {pair.Exchange} {pair.Asset1}{pair.Asset2}" );
-						}
-
-						while (!stoppingToken.IsCancellationRequested)
-						{
-							await Task.Delay(TimeSpan.FromSeconds(pair.UpdatingInterval), stoppingToken);
-						}
+							while (!stoppingToken.IsCancellationRequested)
+							{
+								await Task.Delay(TimeSpan.FromSeconds(pair.UpdatingInterval), stoppingToken);
+							}
 					}
 				}
 				catch(Exception ex)

@@ -7,7 +7,6 @@ using Binance.Net;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Orleans;
 using Persistence;
 using Persistence.Entities;
 
@@ -18,18 +17,16 @@ namespace Binance
 		private readonly ILogger<TradesWorker> _logger;
 		private readonly ISettingsProcessor _exchangeSettingsProcessor;
 		private readonly IOptions<AppSettings> _settings;
-		private readonly IClusterClient _orleansClient;
 
 		public OrdersMonitor(
 			ILogger<TradesWorker> logger,
 			ISettingsProcessor exchangeSettingsProcessor,
-			IOptions<AppSettings> settings,
-			IClusterClient orleansClient)
+			IOptions<AppSettings> settings
+		)
 		{
 			_logger = logger;
 			_exchangeSettingsProcessor = exchangeSettingsProcessor;
 			_settings = settings;
-			_orleansClient = orleansClient;
 		}
 		
 		protected override async Task ExecuteAsync(CancellationToken stoppingToken)

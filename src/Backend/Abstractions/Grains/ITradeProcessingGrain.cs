@@ -4,8 +4,8 @@ using Orleans;
 
 namespace Abstractions.Grains
 {
-	public interface ITradeProcessingGrain : IGrainWithIntegerCompoundKey
+	public interface ITradeProcessingGrain : IGrainWithIntegerKey
 	{
-		Task Set(ITrade trade);
+		Task Process(ITrade trade);
 	}
 }

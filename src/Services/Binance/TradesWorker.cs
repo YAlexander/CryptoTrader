@@ -2,18 +2,16 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Abstractions;
 using Abstractions.Enums;
-using Abstractions.Grains;
 using Binance.Helpers;
 using Binance.Net;
-using Common;
 using CryptoExchange.Net.Objects;
 using CryptoExchange.Net.Sockets;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Orleans;
+using MyNatsClient;
+using MyNatsClient.Encodings.Json;
 using Persistence;
 using Persistence.Entities;
 
@@ -24,18 +22,16 @@ namespace Binance
         private readonly ILogger<TradesWorker> _logger;
         private readonly ISettingsProcessor _exchangeSettingsProcessor;
         private readonly IOptions<AppSettings> _settings;
-        private readonly IClusterClient _orleansClient;
 
         public TradesWorker(
 	        ILogger<TradesWorker> logger,
 	        ISettingsProcessor exchangeSettingsProcessor,
-	        IOptions<AppSettings> settings,
-	        IClusterClient orleansClient)
+	        IOptions<AppSettings> settings
+	        )
         {
             _logger = logger;
             _exchangeSettingsProcessor = exchangeSettingsProcessor;
             _settings = settings;
-            _orleansClient = orleansClient;
         }
 
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
@@ -65,18 +61,16 @@ namespace Binance
 					{
 						CallResult<UpdateSubscription> successTrades  = client.SubscribeToTradeUpdates(pair.ToPair(), async (data) =>
 						{
-							if (!_orleansClient.IsInitialized)
+							using NatsClient natsClient = new NatsClient(new ConnectionInfo(_settings.Value.NatsHost, _settings.Value.NatsPort));
 							{
-								await _orleansClient.Connect();
-							}
+								await natsClient.ConnectAsync();
 
-							GrainKeyExtension keyExtension = new GrainKeyExtension(); 
-							keyExtension.Exchange = pair.Exchange; 
-							keyExtension.Asset1 = pair.Asset1; 
-							keyExtension.Asset2 = pair.Asset2;
-							
-							ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long) pair.Exchange,  keyExtension.ToString());
-							await grain.Set(data.Map(pair));
+								Trade trade = data.Map(pair);
+								await natsClient.PubAsJsonAsync(nameof(Trade), trade);
+								_logger.LogTrace($"Received Trade {trade.Exchange}, {trade.Asset1}/{trade.Asset2}");
+
+								natsClient.Disconnect();
+							}
 						});
 
 						if (!successTrades .Success)

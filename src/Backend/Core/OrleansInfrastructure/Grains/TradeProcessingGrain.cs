@@ -11,7 +11,7 @@ namespace Core.OrleansInfrastructure.Grains
 	[StatelessWorker]
 	public class TradeProcessingGrain : Grain, ITradeProcessingGrain
 	{
-		public Task Set(ITrade trade)
+		public Task Process(ITrade trade)
 		{
 			throw new NotImplementedException();
 		}

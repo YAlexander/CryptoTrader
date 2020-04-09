@@ -1,9 +1,8 @@
-using System;
+﻿using System;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Abstractions.Grains;
-using Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
@@ -14,13 +13,13 @@ using Persistence.Entities;
 
 namespace Silo
 {
-	public class CandlesMonitor : BackgroundService
+	public class TradesMonitor : BackgroundService
 	{
-		private IOptions<AppSettings> _settings;
-		private readonly ILogger<CandlesMonitor> _logger;
+		private readonly IOptions<AppSettings> _settings;
+		private readonly ILogger<TradesMonitor> _logger;
 		private readonly IClusterClient _orleansClient;
 
-		public CandlesMonitor(IOptions<AppSettings> settings, ILogger<CandlesMonitor> logger, IClusterClient orleansClient)
+		public TradesMonitor(IOptions<AppSettings> settings, ILogger<TradesMonitor> logger, IClusterClient orleansClient)
 		{
 			_settings = settings;
 			_logger = logger;
@@ -42,18 +41,13 @@ namespace Silo
 					{
 						await client.ConnectAsync();
 
-						ISubscription subscription = await client.SubAsync(nameof(Candle), stream => stream.SubscribeSafe(msg =>
+						ISubscription subscription = await client.SubAsync(nameof(Trade), stream => stream.SubscribeSafe(msg =>
 						{
 							string payload = msg.GetPayloadAsString();
-							Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
+							Trade trade = JsonSerializer.Deserialize<Trade>(payload[1..]);
 							
-							GrainKeyExtension ext = new GrainKeyExtension();
-							ext.Exchange = candle.Exchange;
-							ext.Asset1 = candle.Asset1;
-							ext.Asset2 = candle.Asset2;
-							
-							ICandleGrain grain = _orleansClient.GetGrain<ICandleGrain>((int)candle.Exchange, ext.ToString());
-							grain.Set(candle);
+							ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long)trade.Exchange);
+							grain.Process(trade);
 						}));
 
 						while (!stoppingToken.IsCancellationRequested)
