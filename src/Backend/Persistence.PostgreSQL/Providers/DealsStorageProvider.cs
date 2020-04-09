@@ -1,29 +1,38 @@
 ﻿using System.Threading.Tasks;
 using Abstractions.Storages;
+using Common;
 using Orleans;
 using Orleans.Runtime;
+using Persistence.Entities;
+using Persistence.Helpers;
+using Persistence.Managers;
 
 namespace Persistence.PostgreSQL.Providers
 {
 	public class DealsStorageProvider : BaseProcessor, IDealStorageProvider
 	{
-		public DealsStorageProvider(string connectionString) : base(connectionString)
+		private readonly IDealsManager _dealsManager;
+		
+		public DealsStorageProvider(string connectionString, IDealsManager dealsManager) : base(connectionString)
 		{
+			_dealsManager = dealsManager;
 		}
 
-		public Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+		public async Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
 		{
-			throw new System.NotImplementedException();
+			grainReference.GetPrimaryKeyLong(out string keyExt);
+			GrainKeyExtension secondaryKey = keyExt.ToExtendedKey();
+			grainState.State = await WithConnection((connection, transaction) => _dealsManager.Get(secondaryKey.Exchange, secondaryKey.Asset1, secondaryKey.Asset2, connection, transaction));
 		}
 
-		public Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
+		public async Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
 		{
-			throw new System.NotImplementedException();
+			await WithConnection((connection, transaction) => _dealsManager.Update((Deal) grainState.State, connection, transaction));
 		}
 
 		public Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
 		{
-			throw new System.NotImplementedException();
+			return Task.CompletedTask;
 		}
 	}
 }

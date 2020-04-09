@@ -15,16 +15,13 @@ namespace Binance
     {
         private readonly ILogger<TradingMonitor> _logger;
         private readonly IClusterClient _orleansClient;
-        private readonly IOrderNotificator _notificator;
         
         public TradingMonitor(
 	        ILogger<TradingMonitor> logger,
-	        IClusterClient orleansClient,
-	        IOrderNotificator notificator)
+	        IClusterClient orleansClient)
         {
             _logger = logger;
             _orleansClient = orleansClient;
-            _notificator = notificator;
         }
 
 		protected override async Task ExecuteAsync (CancellationToken stoppingToken)
@@ -37,10 +34,6 @@ namespace Binance
 					{
 						await _orleansClient.Connect();
 					}
-
-					IOrderProcessingGrain grain = _orleansClient.GetGrain<IOrderProcessingGrain>((int)Exchanges.BINANCE);
-					IOrderNotificator obj = await _orleansClient.CreateObjectReference<IOrderNotificator>(_notificator);
-					await grain.Subscribe(obj);
 					
 					// TODO: Move all communications with backend to NATS queue
 					// ConnectionInfo cnInfo = new ConnectionInfo(new MyNatsClient.Host("192.168.1.250", 4242));

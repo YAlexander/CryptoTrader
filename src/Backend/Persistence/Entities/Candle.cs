@@ -6,7 +6,7 @@ using TechanCore.Enums;
 namespace Persistence.Entities
 {
 	[Serializable]
-	public class Candle : BaseEntity, ICandle
+	public class Candle : BaseEntity<long>, ICandle
 	{
 		public Exchanges Exchange { get; set; }
 		public Assets Asset1 { get; set; }

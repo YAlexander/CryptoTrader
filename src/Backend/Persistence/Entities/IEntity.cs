@@ -2,9 +2,9 @@
 
 namespace Persistence.Entities
 {
-    public interface IEntity
+    public interface IEntity<T>
     {
-        public long Id { get; set; }
+        public T Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
     }

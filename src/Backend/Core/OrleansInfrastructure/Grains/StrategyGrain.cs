@@ -4,6 +4,7 @@ using Abstractions.Entities;
 using Abstractions.Grains;
 using Common;
 using Orleans;
+using Persistence.Helpers;
 
 namespace Core.OrleansInfrastructure.Grains
 {
@@ -13,7 +14,7 @@ namespace Core.OrleansInfrastructure.Grains
         public async Task<IStrategyInfo> Get()
         {
             long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
-            GrainKeyExtension secondaryKey = keyExtension.ToExtended();
+            GrainKeyExtension secondaryKey = keyExtension.ToExtendedKey();
             
             return new Persistence.Entities.StrategyInfo();
         }

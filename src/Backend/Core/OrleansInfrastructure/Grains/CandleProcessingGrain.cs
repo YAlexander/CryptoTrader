@@ -7,6 +7,7 @@ using Common;
 using Orleans;
 using Orleans.Concurrency;
 using Persistence;
+using Persistence.Helpers;
 using TechanCore;
 
 namespace Core.OrleansInfrastructure.Grains
@@ -24,7 +25,7 @@ namespace Core.OrleansInfrastructure.Grains
 		public Task<IEnumerable<ICandle>> Get(DateTime from, DateTime to)
 		{
 			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
-			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
+			GrainKeyExtension secondaryKey = keyExtension.ToExtendedKey();
 
 			return _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, from, to);
 		}
@@ -32,7 +33,7 @@ namespace Core.OrleansInfrastructure.Grains
 		public Task<IEnumerable<ICandle>> Get(int numberOfLastCandles)
 		{
 			long primaryKey = this.GetPrimaryKeyLong(out string keyExtension);
-			GrainKeyExtension secondaryKey = keyExtension.ToExtended();
+			GrainKeyExtension secondaryKey = keyExtension.ToExtendedKey();
 
 			return _candlesProcessor.GetCandles((Exchanges)primaryKey, secondaryKey.Asset1, secondaryKey.Asset2, numberOfLastCandles);
 		}

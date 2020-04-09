@@ -57,35 +57,34 @@ namespace Binance
 			{
 				try
 				{
-
-						using (BinanceSocketClient client = new BinanceSocketClient())
-						{
-							CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
-							{ 
-								if (data.Data.Final)
+					using (BinanceSocketClient client = new BinanceSocketClient())
+					{
+						CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
+						{ 
+							if (data.Data.Final)
+							{
+								using NatsClient natsClient = new NatsClient(new ConnectionInfo(_settings.Value.NatsHost, _settings.Value.NatsPort));
 								{
-									using NatsClient natsClient = new NatsClient(new ConnectionInfo(_settings.Value.NatsHost, _settings.Value.NatsPort));
-									{
-										await natsClient.ConnectAsync();
+									await natsClient.ConnectAsync();
 
-										Candle candle = data.Data.Map(pair);
-										await natsClient.PubAsJsonAsync(nameof(Candle), candle);
-										_logger.LogTrace($"Received candle {candle.Exchange}, {candle.Asset1}/{candle.Asset2}, {candle.TimeFrame}");
+									Candle candle = data.Data.Map(pair);
+									await natsClient.PubAsJsonAsync(nameof(Candle), candle);
+									_logger.LogTrace($"Received candle {candle.Exchange}, {candle.Asset1}/{candle.Asset2}, {candle.TimeFrame}");
 
-										natsClient.Disconnect();
-									}
+									natsClient.Disconnect();
 								}
-							});
+							}
+						});
 							
-							if (!successKline.Success)
-							{
-								_logger.LogError($"{successKline.Error.Message} for {pair.Exchange} {pair.Asset1}{pair.Asset2}" );
-							}
+						if (!successKline.Success)
+						{
+							_logger.LogError($"{successKline.Error.Message} for {pair.Exchange} {pair.Asset1}{pair.Asset2}" );
+						}
 
-							while (!stoppingToken.IsCancellationRequested)
-							{
-								await Task.Delay(TimeSpan.FromSeconds(pair.UpdatingInterval), stoppingToken);
-							}
+						while (!stoppingToken.IsCancellationRequested)
+						{
+							await Task.Delay(TimeSpan.FromSeconds(pair.UpdatingInterval), stoppingToken);
+						}
 					}
 				}
 				catch(Exception ex)

@@ -9,7 +9,7 @@ namespace Abstractions
 {
 	public interface ITradingContext
 	{
-		long DealId { get; set; }
+		Guid? DealId { get; set; }
 		
 		Exchanges Exchange { get; set; }
 
@@ -39,7 +39,7 @@ namespace Abstractions
 
 		// TODO: Add Deal and Orders entity
 		
-		List<IAccount> Funds { get; set; }
+		List<IBalance> Funds { get; set; }
 		
 		TradingAdvices TradingAdvice { get; set; }
 	}

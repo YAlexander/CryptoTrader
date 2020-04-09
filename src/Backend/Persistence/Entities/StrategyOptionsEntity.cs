@@ -1,6 +1,6 @@
 ﻿namespace Persistence.Entities
 {
-    public class StrategyOptionsEntity : BaseEntity
+    public class StrategyOptionsEntity : BaseEntity<long>
     {
         /// <summary>
         /// JSON-based Strategy options

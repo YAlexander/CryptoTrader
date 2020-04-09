@@ -1,5 +1,4 @@
-﻿using Abstractions;
-using Abstractions.Entities;
+﻿using Abstractions.Entities;
 using Abstractions.Enums;
 
 namespace Persistence.Entities
@@ -24,5 +23,9 @@ namespace Persistence.Entities
 		public bool UseMarginalTrading { get; set; }
 		public int Leverage { get; set; }
 		public bool IsDisabled { get; set; }
+		
+		public bool CanChangePosition { get; set; }
+		public int? DiscrepancyPercent { get; set; }
+		public string[] Constraints { get; set; }
 	}
 }
