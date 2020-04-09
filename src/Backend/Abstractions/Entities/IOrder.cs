@@ -6,7 +6,7 @@ namespace Abstractions.Entities
 {
 	public interface IOrder
 	{
-		public Guid OrderId { get; set; }
+		public Guid Id { get; set; }
 		long? ParentOrderId { get; set; }
 		long DealId { get; set; }
 		

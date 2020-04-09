@@ -1,10 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Abstractions.Entities;
 using Abstractions.Enums;
 
 namespace Persistence.Entities
 {
-	public class Deal : BaseEntity, IDeal
+	public class Deal : BaseEntity<Guid>, IDeal
 	{
 		public Exchanges Exchange { get; set; }
 		public Assets Asset1 { get; set; }
@@ -15,5 +16,14 @@ namespace Persistence.Entities
 		public string StatusDescription { get; set; }
 		
 		private List<Order> Orders { get; set; } = new List<Order>();
+		
+		public decimal? AvgPrice { get; set; }
+		public decimal? TotalAmount { get; set; }
+		
+		public decimal? TakeProfit { get; set; }
+		public decimal? StopLoss { get; set; }
+		
+		public decimal? OrderLimit { get; set; }
+		public decimal? PositionLimit { get; set; }
 	}
 }

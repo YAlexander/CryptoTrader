@@ -11,6 +11,7 @@ using MyNatsClient;
 using MyNatsClient.Rx;
 using Orleans;
 using Persistence.Entities;
+using Persistence.Helpers;
 
 namespace Silo
 {
@@ -47,13 +48,9 @@ namespace Silo
 							string payload = msg.GetPayloadAsString();
 							Order order = JsonSerializer.Deserialize<Order>(payload[1..]);
 
-							GrainKeyExtension ext = new GrainKeyExtension();
-							ext.Exchange = order.Exchange;
-							ext.Asset1 = order.Asset1;
-							ext.Asset2 = order.Asset2;
-							ext.Id = order.OrderId;
+							GrainKeyExtension key = order.ToExtendedKey();
 
-							IOrderGrain grain = _orleansClient.GetGrain<IOrderGrain>(order.OrderId, ext.ToString());
+							IOrderGrain grain = _orleansClient.GetGrain<IOrderGrain>(order.Id, key.ToString());
 							grain.Update(order);
 						}));
 

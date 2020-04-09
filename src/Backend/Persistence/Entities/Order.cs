@@ -7,9 +7,8 @@ using Abstractions.Enums;
 namespace Persistence.Entities
 {
 	[Serializable]
-	public class Order : BaseEntity, IOrder
+	public class Order : BaseEntity<Guid>, IOrder
 	{
-		public Guid OrderId { get; set; }
 		public long? ParentOrderId { get; set; }
 		public long DealId { get; set; }
 		

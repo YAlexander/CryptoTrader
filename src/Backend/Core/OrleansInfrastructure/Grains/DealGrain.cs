@@ -1,4 +1,6 @@
-﻿using Abstractions.Grains;
+﻿using System.Threading.Tasks;
+using Abstractions.Entities;
+using Abstractions.Grains;
 using Orleans.Runtime;
 using Persistence.Entities;
 using Persistence.PostgreSQL.Providers;
@@ -14,6 +16,17 @@ namespace Core.OrleansInfrastructure.Grains
 			[PersistentState(nameof(Deal), nameof(DealsStorageProvider))] IPersistentState<Deal> deal)
 		{
 			_deal = deal;
+		}
+
+		public Task<IDeal> Get()
+		{
+			return Task.FromResult((IDeal)_deal.State);
+		}
+
+		public async Task Create(IDeal deal)
+		{
+			_deal.State = (Deal)deal;
+			await _deal.WriteStateAsync();
 		}
 	}
 }

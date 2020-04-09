@@ -2,9 +2,9 @@
 
 namespace Persistence.Entities
 {
-    public abstract class BaseEntity : IEntity
+    public abstract class BaseEntity<T> : IEntity<T>
     {
-        public long Id { get; set; }
+        public T Id { get; set; }
         public DateTime Created { get; set; }
         public DateTime Updated { get; set; }
     }

@@ -4,6 +4,7 @@ using Common;
 using Orleans;
 using Orleans.Runtime;
 using Persistence.Entities;
+using Persistence.Helpers;
 using Persistence.Managers;
 
 namespace Persistence.PostgreSQL.Providers
@@ -20,7 +21,7 @@ namespace Persistence.PostgreSQL.Providers
 		public async Task ReadStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
 		{
 			grainReference.GetPrimaryKeyLong(out string keyExt);
-			GrainKeyExtension secondaryKey = keyExt.ToExtended();
+			GrainKeyExtension secondaryKey = keyExt.ToExtendedKey();
 			
 			grainState.State = await WithConnection((connection, transaction) => _candlesManager.Get(secondaryKey.Exchange, secondaryKey.Asset1, secondaryKey.Asset2, secondaryKey.Time, connection, transaction));
 		}

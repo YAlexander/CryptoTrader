@@ -11,6 +11,7 @@ using MyNatsClient;
 using MyNatsClient.Rx;
 using Orleans;
 using Persistence.Entities;
+using Persistence.Helpers;
 
 namespace Silo
 {
@@ -46,13 +47,10 @@ namespace Silo
 						{
 							string payload = msg.GetPayloadAsString();
 							Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
+
+							GrainKeyExtension key = candle.ToExtendedKey();
 							
-							GrainKeyExtension ext = new GrainKeyExtension();
-							ext.Exchange = candle.Exchange;
-							ext.Asset1 = candle.Asset1;
-							ext.Asset2 = candle.Asset2;
-							
-							ICandleGrain grain = _orleansClient.GetGrain<ICandleGrain>((int)candle.Exchange, ext.ToString());
+							ICandleGrain grain = _orleansClient.GetGrain<ICandleGrain>((long)key.Exchange, key.ToString());
 							grain.Set(candle);
 						}));
 
