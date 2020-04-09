@@ -1,4 +1,4 @@
-﻿using Common.Trading;
+﻿using Abstractions.Entities;
 
 namespace Abstractions
 {

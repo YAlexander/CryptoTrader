@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using Abstractions;
 using Abstractions.Enums;
 
-namespace Common.Trading
+namespace Abstractions.Entities
 {
 	public interface IOrder
 	{

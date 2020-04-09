@@ -1,5 +1,6 @@
 ﻿using System;
 using Abstractions;
+using Abstractions.Entities;
 using Abstractions.Enums;
 
 namespace Persistence.Entities

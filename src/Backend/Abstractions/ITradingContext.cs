@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Abstractions.Entities;
 using Abstractions.Enums;
 using TechanCore;
 using TechanCore.Enums;

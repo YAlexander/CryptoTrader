@@ -1,7 +1,7 @@
 ﻿using System;
 using Abstractions.Enums;
 
-namespace Abstractions
+namespace Abstractions.Entities
 {
 	public interface ITrade
 	{

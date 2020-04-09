@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Abstractions.Enums;
+using Common;
+using Microsoft.Extensions.Options;
 using Persistence.Entities;
 using Persistence.Managers;
 
@@ -8,19 +10,19 @@ namespace Persistence.PostgreSQL.Processors
 {
 	public class ExchangeSettingsProcessor : BaseProcessor, ISettingsProcessor
 	{
-		public async Task<IEnumerable<IExchangeSettings>> Get(Exchanges exchange)
+		public Task<IEnumerable<ExchangeSettings>> Get(Exchanges exchange)
 		{
-			return await WithConnection<IEnumerable<IExchangeSettings>>((connection, transaction) => { return _settingsManager.Get(exchange, connection, transaction); });
+			return WithConnection<IEnumerable<ExchangeSettings>>((connection, transaction) => _settingsManager.Get(exchange, connection, transaction));
 		}
 
-		public Task<IExchangeSettings> Get(Exchanges exchange, Assets asset1, Assets asset2)
+		public Task<ExchangeSettings> Get(Exchanges exchange, Assets asset1, Assets asset2)
 		{
 			throw new System.NotImplementedException();
 		}
 
 		private readonly IExchangeSettingsManager _settingsManager;
 		
-		public ExchangeSettingsProcessor(string connectionString, IExchangeSettingsManager settingsManager) : base(connectionString)
+		public ExchangeSettingsProcessor(IOptions<DatabaseOptions> options, IExchangeSettingsManager settingsManager) : base(options.Value.CryptoTradingConnectionString)
 		{
 			_settingsManager = settingsManager;
 		}

@@ -1,6 +1,6 @@
 using Orleans;
 
-namespace Abstractions
+namespace Abstractions.Grains
 {
 	public interface IAccountGrain : IGrainWithIntegerCompoundKey
 	{

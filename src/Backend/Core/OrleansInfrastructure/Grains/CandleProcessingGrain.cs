@@ -1,19 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Abstractions;
 using Abstractions.Enums;
+using Abstractions.Grains;
 using Common;
 using Orleans;
 using Orleans.Concurrency;
 using Persistence;
-using Persistence.Entities;
 using TechanCore;
 
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
-	[ImplicitStreamSubscription(nameof(Candle))]
 	public class CandleProcessingGrain : Grain, ICandleProcessingGrain
 	{
 		private readonly ICandlesProcessor _candlesProcessor;

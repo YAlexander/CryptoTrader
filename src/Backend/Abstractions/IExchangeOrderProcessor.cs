@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Common.Trading;
+using Abstractions.Entities;
 
 namespace Abstractions
 {

@@ -4,9 +4,14 @@
         <TargetFramework>netstandard2.1</TargetFramework>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
     <ItemGroup>
       <ProjectReference Include="..\..\Common\Common.csproj" />
-      <ProjectReference Include="..\..\Contracts\Contracts.csproj" />
       <ProjectReference Include="..\..\TechanCore\TechanCore.csproj" />
       <ProjectReference Include="..\Abstractions\Abstractions.csproj" />
       <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
@@ -14,10 +19,10 @@
 
     <ItemGroup>
       <PackageReference Include="Cryptowatcher.TA-LIb-Core" Version="1.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0-preview.1.20120.4" />
-      <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.9.0-ci.20200315.2" />
-      <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.9.0-ci.20200315.2" />
-      <PackageReference Include="System.Text.Json" Version="5.0.0-preview.1.20120.5" />
+      <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0-preview.2.20160.3" />
+      <PackageReference Include="Microsoft.Orleans.CodeGenerator.MSBuild" Version="3.9.0-ci.20200408.9" />
+      <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.9.0-ci.20200408.9" />
+      <PackageReference Include="System.Text.Json" Version="5.0.0-preview.2.20160.6" />
     </ItemGroup>
 
     <ItemGroup>
@@ -25,6 +30,8 @@
       <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\CandleStorage.cs" />
       <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\OrderStorage.cs" />
       <Orleans_CodeGenInputs Remove="OrleansInfrastructure\StorageProviders\TradeStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\Grains\StorageProviders\CandleStorage.cs" />
+      <Orleans_CodeGenInputs Remove="OrleansInfrastructure\Grains\StorageProviders\OrderStorage.cs" />
     </ItemGroup>
 
 </Project>

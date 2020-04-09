@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "Core": {
+      "commandName": "Project",
+      "sqlDebugging": true,
+      "nativeDebugging": true
+    }
+  }
+}

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using Abstractions;
+using Abstractions.Entities;
 using Abstractions.Enums;
-using Common.Trading;
 
 namespace Persistence.Entities
 {

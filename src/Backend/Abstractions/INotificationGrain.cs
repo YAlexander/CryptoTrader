@@ -3,7 +3,7 @@ using Orleans;
 
 namespace Abstractions
 {
-	public interface INotificationGrain : IGrainWithIntegerKey
+	public interface INotificationService
 	{
 		Task Subscribe(IOrderNotificator observer);
 

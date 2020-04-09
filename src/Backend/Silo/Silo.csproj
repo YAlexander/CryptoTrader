@@ -5,15 +5,29 @@
         <UserSecretsId>dotnet-Silo-DBBA5655-B5DD-4706-A7BC-207E872801E7</UserSecretsId>
     </PropertyGroup>
 
+    <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+      <DefineConstants>DEBUG;TRACE</DefineConstants>
+      <DebugType>full</DebugType>
+      <DebugSymbols>true</DebugSymbols>
+    </PropertyGroup>
+
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.1.20120.4" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.1.20120.4" />
-        <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.9.0-ci.20200315.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.2.20160.3" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.2.20160.3" />
+        <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.9.0-ci.20200408.9" />
         <PackageReference Include="Microsoft.Orleans.OrleansSqlUtils" Version="3.0.0-ci.20190909.21" />
-        <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.9.0-ci.20200315.2" />
-        <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.9.0-ci.20200315.2" />
-        <PackageReference Include="Microsoft.Orleans.Server" Version="3.9.0-ci.20200315.2" />
+        <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.9.0-ci.20200408.9" />
+        <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.9.0-ci.20200408.9" />
+        <PackageReference Include="Microsoft.Orleans.Server" Version="3.9.0-ci.20200408.9" />
+        <PackageReference Include="MyNatsClient" Version="0.14.1" />
+        <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.14.1" />
+        <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
         <PackageReference Include="NLog.Extensions.Logging" Version="1.6.2" />
         <PackageReference Include="OrleansDashboard" Version="3.0.8" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Core\Core.csproj" />
+      <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
     </ItemGroup>
 </Project>

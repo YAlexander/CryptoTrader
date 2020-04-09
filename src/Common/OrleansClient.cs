@@ -5,6 +5,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Orleans;
+using Orleans.Hosting;
 using Orleans.Runtime;
 
 namespace Common
@@ -20,7 +21,7 @@ namespace Common
         {
             get
             {
-                if (!_client.IsInitialized)
+                if (_client == null || !_client.IsInitialized)
                 {
                     _client = Init();
                 }
@@ -95,6 +96,7 @@ namespace Common
             return new ClientBuilder()
                 .UseLocalhostClustering()
                 .ConfigureLogging(builder => builder.AddProvider(_loggerProvider))
+                .AddSimpleMessageStreamProvider(Constants.MessageStreamProvider)
                 .Build();
         }
     }

@@ -10,17 +10,10 @@ namespace Persistence.PostgreSQL.DbManagers
 {
 	public class ExchangeSettingsManager : IExchangeSettingsManager
 	{
-		public Task<IEnumerable<IExchangeSettings>> Get(Exchanges exchange, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<IEnumerable<ExchangeSettings>> Get(Exchanges exchange, IDbConnection connection, IDbTransaction transaction = null)
 		{
-			return connection.QueryAsync<IExchangeSettings>(GetSettings, new { exchange = exchange }, transaction);
+			string query = $@"select * from {exchange}.ExchangeSettings";
+			return connection.QueryAsync<ExchangeSettings>(query, new { }, transaction);
 		}
-
-		private const string GetSettings = @"
-				select
-				     *
-				from 
-				     ExchangeSettings
-				where
-				      exchange = @exchange;";
 	}
 }

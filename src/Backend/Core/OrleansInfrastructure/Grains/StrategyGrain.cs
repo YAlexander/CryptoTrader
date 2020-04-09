@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Abstractions;
+using Abstractions.Entities;
+using Abstractions.Grains;
 using Common;
-using Common.Trading;
 using Orleans;
 
 namespace Core.OrleansInfrastructure.Grains

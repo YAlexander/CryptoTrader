@@ -2,7 +2,7 @@
 using Orleans;
 using TechanCore;
 
-namespace Abstractions
+namespace Abstractions.Grains
 {
     public interface ICandleGrain : IGrainWithIntegerCompoundKey
     {

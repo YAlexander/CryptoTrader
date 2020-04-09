@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Abstractions;
-using Common.Trading;
+using Abstractions.Entities;
 
 namespace Bitmex
 {

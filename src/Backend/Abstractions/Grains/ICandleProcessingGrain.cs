@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Orleans;
 using TechanCore;
 
-namespace Abstractions
+namespace Abstractions.Grains
 {
 	// For Grain identity we use Exchange code as primary key and GrainKeyExtension as key extension
 	public interface ICandleProcessingGrain : IGrainWithIntegerCompoundKey

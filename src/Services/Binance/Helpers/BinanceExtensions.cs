@@ -1,6 +1,7 @@
 ﻿using System;
 using Abstractions.Enums;
-using Binance.Net.Objects;
+using Binance.Net.Enums;
+using Binance.Net.Objects.Spot.MarketStream;
 using Persistence.Entities;
 using TechanCore.Enums;
 
@@ -68,7 +69,7 @@ namespace Binance.Helpers
 			}
 		}
 
-		public static Trade Map (this BinanceStreamTrade binanceTrade, IExchangeSettings pair)
+		public static Trade Map (this BinanceStreamTrade binanceTrade, ExchangeSettings pair)
 		{
 			// TODO: Validate trade symbol
 			Trade trade = new Trade();
@@ -82,7 +83,7 @@ namespace Binance.Helpers
 			return trade;
 		}
 		
-		public static Candle Map (this BinanceStreamKline binanceCandle, IExchangeSettings pair)
+		public static Candle Map (this BinanceStreamKline binanceCandle, ExchangeSettings pair)
 		{
 			Candle candle = new Candle();
 			candle.Exchange = pair.Exchange;
@@ -101,7 +102,7 @@ namespace Binance.Helpers
 			return candle;
 		}
 
-		public static string ToPair(this IExchangeSettings settings)
+		public static string ToPair(this ExchangeSettings settings)
 		{
 			return $"{settings.Asset1}{settings.Asset2}";
 		}

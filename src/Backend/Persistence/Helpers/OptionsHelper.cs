@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using Abstractions;
+using Abstractions.Entities;
 using TechanCore;
 using TechanCore.Strategies;
 using TechanCore.Strategies.Options;

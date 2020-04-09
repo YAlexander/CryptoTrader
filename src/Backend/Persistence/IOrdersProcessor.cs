@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Abstractions.Entities;
 using Abstractions.Enums;
-using Common.Trading;
 
 namespace Persistence
 {
