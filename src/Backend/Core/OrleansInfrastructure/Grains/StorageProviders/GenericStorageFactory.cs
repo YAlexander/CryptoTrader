@@ -11,6 +11,8 @@ namespace Core.OrleansInfrastructure.Grains.StorageProviders
 	{
 		public static IGrainStorage Create<T, TK>(IServiceProvider services, string name) where T : IGrainStorage where TK : IDatabaseManager
 		{
+			// TODO: Replace managers with interfaces
+
 			IOptions<DatabaseOptions> optionsSnapshot = services.GetRequiredService<IOptions<DatabaseOptions>>();
 			DatabaseOptions options = optionsSnapshot.Value;
 			TK storageManager = ActivatorUtilities.CreateInstance<TK>(services);

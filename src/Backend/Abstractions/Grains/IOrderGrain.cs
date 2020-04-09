@@ -6,7 +6,7 @@ namespace Abstractions.Grains
 {
 	public interface IOrderGrain : IGrainWithGuidCompoundKey
 	{
-		Task Receive(IOrder order);
+		Task<IOrder> Get();
 		Task Update(IOrder order);
 	}
 }

@@ -1,11 +1,15 @@
 using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Abstractions.Grains;
+using Common;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using MyNatsClient;
 using MyNatsClient.Rx;
 using Orleans;
+using Persistence.Entities;
 
 namespace Silo
 {
@@ -30,14 +34,23 @@ namespace Silo
 					{
 						await _orleansClient.Connect();
 					}
-
+					
 					using (NatsClient client = new NatsClient(new MyNatsClient.ConnectionInfo("", 222)))
 					{
 						await client.ConnectAsync();
 
-						 ISubscription subscription = await client.SubAsync("trades", stream => stream.Subscribe(msg =>
+						ISubscription subscription = await client.SubAsync(nameof(Candle), stream => stream.SubscribeSafe(msg =>
 						{
-							// TODO: Call Candle Grain
+							string payload = msg.GetPayloadAsString();
+							Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
+							
+							GrainKeyExtension ext = new GrainKeyExtension();
+							ext.Exchange = candle.Exchange;
+							ext.Asset1 = candle.Asset1;
+							ext.Asset2 = candle.Asset2;
+							
+							ICandleGrain grain = _orleansClient.GetGrain<ICandleGrain>((int)candle.Exchange, ext.ToString());
+							grain.Set(candle);
 						}));
 
 						while (!stoppingToken.IsCancellationRequested)

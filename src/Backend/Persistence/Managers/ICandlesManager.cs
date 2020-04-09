@@ -11,7 +11,7 @@ namespace Persistence.Managers
 	{
 		Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles, IDbConnection connection, IDbTransaction transaction = null);
 
-		Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime time, IDbConnection connection, IDbTransaction transaction = null);
+		Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime? time, IDbConnection connection, IDbTransaction transaction = null);
 
 		Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime from, DateTime to, IDbConnection connection, IDbTransaction transaction = null);
 

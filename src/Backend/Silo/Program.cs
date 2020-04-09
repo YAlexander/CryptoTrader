@@ -65,6 +65,13 @@ namespace Silo
                         	optionsBuilder.Invariant = appSettings.ClusterInvariant;
                          	optionsBuilder.UseJsonFormat = true;
                         })
+                        .AddGenericGrainStorage<CandleStorageProvider, CandlesManager>(nameof(CandleStorageProvider), opt =>
+                        {
+                            opt.Configure(options =>
+                            {
+                                options.CryptoTradingConnectionString = appSettings.DatabaseOptions.CryptoTradingConnectionString;
+                            });
+                        })
                         .AddGenericGrainStorage<OrdersStorageProvider, OrdersManager>(nameof(OrdersStorageProvider), opt =>
                         {
                             opt.Configure(options =>

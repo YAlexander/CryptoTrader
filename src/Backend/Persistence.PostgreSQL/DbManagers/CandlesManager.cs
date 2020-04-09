@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Abstractions.Enums;
 using Dapper;
+using Orleans.Hosting;
 using Persistence.Entities;
 using Persistence.Managers;
 using TechanCore;
@@ -35,8 +37,9 @@ namespace Persistence.PostgreSQL.DbManagers
 			}, transaction);
 		}
 
-		public Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime time, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime? time, IDbConnection connection, IDbTransaction transaction = null)
 		{
+			string timeCondition = time.HasValue ? " and time = @time " : String.Empty;
 			string query = $@"
 				select 
 					*
@@ -46,10 +49,8 @@ namespace Persistence.PostgreSQL.DbManagers
 					asset1 = @asset1
 				and
 					asset2 = @asset2
-				and
-					time = @time
-				order by time desc
-				limit @numberOfCandles;
+				{time}
+				order by time desc limit 1;
 			";
 
 			return connection.QueryFirstAsync<Candle>(query, new

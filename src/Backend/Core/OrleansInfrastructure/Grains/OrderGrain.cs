@@ -20,10 +20,9 @@ namespace Core.OrleansInfrastructure.Grains
 			_order = order;
 		}
 		
-		public async Task Receive(IOrder order)
+		public Task<IOrder> Get()
 		{
-			_order.State = (Order) order;
-			await _order.WriteStateAsync();
+			return Task.FromResult((IOrder)_order.State);
 		}
 
 		public async Task Update(IOrder order)
