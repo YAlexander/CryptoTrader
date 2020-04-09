@@ -2,7 +2,6 @@
 {
     public enum DealStatus
     {
-        PENDING,
         OPEN,
         CLOSED
     }

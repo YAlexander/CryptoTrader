@@ -31,5 +31,10 @@ namespace Abstractions.Entities
 		int Leverage { get; set; }
 		
 		bool IsDisabled { get; set; }
+		
+		bool CanChangePosition { get; set; }
+		int? DiscrepancyPercent { get; set; }
+		
+		string[] Constraints { get; set; }
 	}
 }

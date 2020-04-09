@@ -4,7 +4,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Persistence;
-using Persistence.Entities;
 using Persistence.Managers;
 using Persistence.PostgreSQL.DbManagers;
 using Persistence.PostgreSQL.Processors;
@@ -32,7 +31,6 @@ namespace Binance
                     services.AddSingleton(_ => _.GetService<OrleansClient>().Client);
 
                     services.AddTransient<IExchangeSettingsManager, ExchangeSettingsManager>();
-                    services.AddTransient<IOrderNotificator, OrderNotificator>();
                     services.AddTransient<ISettingsProcessor, ExchangeSettingsProcessor>();
                     services.AddTransient<ICandlesManager, CandlesManager>();
                     services.AddTransient<IExchangeOrderProcessor, BinanceOrderProcessor>();

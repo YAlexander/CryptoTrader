@@ -18,12 +18,12 @@ namespace Core.OrleansInfrastructure.Grains
 			_deal = deal;
 		}
 
-		public Task<IDeal> Get()
+		public Task<IDeal> Get ()
 		{
 			return Task.FromResult((IDeal)_deal.State);
 		}
 
-		public async Task Create(IDeal deal)
+		public async Task CreateOrUpdate (IDeal deal)
 		{
 			_deal.State = (Deal)deal;
 			await _deal.WriteStateAsync();

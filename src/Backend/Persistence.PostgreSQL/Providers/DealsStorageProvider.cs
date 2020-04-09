@@ -11,7 +11,7 @@ namespace Persistence.PostgreSQL.Providers
 {
 	public class DealsStorageProvider : BaseProcessor, IDealStorageProvider
 	{
-		private IDealsManager _dealsManager;
+		private readonly IDealsManager _dealsManager;
 		
 		public DealsStorageProvider(string connectionString, IDealsManager dealsManager) : base(connectionString)
 		{

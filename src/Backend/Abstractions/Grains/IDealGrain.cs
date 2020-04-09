@@ -6,7 +6,7 @@ namespace Abstractions.Grains
 {
 	public interface IDealGrain : IGrainWithIntegerCompoundKey
 	{
-		Task<IDeal> Get();
-		Task Create(IDeal deal);
+		Task<IDeal> Get ();
+		Task CreateOrUpdate (IDeal deal);
 	}
 }

@@ -16,13 +16,7 @@ namespace Core.OrleansInfrastructure.Grains
 	public class OrderProcessingGrain : Grain, IOrderProcessingGrain
 	{
 		private IStreamProvider _streamProvider;
-		private readonly GrainObserverManager<IOrderNotificator> _subsManager;
-
-		public OrderProcessingGrain(GrainObserverManager<IOrderNotificator> subsManager)
-		{
-			_subsManager = subsManager;
-		}
-
+		
 		public override async Task OnActivateAsync()
 		{
 			_streamProvider = GetStreamProvider(Constants.MessageStreamProvider);
@@ -41,16 +35,13 @@ namespace Core.OrleansInfrastructure.Grains
 			IOrderGrain newOrder = GrainFactory.GetGrain<IOrderGrain>(key.Id.Value, key.ToString());
 			await newOrder.Update(order);
 			
-			INotification<IOrder> notification = new Notification<IOrder>();
-			notification.Payload = order;
+			// TODO: Nats queue
+			//INotification<IOrder> notification = new Notification<IOrder>();
+			//notification.Payload = order;
 
-			await this.SendUpdateMessage(notification);
+			//await this.SendUpdateMessage(notification);
 		}
 		
-		private async Task SendUpdateMessage(INotification<IOrder> message)
-		{
-			await _subsManager.Notify(s => s.ReceiveMessage(message));
-		}
 
 		public Task OnCompletedAsync()
 		{
@@ -68,18 +59,6 @@ namespace Core.OrleansInfrastructure.Grains
 
 			IOrderGrain grain = GrainFactory.GetGrain<IOrderGrain>(order.Id, extension.ToString());
 			await grain.Update(order);
-		}
-
-		public Task Subscribe(IOrderNotificator observer)
-		{
-			_subsManager.Subscribe(observer);
-			return Task.CompletedTask;
-		}
-
-		public Task UnSubscribe(IOrderNotificator observer)
-		{ 
-			_subsManager.Unsubscribe(observer);
-			return Task.CompletedTask;
 		}
 	}
 }

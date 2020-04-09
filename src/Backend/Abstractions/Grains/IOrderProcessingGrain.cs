@@ -4,7 +4,7 @@ using Orleans;
 
 namespace Abstractions.Grains
 {
-	public interface IOrderProcessingGrain : INotificationService, IGrainWithIntegerKey
+	public interface IOrderProcessingGrain : IGrainWithIntegerKey
 	{
 		Task Update(IOrder order);
 	}

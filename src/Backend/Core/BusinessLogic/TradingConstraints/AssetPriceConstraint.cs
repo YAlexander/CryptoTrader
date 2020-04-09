@@ -1,13 +1,14 @@
 ﻿using System.Threading.Tasks;
 using Abstractions;
+using Abstractions.Entities;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-    public class AssetPriceConstraint : ITradingConstraint
+    public class AssetPriceConstraint : IRiskManager
     {
-        public async Task<ITradingContext> Set (ITradingContext context)
+        public ITradingContext Process(ITradingContext context, IStrategyInfo info)
         {
-            return context;
+            throw new System.NotImplementedException();
         }
     }
 }
