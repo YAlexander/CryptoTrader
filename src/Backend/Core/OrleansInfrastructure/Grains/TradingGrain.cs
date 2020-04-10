@@ -7,6 +7,7 @@ using Abstractions.Entities;
 using Abstractions.Enums;
 using Abstractions.Grains;
 using Common;
+using Common.Exceptions;
 using Core.BusinessLogic;
 using Core.Helpers;
 using Orleans;
@@ -36,7 +37,7 @@ namespace Core.OrleansInfrastructure.Grains
         {
             ITradingContext context = await BuildContext(item.Exchange, item.Asset1, item.Asset2);
 
-            if (context.TradingAdvice != TradingAdvices.HOLD)
+            if (context != null)
             {
                 IAsyncStream<TradingContext> stream = _streamProvider.GetStream<TradingContext>(this.GetPrimaryKey(), nameof(TradingContext));
                 await stream.OnNextAsync((TradingContext)context);
@@ -83,27 +84,28 @@ namespace Core.OrleansInfrastructure.Grains
 
             if (context.TradingAdvice == TradingAdvices.HOLD)
             {
-                return context;
+                return null;
             }
             
-            // TODO: Move Deal processing into OrderProcessing grain
-            IDealGrain dealGrain = GrainFactory.GetGrain<IDealGrain>((int) exchange, keyExtension.ToString());
-            IDeal deal = await dealGrain.Get();
-            if (deal == null)
-            {
-                deal = new Deal();
-                deal.Id = Guid.NewGuid();
-                deal.Status = DealStatus.OPEN;
-                deal.Exchange = exchange;
-                deal.Asset1 = asset1;
-                deal.Asset2 = asset2;
+            keyExtension = context.ToDealExtendedKey();
+
+            IDealGrain dealGrain = GrainFactory.GetGrain<IDealGrain>((long)context.Exchange, keyExtension.ToString());
+			
+            if (context.Deal == null)
+            { 
+                Deal deal = new Deal(); 
+                deal.Id = keyExtension.Id.Value; 
+                deal.Status = DealStatus.OPEN; 
+                deal.Exchange = context.Exchange; 
+                deal.Asset1 = context.TradingPair.asset1; 
+                deal.Asset2 = context.TradingPair.asset2; 
                 deal.Position = context.TradingAdvice == TradingAdvices.BUY ? DealPositions.LONG : DealPositions.SHORT;
                 
                 await dealGrain.CreateOrUpdate(deal);
             }
 
-            context.DealId = deal.Id;
-
+            context.Deal = await dealGrain.Get();
+            
             IBalanceProcessingGrain balanceGrain = GrainFactory.GetGrain<IBalanceProcessingGrain>((long)exchange);
             IEnumerable<IBalance> balances = await balanceGrain.Get();
 
@@ -111,11 +113,22 @@ namespace Core.OrleansInfrastructure.Grains
 
             IEnumerable<IRiskManager> riskManagers = RiskHelper.Get(strategyInfo.Constraints);
 
-            foreach (var manager in riskManagers)
-            {
-                manager.Process(context, strategyInfo);
-            }
+            ITradeProcessingGrain tradesGrain = GrainFactory.GetGrain<ITradeProcessingGrain>((long)keyExtension.Exchange);
+            context.LastTrade = await tradesGrain.Get(keyExtension.Asset1, keyExtension.Asset2);
             
+            try
+            {
+                foreach (IRiskManager manager in riskManagers)
+                {
+                    manager.Process(context, strategyInfo);
+                }
+            }
+            catch (RiskManagementException ex)
+            {
+                // TODO: Log error
+                return null;
+            }
+
             return context;
         }
 

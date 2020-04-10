@@ -11,16 +11,21 @@ namespace Core.Helpers
 		{
 			foreach (string constraint in constraints)
 			{
-				switch (constraint)
+				if (Managers.ContainsKey(constraint))
 				{
-					case nameof(AssetPriceConstraint):
-						yield return new AssetPriceConstraint();
-					break;
-					
-					default:
-						throw new Exception("Unsupported constraint");
+					yield return Managers[constraint];
+				}
+				else
+				{
+					throw new Exception($"Unknown constraint {constraint}");
 				}
 			}
 		}
+		
+		private static readonly Dictionary<string, IRiskManager> Managers = new Dictionary<string, IRiskManager>()
+		{
+			[nameof(SimpleOrderAmountConstraint)] = new SimpleOrderAmountConstraint(),
+			[nameof(InsufficientFundsConstraint)] = new InsufficientFundsConstraint()
+		};
 	}
 }

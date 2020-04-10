@@ -9,7 +9,7 @@ namespace Abstractions
 {
 	public interface ITradingContext
 	{
-		Guid? DealId { get; set; }
+		IDeal Deal { get; set; }
 		
 		Exchanges Exchange { get; set; }
 
@@ -42,5 +42,7 @@ namespace Abstractions
 		List<IBalance> Funds { get; set; }
 		
 		TradingAdvices TradingAdvice { get; set; }
+		
+		public decimal? LastTrade { get; set; }
 	}
 }

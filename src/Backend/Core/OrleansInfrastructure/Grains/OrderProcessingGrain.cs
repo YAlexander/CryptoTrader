@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using Abstractions;
 using Abstractions.Entities;
+using Abstractions.Enums;
 using Abstractions.Grains;
 using Common;
 using Core.BusinessLogic;
@@ -9,6 +9,7 @@ using Orleans;
 using Orleans.Streams;
 using Persistence.Entities;
 using Persistence.Helpers;
+using TechanCore.Enums;
 
 namespace Core.OrleansInfrastructure.Grains
 {
@@ -27,13 +28,14 @@ namespace Core.OrleansInfrastructure.Grains
 		private async Task OnNextAsync(TradingContext context, StreamSequenceToken token = null)
 		{
 			// TODO: Process order
-
 			IOrder order = new Order();
-			// TODO: Id can't be null
-			GrainKeyExtension key = order.ToExtendedKey();
+			order.Id = Guid.NewGuid();
 
-			IOrderGrain newOrder = GrainFactory.GetGrain<IOrderGrain>(key.Id.Value, key.ToString());
+			GrainKeyExtension key = order.ToOrderExtendedKey();
+
+			IOrderGrain newOrder = GrainFactory.GetGrain<IOrderGrain>(order.Id, key.ToString());
 			await newOrder.Update(order);
+
 			
 			// TODO: Nats queue
 			//INotification<IOrder> notification = new Notification<IOrder>();
@@ -55,7 +57,7 @@ namespace Core.OrleansInfrastructure.Grains
 
 		public async Task Update(IOrder order)
 		{
-			GrainKeyExtension extension = order.ToExtendedKey();
+			GrainKeyExtension extension = order.ToOrderExtendedKey();
 
 			IOrderGrain grain = GrainFactory.GetGrain<IOrderGrain>(order.Id, extension.ToString());
 			await grain.Update(order);
