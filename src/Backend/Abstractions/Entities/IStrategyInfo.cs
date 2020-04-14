@@ -21,19 +21,10 @@ namespace Abstractions.Entities
 		
 		bool UseTrailingStop { get; set; }
 		
-		bool IsStopLossPercent { get; set; }
-		decimal? StopLossValue { get; set; }
-
-		bool IsTakeProfitPercent { get; set; }
-		decimal? TakeProfitValue { get; set; }
-		
 		bool UseMarginalTrading { get; set; }
 		int Leverage { get; set; }
 		
 		bool IsDisabled { get; set; }
-		
-		bool CanChangePosition { get; set; }
-		int? DiscrepancyPercent { get; set; }
 		
 		string[] Constraints { get; set; }
 	}

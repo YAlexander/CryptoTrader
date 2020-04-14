@@ -18,7 +18,8 @@ namespace Core.BusinessLogic.TradingConstraints
 
             if (funds != null)
             {
-                context.MaxAmount = (funds.TotalAmount - funds.LockedAmount) * info.Leverage * 0.01m;
+                int leverage = info.UseMarginalTrading ? info.Leverage : 1;
+                context.MaxAmount = (funds.TotalAmount - funds.LockedAmount) * leverage * 0.01m;
                 return context;
             }
 

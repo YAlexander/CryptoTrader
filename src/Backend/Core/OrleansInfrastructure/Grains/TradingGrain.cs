@@ -125,7 +125,7 @@ namespace Core.OrleansInfrastructure.Grains
             }
             catch (RiskManagementException ex)
             {
-                // TODO: Log error
+                // TODO: log error
                 return null;
             }
 

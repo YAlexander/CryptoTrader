@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Abstractions;
 using Abstractions.Entities;
 using Abstractions.Enums;
 
@@ -9,8 +8,6 @@ namespace Persistence.Entities
 	[Serializable]
 	public class Order : BaseEntity<Guid>, IOrder
 	{
-		public Guid Id { get; set; } = Guid.NewGuid();
-		
 		public long? ParentOrderId { get; set; }
 		public Guid? DealId { get; set; }
 		

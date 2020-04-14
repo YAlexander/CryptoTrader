@@ -1,5 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Abstractions;
 using Core.BusinessLogic.TradingConstraints;
 
@@ -7,25 +7,23 @@ namespace Core.Helpers
 {
 	public static class RiskHelper
 	{
+		private static readonly IRiskManager[] ManagersOrdered =
+		{
+			new HasAssetsConstraint(),
+			new SimpleOrderAmountConstraint(),
+			new InsufficientFundsConstraint(),
+			new PriceLossProfitConstraint()
+		};
+		
 		public static IEnumerable<IRiskManager> Get(string[] constraints)
 		{
-			foreach (string constraint in constraints)
+			foreach (IRiskManager manager in ManagersOrdered)
 			{
-				if (Managers.ContainsKey(constraint))
+				if (constraints.Contains(manager.Name))
 				{
-					yield return Managers[constraint];
-				}
-				else
-				{
-					throw new Exception($"Unknown constraint {constraint}");
+					yield return manager;
 				}
 			}
 		}
-		
-		private static readonly Dictionary<string, IRiskManager> Managers = new Dictionary<string, IRiskManager>()
-		{
-			[nameof(SimpleOrderAmountConstraint)] = new SimpleOrderAmountConstraint(),
-			[nameof(InsufficientFundsConstraint)] = new InsufficientFundsConstraint()
-		};
 	}
 }

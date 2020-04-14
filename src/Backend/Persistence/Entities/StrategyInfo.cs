@@ -16,16 +16,9 @@ namespace Persistence.Entities
 		public int TimeFrame { get; set; }
 		public bool TradeOnFlat { get; set; }
 		public bool UseTrailingStop { get; set; }
-		public bool IsStopLossPercent { get; set; }
-		public decimal? StopLossValue { get; set; }
-		public bool IsTakeProfitPercent { get; set; }
-		public decimal? TakeProfitValue { get; set; }
 		public bool UseMarginalTrading { get; set; }
 		public int Leverage { get; set; }
 		public bool IsDisabled { get; set; }
-		
-		public bool CanChangePosition { get; set; }
-		public int? DiscrepancyPercent { get; set; }
 		public string[] Constraints { get; set; }
 	}
 }
