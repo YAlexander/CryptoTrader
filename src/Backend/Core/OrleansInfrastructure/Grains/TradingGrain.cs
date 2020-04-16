@@ -87,7 +87,8 @@ namespace Core.OrleansInfrastructure.Grains
                 return null;
             }
             
-            keyExtension = context.ToDealExtendedKey();
+            keyExtension = context.ToExtendedKey();
+            keyExtension.Id ??= Guid.NewGuid(); 
 
             IDealGrain dealGrain = GrainFactory.GetGrain<IDealGrain>((long)context.Exchange, keyExtension.ToString());
 			
@@ -109,7 +110,7 @@ namespace Core.OrleansInfrastructure.Grains
             IBalanceProcessingGrain balanceGrain = GrainFactory.GetGrain<IBalanceProcessingGrain>((long)exchange);
             IEnumerable<IBalance> balances = await balanceGrain.Get();
 
-            context.Funds = balances.ToList();
+            context.Funds = balances.ToArray();
 
             IEnumerable<IRiskManager> riskManagers = RiskHelper.Get(strategyInfo.Constraints);
 

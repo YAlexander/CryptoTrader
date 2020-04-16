@@ -16,26 +16,18 @@ namespace Core.BusinessLogic.TradingConstraints
 				decimal gap = context.LastTrade.Value * 0.004m;
 				decimal stopLossSize = context.LastTrade.Value * 0.02m;
 
-				decimal limitPrice;
-				decimal stopLossPrice;
-				decimal takeProfitPrice;
-
 				if (context.Deal.Position == DealPositions.LONG)
 				{
-					limitPrice = context.LastTrade.Value + gap;
-					stopLossPrice = limitPrice - stopLossSize;
-					takeProfitPrice = limitPrice + 3 * stopLossSize;
+					context.Price = context.LastTrade.Value + gap;
+					context.StopLosePrice = context.Price - stopLossSize;
+					context.TakeProfitPrice = context.Price + 3 * stopLossSize;
 				}
 				else
 				{
-					limitPrice = context.LastTrade.Value - gap;
-					stopLossPrice = limitPrice + stopLossSize;
-					takeProfitPrice = limitPrice - 3 * stopLossSize;
+					context.Price = context.LastTrade.Value - gap;
+					context.StopLosePrice = context.Price + stopLossSize;
+					context.TakeProfitPrice = context.Price - 3 * stopLossSize;
 				}
-
-				context.Price = limitPrice;
-				context.StopLosePrice = stopLossPrice;
-				context.TakeProfitPrice = takeProfitPrice;
 			}
 
 			return context;

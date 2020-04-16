@@ -26,8 +26,13 @@ namespace Core.BusinessLogic
 		public decimal MaxAmount { get; set; }
 		public DateTime? DisableTradingTill { get; set; }
 		public bool CreateReverseOrder { get; set; }
-		public List<IBalance> Funds { get; set; }
+		public IBalance[] Funds { get; set; }
 		public TradingAdvices TradingAdvice { get; set; }
 		public decimal? LastTrade { get; set; }
+		
+		public List<IOrder> Orders { get; }
+		
+		// Max daily loss
+		public decimal? DailyRiskLimit { get; set; }
 	}
 }

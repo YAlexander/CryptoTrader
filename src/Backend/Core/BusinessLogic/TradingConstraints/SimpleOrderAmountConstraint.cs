@@ -16,14 +16,11 @@ namespace Core.BusinessLogic.TradingConstraints
                 ? context.Funds.FirstOrDefault(x => x.Asset == context.TradingPair.asset2)
                 : context.Funds.FirstOrDefault(x => x.Asset == context.TradingPair.asset1);
 
-            if (funds != null)
-            {
-                int leverage = info.UseMarginalTrading ? info.Leverage : 1;
-                context.MaxAmount = (funds.TotalAmount - funds.LockedAmount) * leverage * 0.01m;
-                return context;
-            }
-
-            throw new Exception($"Insufficient funds");
+            if (funds == null) throw new Exception($"Insufficient funds");
+            
+            int leverage = info.UseMarginalTrading ? info.Leverage : 1;
+            context.MaxAmount = (funds.TotalAmount - funds.LockedAmount) * leverage * 0.01m;
+            return context;
         }
     }
 }
