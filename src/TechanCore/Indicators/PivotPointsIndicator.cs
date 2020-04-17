@@ -6,38 +6,55 @@ using TechanCore.Indicators.Results;
 
 namespace TechanCore.Indicators
 {
-	public class PivotPointsIndicator: BaseIndicator<EmptyOption, PivotPointsResult>
+	public class PivotPointsIndicator: BaseIndicator<EmptyOption, PivotPointsResults>
 	{
 		public override string Name { get; } = "Pivot Points (PP) Indicator";
 		
-		public override PivotPointsResult Get(ICandle[] source, EmptyOption options)
+		public override PivotPointsResults Get(ICandle[] source, EmptyOption options)
 		{
-			// TODO: Calculate PP for all candles, not only for last period
-			Timeframes pivotTimeFrame = GetPivotTimeframe(source[0].TimeFrame);
-			ICandle pivotCandle = source.GroupCandles(pivotTimeFrame).Last();
+			PivotPointsResult[] results = new PivotPointsResult[source.Length];
+			ICandle[] pivotCandles = source.GroupCandles(GetPivotTimeframe(source[0].TimeFrame));
 
-			decimal p = (pivotCandle.High + pivotCandle.Low + pivotCandle.Close) / 3;
-			decimal r1 = p * 2 - pivotCandle.Low;
-			decimal s1 = p * 2 - pivotCandle.High;
-			decimal r2 = p + pivotCandle.High - pivotCandle.Low;
-			decimal s2 = p - pivotCandle.Low + pivotCandle.High;
-			
-			return new PivotPointsResult
+			int daysPeriod = pivotCandles[0].TimeFrame == Timeframes.DAY ? 1 : 7;
+			int position = 0;
+
+			for (int i = 0; i < source.Length; i++)
 			{
-				P = p,
-				R1 = r1,
-				R2 = r2,
-				S1 = s1,
-				S2 = s2
-			};
+				var pivotCandle = pivotCandles[i];
+				
+				decimal p = (pivotCandle.High + pivotCandle.Low + pivotCandle.Close) / 3;
+				decimal r1 = p * 2 - pivotCandle.Low;
+				decimal s1 = p * 2 - pivotCandle.High;
+				decimal r2 = p + pivotCandle.High - pivotCandle.Low;
+				decimal s2 = p - pivotCandle.Low + pivotCandle.High;
+
+				PivotPointsResult currentPivot = new PivotPointsResult
+				{
+					P = p,
+					R1 = r1,
+					R2 = r2,
+					S1 = s1,
+					S2 = s2
+				};
+				
+				int numberOfCandles = source.Count(x => x.Time >= pivotCandle.Time && x.Time < pivotCandle.Time.AddDays(daysPeriod));
+				for (int j = position; j < position + numberOfCandles; j++)
+				{
+					results[j] = currentPivot;
+				}
+
+				position += numberOfCandles;
+			}
+			
+			return new PivotPointsResults { Pivots = results };
 		}
 
-		public override PivotPointsResult Get(decimal[] source, EmptyOption options)
+		public override PivotPointsResults Get(decimal[] source, EmptyOption options)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public override PivotPointsResult Get(decimal?[] source, EmptyOption options)
+		public override PivotPointsResults Get(decimal?[] source, EmptyOption options)
 		{
 			throw new System.NotImplementedException();
 		}

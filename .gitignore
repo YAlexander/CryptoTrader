@@ -48,3 +48,5 @@ src/Backend/Silo/bin/
 src/Backend/Silo/obj/
 src/Common/obj/
 src/Common/bin/
+src/Backoffice/Site.Core/obj/
+src/Backoffice/Site.Core/bin/

@@ -1,6 +1,6 @@
 namespace TechanCore.Indicators.Results
 {
-	public class PivotPointsResult : IResultSet
+	public class PivotPointsResult
 	{
 		public decimal P { get; set; }
 		public decimal R1 { get; set; }

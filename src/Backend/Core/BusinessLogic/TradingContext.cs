@@ -10,6 +10,7 @@ namespace Core.BusinessLogic
 {
 	public class TradingContext : ITradingContext
 	{
+		public TradingMode Mode { get; set; }
 		public IDeal Deal { get; set; }
 		public Exchanges Exchange { get; set; }
 		public (Assets asset1, Assets asset2) TradingPair { get; set; }

@@ -9,6 +9,7 @@ namespace Abstractions
 {
 	public interface ITradingContext
 	{
+		TradingMode Mode { get; set; }
 		IDeal Deal { get; set; }
 		
 		Exchanges Exchange { get; set; }
