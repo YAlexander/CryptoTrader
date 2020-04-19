@@ -15,15 +15,13 @@ namespace Site.Core.Reports
 {
 	public abstract class BaseReportsManager<T> where T : IReport
 	{
-		public abstract Task<byte[]> GetReport(T data, DocumentOptions options);
+		public abstract Task<byte[]> GetReport(T data);
 		
-		protected virtual async Task<string> TransformXmlToHtml(string data, string templateName)
+		protected virtual async Task<string> TransformXmlToHtml(string data, string resource)
 		{
-			string xsltResource = await GetResource(templateName);
-					
 			XslCompiledTransform transform = new XslCompiledTransform();
 					
-			using (StringReader sr = new StringReader(xsltResource))
+			using (StringReader sr = new StringReader(resource))
 			{ 
 				using (XmlReader xr = XmlReader.Create(sr))
 				{ 
@@ -42,7 +40,7 @@ namespace Site.Core.Reports
 		}
 	
 		
-		private Task<string> GetResource(string resourceName)
+		protected virtual Task<string> GetResource(string resourceName)
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly();
 			string resourcePath = assembly.GetManifestResourceNames().Single(str => str.EndsWith(resourceName));
@@ -61,7 +59,7 @@ namespace Site.Core.Reports
 			await using var ms = new MemoryStream();
 			
 			ConverterProperties converterProperties = new ConverterProperties();
-			converterProperties.SetBaseUri(options.ImagesLocation);
+			converterProperties.SetBaseUri(options.BaseUrl);
 			converterProperties.SetMediaDeviceDescription(new MediaDeviceDescription(MediaType.PRINT));
 				
 			PdfDocument pdfDocument = new PdfDocument(new PdfWriter(ms));
