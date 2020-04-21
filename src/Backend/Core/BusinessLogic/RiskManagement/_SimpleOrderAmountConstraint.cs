@@ -6,7 +6,7 @@ using Abstractions.Enums;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-    public class SimpleOrderAmountConstraint : IRiskManager
+    public class SimpleOrderAmountConstraint : IRiskStrategy
     {
         public string Name { get; set; } = "Max Order Amount (Simple)";
 
@@ -18,8 +18,8 @@ namespace Core.BusinessLogic.TradingConstraints
 
             if (funds == null) throw new Exception($"Insufficient funds");
             
-            int leverage = info.UseMarginalTrading ? info.Leverage : 1;
-            context.MaxAmount = (funds.TotalAmount - funds.LockedAmount) * leverage * 0.01m;
+            //int leverage = info.UseMarginalTrading ? info.Leverage : 1;
+            //context.MaxAmount = (funds.TotalAmount - funds.LockedAmount) * leverage * 0.01m;
             return context;
         }
     }

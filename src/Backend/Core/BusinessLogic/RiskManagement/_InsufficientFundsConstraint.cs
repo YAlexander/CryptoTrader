@@ -6,7 +6,7 @@ using Abstractions.Enums;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-	public class InsufficientFundsConstraint : IRiskManager
+	public class InsufficientFundsConstraint : IRiskStrategy
 	{
 		// Min USD order amount
 		private const decimal MinOrderAmount = 15;

@@ -1,29 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using Abstractions;
-using Core.BusinessLogic.TradingConstraints;
+using Core.BusinessLogic.RiskManagement;
 
 namespace Core.Helpers
 {
 	public static class RiskHelper
 	{
-		private static readonly IRiskManager[] ManagersOrdered =
+		public static IRiskStrategy Get(string strategy, string options)
 		{
-			new HasAssetsConstraint(),
-			new SimpleOrderAmountConstraint(),
-			new InsufficientFundsConstraint(),
-			new PriceLossProfitConstraint()
-		};
-		
-		public static IEnumerable<IRiskManager> Get(string[] constraints)
-		{
-			foreach (IRiskManager manager in ManagersOrdered)
+			return strategy switch
 			{
-				if (constraints.Contains(manager.Name))
-				{
-					yield return manager;
-				}
-			}
+				nameof(SimpleRiskStrategy) => new SimpleRiskStrategy(options),
+				_ => throw new Exception($"Unknown Risk Manager: {strategy}")
+			};
 		}
 	}
 }

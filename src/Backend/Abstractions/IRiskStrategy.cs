@@ -2,9 +2,10 @@
 
 namespace Abstractions
 {
-	public interface IRiskManager
+	public interface IRiskStrategy
 	{
-		string Name { get; set; }
+		string Name { get; }
+		
 		ITradingContext Process (ITradingContext context, IStrategyInfo info);
 	}
 }

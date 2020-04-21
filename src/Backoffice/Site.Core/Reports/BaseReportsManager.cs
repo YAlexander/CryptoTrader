@@ -38,8 +38,7 @@ namespace Site.Core.Reports
 			
 			return results.ToString();
 		}
-	
-		
+
 		protected virtual Task<string> GetResource(string resourceName)
 		{
 			Assembly assembly = Assembly.GetExecutingAssembly();

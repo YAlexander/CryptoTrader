@@ -5,7 +5,7 @@ using Abstractions.Entities;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-	public class HasAssetsConstraint : IRiskManager
+	public class HasAssetsConstraint : IRiskStrategy
 	{
 		public string Name { get; set; } = "Has Pair Assets";
 		public ITradingContext Process(ITradingContext context, IStrategyInfo info)

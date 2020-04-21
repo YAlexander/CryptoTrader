@@ -7,7 +7,6 @@ using Abstractions.Entities;
 using Abstractions.Enums;
 using Abstractions.Grains;
 using Common;
-using Common.Exceptions;
 using Core.BusinessLogic;
 using Core.Helpers;
 using Orleans;
@@ -79,7 +78,7 @@ namespace Core.OrleansInfrastructure.Grains
             context.Candles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);
 
             (IStrategyOption options, IStrategyOption defaultOptions) options = OptionsHelper.Decode(strategyInfo);
-            context.Strategy = StrategiesHelper.Get(strategyInfo.Class, options.options); 
+            context.Strategy = StrategiesHelper.Get(strategyInfo.StrategyClass, options.options); 
 
             context.TradingAdvice = context.Strategy.Forecast(context.Candles);
 
@@ -113,23 +112,11 @@ namespace Core.OrleansInfrastructure.Grains
 
             context.Funds = balances.ToArray();
 
-            IEnumerable<IRiskManager> riskManagers = RiskHelper.Get(strategyInfo.Constraints);
-
             ITradeProcessingGrain tradesGrain = GrainFactory.GetGrain<ITradeProcessingGrain>((long)keyExtension.Exchange);
             context.LastTrade = await tradesGrain.Get(keyExtension.Asset1, keyExtension.Asset2);
-            
-            try
-            {
-                foreach (IRiskManager manager in riskManagers)
-                {
-                    manager.Process(context, strategyInfo);
-                }
-            }
-            catch (RiskManagementException ex)
-            {
-                // TODO: log error
-                return null;
-            }
+
+            IRiskStrategy riskStrategy = RiskHelper.Get(strategyInfo.RiskManagerName, strategyInfo.RiskManagerOptions);
+            context = riskStrategy.Process(context, strategyInfo);
 
             return context;
         }

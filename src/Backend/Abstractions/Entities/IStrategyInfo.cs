@@ -14,18 +14,11 @@ namespace Abstractions.Entities
 		string Options { get; set; }
 		string DefaultOptions { get; set; }
 		
-		string Class { get; set; }
 		int TimeFrame { get; set; }
-
-		bool TradeOnFlat { get; set; }
-		
-		bool UseTrailingStop { get; set; }
-		
-		bool UseMarginalTrading { get; set; }
-		int Leverage { get; set; }
 		
 		bool IsDisabled { get; set; }
 		
-		string[] Constraints { get; set; }
+		string RiskManagerName { get; set; }
+		string RiskManagerOptions { get; set; }
 	}
 }

@@ -4,7 +4,7 @@ using Abstractions.Enums;
 
 namespace Core.BusinessLogic.TradingConstraints
 {
-	public class PriceLossProfitConstraint : IRiskManager
+	public class PriceLossProfitConstraint : IRiskStrategy
 	{
 		public string Name { get; set; } = "Stop loss / Take Profit Manager";
 		
