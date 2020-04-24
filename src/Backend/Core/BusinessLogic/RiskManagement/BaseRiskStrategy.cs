@@ -1,6 +1,8 @@
+using System.Linq;
 using System.Text.Json;
 using Abstractions;
 using Abstractions.Entities;
+using Abstractions.Enums;
 
 namespace Core.BusinessLogic.RiskManagement
 {
@@ -18,5 +20,25 @@ namespace Core.BusinessLogic.RiskManagement
 		public abstract string Name { get; }
 
 		public abstract ITradingContext Process(ITradingContext context, IStrategyInfo info);
+
+		protected bool HasAsset(Assets asset, ITradingContext context)
+		{
+			IBalance balance = context.Funds.FirstOrDefault(x => x.Asset == asset);
+
+			decimal estimatedValue;
+				
+			if (context.Deal.Position == DealPositions.LONG)
+			{
+				estimatedValue = balance != null ? balance.TotalAmount - balance.LockedAmount : 0;
+			}
+			else
+			{
+				estimatedValue = balance != null && context.LastTrade.HasValue 
+					? (balance.TotalAmount - balance.LockedAmount) / context.LastTrade.Value 
+					: 0;
+			}
+			
+			return estimatedValue >= Options.MinimalOrderAmount;
+		}
 	}
 }

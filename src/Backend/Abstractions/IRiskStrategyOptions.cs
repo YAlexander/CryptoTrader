@@ -10,5 +10,7 @@ namespace Abstractions
 		int Leverage { get; set; }
 		
 		decimal MinimalOrderAmount { get; set; }
+		
+		decimal DefaultOpenGap { get; set; }
 	}
 }

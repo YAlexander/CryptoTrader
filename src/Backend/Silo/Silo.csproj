@@ -12,22 +12,35 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.2.20160.3" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.2.20160.3" />
-        <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.9.0-ci.20200408.9" />
-        <PackageReference Include="Microsoft.Orleans.OrleansSqlUtils" Version="3.0.0-ci.20190909.21" />
-        <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.9.0-ci.20200408.9" />
-        <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.9.0-ci.20200408.9" />
-        <PackageReference Include="Microsoft.Orleans.Server" Version="3.9.0-ci.20200408.9" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.3.20215.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.3.20215.2" />
+        <PackageReference Include="Microsoft.Orleans.Clustering.AdoNet" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Orleans.OrleansSqlUtils" Version="2.4.5" />
+        <PackageReference Include="Microsoft.Orleans.Persistence.AdoNet" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Orleans.Reminders.AdoNet" Version="3.1.6" />
+        <PackageReference Include="Microsoft.Orleans.Server" Version="3.1.6" />
         <PackageReference Include="MyNatsClient" Version="0.14.1" />
         <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.14.1" />
         <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
+        <PackageReference Include="NLog" Version="4.7.0" />
         <PackageReference Include="NLog.Extensions.Logging" Version="1.6.2" />
+        <PackageReference Include="NLog.Web.AspNetCore" Version="4.9.2" />
         <PackageReference Include="OrleansDashboard" Version="3.0.8" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\Core\Core.csproj" />
       <ProjectReference Include="..\Persistence.PostgreSQL\Persistence.PostgreSQL.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Content Update="appsettings.Development.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
+      <Content Update="appsettings.json">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+      </Content>
     </ItemGroup>
 </Project>
