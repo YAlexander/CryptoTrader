@@ -42,15 +42,15 @@ namespace Silo
 							await client.ConnectAsync();
 
 							ISubscription subscription = await client.SubAsync(nameof(Candle), stream => stream.SubscribeSafe(async msg =>
-						   {
-							   string payload = msg.GetPayloadAsString();
-							   Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
+							{
+								string payload = msg.GetPayloadAsString();
+								Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
 
-							   GrainKeyExtension key = candle.ToExtendedKey();
+								GrainKeyExtension key = candle.ToExtendedKey();
 
-							   ICandleGrain grain = orleansClient.GetGrain<ICandleGrain>((long)key.Exchange, key.ToString());
-							   await grain.Set((ICandle)candle);
-						   }));
+								ICandleGrain grain = orleansClient.GetGrain<ICandleGrain>((long)key.Exchange, key.ToString());
+								await grain.Set((ICandle)candle);
+							}));
 
 							while (!stoppingToken.IsCancellationRequested)
 							{

@@ -1,3 +1,51 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+	ViewData["Title"] = "Markets overview";
+}
+
+
+<div class="row">
+	<div id="chart-container" class="col-9 tradingview-widget-container">
+		<div id="tradingview_e0842"></div>
+	</div>
+	<div class="col-3"><input id="btntmp" type="button" value="neo" /></div>
+</div>
+
+@section Scripts{
+	<script>
+		function afterResize() {
+			drawChart("BINANCE:BTCUSDT", "60");
+		}
+
+		function drawChart(pair, interval) {
+			var charth = document.getElementById('chart-container').clientHeight;
+			var chartv = document.getElementById('chart-container').clientWidth;
+
+			new TradingView.widget(
+				{
+					"height": charth,
+					"width": chartv,
+					"symbol": pair,
+					"interval": interval,
+					"timezone": "Etc/UTC",
+					"theme": "dark",
+					"style": "4",
+					"locale": "en",
+					"toolbar_bg": "#f1f3f6",
+					"enable_publishing": false,
+					"hide_side_toolbar": false,
+					"allow_symbol_change": true,
+					"container_id": "tradingview_e0842"
+				}
+			);
+		}
+
+		$(document).ready
+		{
+			drawChart("BINANCE:BTCUSDT", "60");
+			window.addEventListener("resize", afterResize);
+		}
+	</script>
+
+
+
 }
