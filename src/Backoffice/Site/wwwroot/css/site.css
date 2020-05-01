@@ -1,7 +1,4 @@
-﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
-for details on configuring this project to bundle and minify static web assets. */
-
-a.navbar-brand {
+﻿a.navbar-brand {
 	white-space: normal;
 	text-align: center;
 	word-break: break-all;
@@ -72,20 +69,20 @@ body {
 
 nav {
 	margin-left: 20px;
-	margin-top: 20px;
+	margin-top: 3px;
 }
 
-	.btn.btn-outline-secondary {
-		border: 1px solid #e5e5e5
-	}
+.btn.btn-outline-secondary {
+	border: 1px solid #e5e5e5
+}
 
-	.footer {
-		position: absolute;
-		bottom: 0;
-		width: 100%;
-		white-space: nowrap;
-		line-height: 60px; /* Vertically center the text there */
-	}
+.footer {
+	position: absolute;
+	bottom: 0;
+	width: 100%;
+	white-space: nowrap;
+	line-height: 60px; /* Vertically center the text there */
+}
 
 #chart-container {
 	height: 100vh;
@@ -121,9 +118,9 @@ nav {
 	}
 
 
-	.toggle input[type=checkbox] {
-		display: none
-	}
+.toggle input[type=checkbox] {
+	display: none
+}
 
 .toggle-group {
 	position: absolute;
@@ -183,10 +180,10 @@ nav {
 }
 
 .balance {
-	padding-top: 10px;
+	padding-top: 5px;
 	padding-left: 30px;
 	padding-right: 10px;
-	font-size: 10pt;
+	font-size: 9pt;
 }
 
 	.balance table {
@@ -200,15 +197,17 @@ nav {
 
 		.balance table td, .balance table th {
 			color: #e5e5e5;
+			text-transform: uppercase;
+			font-size: 9pt;
 		}
 
 		.balance table .splitter {
 			width: 50px;
 		}
 
-		.summmary {
-			border-top: 1px solid #e5e5e5;
-		}
+.summmary {
+	border-top: 1px solid #e5e5e5;
+}
 
 .balance tr:last-child > td {
 	border-top: 1px solid #e5e5e5;
@@ -220,7 +219,7 @@ nav {
 	width: 95%;
 	overflow: auto;
 	border: 1px solid #e5e5e5;
-	margin-top: 20px;
+	margin-top: 5px;
 	margin-left: 15px;
 }
 
@@ -232,14 +231,118 @@ nav {
 	font-size: 9pt;
 }
 
-.hold {
+.hold, default {
 	color: #e5e5e5;
 }
 
-.ask {
+.ask, .short {
 	color: rgb(239, 83, 80);
 }
 
-.bid {
+.bid, .long {
 	color: rgb(38, 166, 154);
+}
+
+.position-block {
+	width: 96%;
+	margin-top: 10px;
+	margin-left: 15px;
+	margin-right: 30px;
+	background-color: #131722;
+	border: 1px solid #e5e5e5;
+	color: #e5e5e5;
+	text-align: center;
+	margin-bottom: 15px;
+	padding-bottom: 5px;
+}
+
+	.position-block label.inner-text {
+		padding-left: 15px;
+		padding-right: 15px;
+		font-size: 16pt;
+	}
+
+	button.position {
+		margin-top: 5px;
+		background-color: #131722;
+		border: 1px solid #e5e5e5;
+	}
+
+.select-position {
+margin-bottom: 5px;
+}
+
+button.position.active.ask {
+	border: 1px solid rgb(239, 83, 80);
+}
+
+button.position.active.bid img {
+	border: 1px solid rgb(38, 166, 154);
+}
+
+button.position img {
+	height: 38px;
+	width: 38px;
+}
+
+.form-control {
+	margin:1px;
+	background-clip: initial;
+	border-radius: 0;
+	padding: 0;
+	padding-left: 3px;
+	height: 28px;
+}
+
+.form-group {
+	margin-bottom: 2px;
+}
+
+	.form-group input, .form-group select {
+		font-size: 8pt;
+		text-transform: uppercase;
+		font-weight: bold;
+	}
+
+	.form-group label, .form-group a {
+		font-size: 8pt;
+		text-transform: uppercase;
+		color: #e5e5e5;
+		font-weight: bold;
+	}
+
+.form-check-label{
+	padding-bottom: 10px;
+}
+
+.form-check {
+	padding-left: 28px;
+}
+
+#orders-book{
+	margin-left: 20px;
+	width: 96%;
+}
+
+#orders-book th {
+	border-top: 1px solid #e5e5e5;
+	border-bottom: 1px solid #e5e5e5;
+	color: #e5e5e5;
+	font-size: 8pt;
+	text-transform: uppercase;
+}
+
+.orders-ask td {
+	color: rgb(239, 83, 80);
+	font-size: 9pt;
+}
+
+.orders-bid td {
+	color: rgb(38, 166, 154);
+	font-size: 9pt;
+}
+
+.orders-last-trade td {
+	color: #e5e5e5;
+	font-size: 9pt;
 }

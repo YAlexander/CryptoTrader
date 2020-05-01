@@ -55,48 +55,159 @@
 		<div class="row">
 			<div class="col-12 justify-content-center align-items-center">
 				<label class="checkbox-inline toggle-box">
-					<input type="checkbox" data-toggle="toggle" data-on="Trading" data-off="Simulation" data-size="mini">
+					<input type="checkbox" data-toggle="toggle" data-on="TRADING" data-off="SIMULATION" data-size="mini">
 				</label>
 				<label class="checkbox-inline toggle-box">
-					<input type="checkbox" data-toggle="toggle" data-off="Manual" data-on="Robo" data-size="mini">
+					<input type="checkbox" data-toggle="toggle" data-off="MANUAL" data-on="ROBO" data-size="mini">
 				</label>
 			</div>
 		</div>
-		<div class="row">
-			<div class="col-12 justify-content-center align-items-center balance">
-				<table class="balance">
-					<tr>
-						<th>BTC:</th>
-						<th>&nbsp;</th>
-						<th class="splitter">&nbsp;</th>
-						<th>USDT:</th>
-						<th>&nbsp;</th>
-					</tr>
-					<tr>
-						<td>Available:</td>
-						<td>10</td>
-						<td class="splitter">&nbsp;</td>
-						<td>Available:</td>
-						<td>20</td>
-					</tr>
-					<tr>
-						<td>Locked:</td>
-						<td>10</td>
-						<td class="splitter">&nbsp;</td>
-						<td>Locked:</td>
-						<td>20</td>
-					</tr>
-					<tr>
-						<td class="summary"><strong>Total:</strong></td>
-						<td class="summary">10</td>
-						<td class="splitter summary">&nbsp;</td>
-						<td class="summary"><strong>Total:</strong></td>
-						<td class="summary">20</td>
-					</tr>
-				</table>
 
+		<div class="row order-book">
+			<div class="col-12">
+				<table id="orders-book">
+					<tr>
+						<th>
+							Price (USDT)
+						</th>
+						<th>Amount (BTC)</th>
+						<th>Total</th>
+					</tr>
+					<tr class="orders-ask">
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+					</tr>
+					<tr class="orders-ask">
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+					</tr>
+					<tr class="orders-ask">
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+					</tr>
+					<tr class="orders-last-trade">
+						<td>&nbsp;</td>
+						<td>2</td>
+						<td>&nbsp;</td>
+					</tr>
+					<tr class="orders-bid">
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+					</tr>
+					<tr class="orders-bid">
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+					</tr>
+					<tr class="orders-bid">
+						<td>1</td>
+						<td>2</td>
+						<td>3</td>
+					</tr>
+
+				</table>
 			</div>
 		</div>
+		<div class="row position-block">
+			<div class="col-12">
+				<form>
+					<div class="row select-position">
+						<div class="col-12">
+							<button type="button" class="position active ask"><img src="~/img/bear.png" /></button>
+							<label class="inner-text">POSITION</label>
+							<button type="button" class="position bid"><img src="~/img/bull-gray.png" /></button>
+						</div>
+					</div>
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<select id="order-type" class="form-control">
+								<option>Limit</option>
+								<option>Market</option>
+							</select>
+						</div>
+						<div class="form-group col-md-6">
+							<select id="order-lifetime" class="form-control">
+								<option>Fill Or Kill</option>
+							</select>
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<input type="number" class="form-control" placeholder="Price">
+						</div>
+						<div class="form-group col-md-6">
+							<input type="number" class="form-control" placeholder="Amount">
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group col-md-6">
+							<input type="number" class="form-control" placeholder="Stop Loss">
+						</div>
+						<div class="form-group col-md-6">
+							<input type="number" class="form-control" placeholder="Take Profit">
+						</div>
+					</div>
+
+					<div class="form-row">
+						<div class="form-group">
+							<div class="form-check">
+								<input class="form-check-input" type="checkbox" id="trailing-stop-select">
+								<label class="form-check-label" for="trailing-stop-select">
+									Use Trailing Stop
+								</label>
+							</div>
+						</div>
+						<div class="form-group col-md-6">
+							<a href="">Related orders</a>
+						</div>
+					</div>
+
+					<button type="button" class="btn btn-primary">OPEN</button>
+					<button type="button" class="btn btn-primary">ADD</button>
+					<button type="button" class="btn btn-primary">REDUCE</button>
+				</form>
+			</div>
+		</div>
+	<div class="row">
+		<div class="col-12 justify-content-center align-items-center balance">
+			<table class="balance">
+				<tr>
+					<th>BTC:</th>
+					<th>&nbsp;</th>
+					<th class="splitter">&nbsp;</th>
+					<th>USDT:</th>
+					<th>&nbsp;</th>
+				</tr>
+				<tr>
+					<td>Available:</td>
+					<td>10</td>
+					<td class="splitter">&nbsp;</td>
+					<td>Available:</td>
+					<td>20</td>
+				</tr>
+				<tr>
+					<td>Locked:</td>
+					<td>10</td>
+					<td class="splitter">&nbsp;</td>
+					<td>Locked:</td>
+					<td>20</td>
+				</tr>
+				<tr>
+					<td class="summary"><strong>Total:</strong></td>
+					<td class="summary">10</td>
+					<td class="splitter summary">&nbsp;</td>
+					<td class="summary"><strong>Total:</strong></td>
+					<td class="summary">20</td>
+				</tr>
+			</table>
+		</div>
+	</div>
 
 		<div clas="row advice-block">
 			<div class="col-12 advice-block">
