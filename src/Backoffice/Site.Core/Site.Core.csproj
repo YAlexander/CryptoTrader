@@ -20,4 +20,9 @@
       <EmbeddedResource Include="Reports\Templates\DealsReport.xslt" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\..\Backend\Abstractions\Abstractions.csproj" />
+      <ProjectReference Include="..\..\TechanCore\TechanCore.csproj" />
+    </ItemGroup>
+
 </Project>

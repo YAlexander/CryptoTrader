@@ -3,9 +3,9 @@ using TechanCore.Analytics.Result;
 
 namespace TechanCore.Analytics
 {
-	public class SharpeRatio : IAnalyzer<SharpeRatioOptions, SharpeRatioResult>
+	public class SharpeRatio : IAnalyzer<SharpeRatioOptions, DefaultAnalyticsResult>
 	{
-		public SharpeRatioResult Get(SharpeRatioOptions options)
+		public DefaultAnalyticsResult Get(SharpeRatioOptions options)
 		{
 			throw new System.NotImplementedException();
 		}
