@@ -12,6 +12,7 @@ using MyNatsClient.Rx;
 using Orleans;
 using Persistence.Entities;
 using Persistence.Helpers;
+using TechanCore;
 
 namespace Silo
 {
@@ -19,9 +20,9 @@ namespace Silo
 	{
 		private IOptions<AppSettings> _settings;
 		private readonly ILogger<CandlesMonitor> _logger;
-		private readonly IClusterClient _orleansClient;
+		private readonly OrleansClient _orleansClient;
 
-		public CandlesMonitor(IOptions<AppSettings> settings, ILogger<CandlesMonitor> logger, IClusterClient orleansClient)
+		public CandlesMonitor(IOptions<AppSettings> settings, ILogger<CandlesMonitor> logger, OrleansClient orleansClient)
 		{
 			_settings = settings;
 			_logger = logger;
@@ -32,40 +33,38 @@ namespace Silo
 		{
 			while (!stoppingToken.IsCancellationRequested)
 			{
-				try
+				using (IClusterClient orleansClient = _orleansClient.Client)
 				{
-					if (!_orleansClient.IsInitialized)
+					try
 					{
-						await _orleansClient.Connect();
-					}
-					
-					using (NatsClient client = new NatsClient(new ConnectionInfo(_settings.Value.NatsHost, _settings.Value.NatsPort)))
-					{
-						await client.ConnectAsync();
-
-						ISubscription subscription = await client.SubAsync(nameof(Candle), stream => stream.SubscribeSafe(msg =>
+						using (NatsClient client = new NatsClient(new ConnectionInfo(_settings.Value.NatsHost, _settings.Value.NatsPort)))
 						{
-							string payload = msg.GetPayloadAsString();
-							Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
+							await client.ConnectAsync();
 
-							GrainKeyExtension key = candle.ToExtendedKey();
-							
-							ICandleGrain grain = _orleansClient.GetGrain<ICandleGrain>((long)key.Exchange, key.ToString());
-							grain.Set(candle);
-						}));
+							ISubscription subscription = await client.SubAsync(nameof(Candle), stream => stream.SubscribeSafe(async msg =>
+							{
+								string payload = msg.GetPayloadAsString();
+								Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
 
-						while (!stoppingToken.IsCancellationRequested)
-						{
-							await Task.Delay(_settings.Value.DefaultTimeoutSeconds, stoppingToken);
+								GrainKeyExtension key = candle.ToExtendedKey();
+
+								ICandleGrain grain = orleansClient.GetGrain<ICandleGrain>((long)key.Exchange, key.ToString());
+								await grain.Set((ICandle)candle);
+							}));
+
+							while (!stoppingToken.IsCancellationRequested)
+							{
+								await Task.Delay(_settings.Value.DefaultTimeoutSeconds, stoppingToken);
+							}
+
+							await client.UnsubAsync(subscription);
+							client.Disconnect();
 						}
-
-						await client.UnsubAsync(subscription);
-						client.Disconnect();
 					}
-				}
-				catch (Exception ex)
-				{
-					_logger.LogError($"Worker failed: {ex.Message}", ex);
+					catch (Exception ex)
+					{
+						_logger.LogError($"Worker failed: {ex.Message}", ex);
+					}
 				}
 			}
 		}

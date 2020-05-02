@@ -12,12 +12,12 @@ namespace Persistence.Helpers
 	{
 		public static (IStrategyOption options, IStrategyOption defaultOptions) Decode(IStrategyInfo info)
 		{
-			if (!Options.ContainsKey(info.Class))
+			if (!Options.ContainsKey(info.StrategyClass))
 			{
 				throw new Exception($"Strategy {info.StrategyName} is not supported");
 			}	
 			
-			return Options[info.Class](info.Options, info.DefaultOptions);
+			return Options[info.StrategyClass](info.Options, info.DefaultOptions);
 		}
 
 		private static readonly Dictionary<string, Func<string, string, (IStrategyOption options, IStrategyOption defaultOptions)>> Options = new Dictionary<string, Func<string, string, (IStrategyOption options, IStrategyOption defaultOptions)>>

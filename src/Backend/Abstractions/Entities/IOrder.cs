@@ -8,7 +8,8 @@ namespace Abstractions.Entities
 	{
 		public Guid Id { get; set; }
 		long? ParentOrderId { get; set; }
-		long DealId { get; set; }
+		
+		Guid? DealId { get; set; }
 		
 		string ExchangeOrderId { get; set; }
 		

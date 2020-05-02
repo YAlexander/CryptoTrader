@@ -9,7 +9,8 @@ namespace Abstractions
 {
 	public interface ITradingContext
 	{
-		Guid? DealId { get; set; }
+		TradingMode Mode { get; set; }
+		IDeal Deal { get; set; }
 		
 		Exchanges Exchange { get; set; }
 
@@ -36,11 +37,15 @@ namespace Abstractions
 		DateTime? DisableTradingTill { get; set; }		
 		
 		bool CreateReverseOrder { get; set; }
-
-		// TODO: Add Deal and Orders entity
 		
-		List<IBalance> Funds { get; set; }
+		IBalance[] Funds { get; set; }
 		
 		TradingAdvices TradingAdvice { get; set; }
+		
+		public decimal? LastTrade { get; set; }
+		
+		List<IOrder> Orders { get; }
+		
+		decimal? DailyRiskLimit { get; set; }
 	}
 }

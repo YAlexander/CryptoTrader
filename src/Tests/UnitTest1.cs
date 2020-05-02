@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Abstractions.Enums;
-using Core.Helpers;
 using NUnit.Framework;
 using Persistence.Entities;
 using TechanCore.Enums;
+using TechanCore.Helpers;
 using TechanCore.Indicators;
 using TechanCore.Indicators.Options;
 

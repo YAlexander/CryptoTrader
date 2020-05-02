@@ -1,0 +1,28 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netcoreapp5.0</TargetFramework>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Folder Include="Reports\Templates" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <PackageReference Include="itext7" Version="7.1.11" />
+      <PackageReference Include="itext7.pdfhtml" Version="3.0.0" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0-preview.3.20215.2" />
+      <PackageReference Include="ZXing.Net" Version="0.16.5" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Reports\Templates\DealsReport.xslt" />
+      <EmbeddedResource Include="Reports\Templates\DealsReport.xslt" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\..\Backend\Abstractions\Abstractions.csproj" />
+      <ProjectReference Include="..\..\TechanCore\TechanCore.csproj" />
+    </ItemGroup>
+
+</Project>

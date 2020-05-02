@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Abstractions;
 using Abstractions.Entities;
 using Common;
 using Persistence.Entities;
@@ -41,7 +42,16 @@ namespace Persistence.Helpers
                 Exchange = order.Exchange,
                 Asset1 = order.Asset1,
                 Asset2 = order.Asset2,
-                Id = order.Id
+            };
+        }
+        
+        public static GrainKeyExtension ToExtendedKey(this ITradingContext context)
+        {
+            return new GrainKeyExtension
+            {
+                Exchange = context.Exchange,
+                Asset1 = context.TradingPair.asset1,
+                Asset2 = context.TradingPair.asset2,
             };
         }
     }

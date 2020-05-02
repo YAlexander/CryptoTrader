@@ -1,8 +1,8 @@
 ﻿namespace Abstractions.Enums
 {
-    public enum OrderSides
-    {
-        ASK,
-        BID
-    }
+	public enum OrderSides
+	{
+		ASK,
+		BID
+	}
 }

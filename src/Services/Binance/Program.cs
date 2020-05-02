@@ -27,8 +27,8 @@ namespace Binance
                     services.Configure<AppSettings>(configuration.GetSection(nameof(AppSettings)));
                     services.Configure<DatabaseOptions>(configuration.GetSection($"{nameof(AppSettings)}:{nameof(DatabaseOptions)}"));
                     
-                    services.AddSingleton<OrleansClient>();
-                    services.AddSingleton(_ => _.GetService<OrleansClient>().Client);
+                    //services.AddSingleton<OrleansClient>();
+                    //services.AddSingleton(_ => _.GetService<OrleansClient>().Client);
 
                     services.AddTransient<IExchangeSettingsManager, ExchangeSettingsManager>();
                     services.AddTransient<ISettingsProcessor, ExchangeSettingsProcessor>();
@@ -36,7 +36,7 @@ namespace Binance
                     services.AddTransient<IExchangeOrderProcessor, BinanceOrderProcessor>();
                     services.AddTransient<ICandlesProcessor, CandlesProcessor>();
 
-                    services.AddSingleton<IHostedService>(_ => _.GetService<OrleansClient>());
+                    //services.AddSingleton<IHostedService>(_ => _.GetService<OrleansClient>());
 
                     services.AddHostedService<CandlesWorker>();
                     //services.AddHostedService<TradesWorker>();
