@@ -24,19 +24,19 @@ namespace TechanCore.Strategies
 			{
 				if (macd.Macd[i] - macd.Signal[i] < 0 && stoch.K[i] > 70 && stoch.K[i] < stoch.D[i])
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else if (macd.Macd[i] - macd.Signal[i] > 0 && stoch.K[i] < 30 && stoch.K[i] > stoch.D[i])
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public StochRsiMacdStrategy(StochRsiMacdStrategyOptions options) : base(options)

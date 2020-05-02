@@ -25,23 +25,23 @@ namespace TechanCore.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else if (ao[i] > 0 && ao[i - 1] < 0 && smaShort[i] > smaLong[i] || ao[i] > 0 && smaShort[i] > smaLong[i] && smaShort[i - 1] < smaLong[i - 1])
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else if (smaShort[i] < smaLong[i] && smaShort[i - 1] > smaLong[i - 1])
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public AwesomeSmaStrategy(AwesomeSmaStrategyOptions options) : base(options)

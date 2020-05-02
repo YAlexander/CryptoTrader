@@ -29,23 +29,23 @@ namespace TechanCore.Strategies
 				// TODO: Replace with ? period
 				if (i < 25)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else if (slowMa[i] < sma[i])
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else if (macd.Hist[i] > 0 && macd.Hist[i - 1] < 0 && macd.Macd[i] > 0 && fastMa[i] > slowMa[i] && closes[i - 26] > sma[i])
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public MacdSmaStrategy(MacdSmaStrategyOptions options) : base(options)

@@ -23,23 +23,23 @@ namespace TechanCore.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else if (emaShort[i] < emaLong[i] && emaShort[i - 1] > emaLong[i])
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else if (emaShort[i] > emaLong[i] && emaShort[i - 1] < emaLong[i])
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public EmaCrossStrategy(EmaCrossStrategyOptions options) : base(options)

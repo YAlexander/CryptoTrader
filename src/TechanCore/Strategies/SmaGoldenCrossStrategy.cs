@@ -26,23 +26,23 @@ namespace TechanCore.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else if (crossUnder[i])
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else if (crossOver[i])
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public SmaGoldenCrossStrategy(EmptyStrategyOptions options) : base(options)

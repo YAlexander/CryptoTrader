@@ -26,26 +26,26 @@ namespace TechanCore.Strategies
 			{
 				if (i < 1)
 				{
-					result.Add((source[i], TradingAdvices.HOLD));
+					Result.Add((source[i], TradingAdvices.HOLD));
 				}
 				else
 				{
 					if (source[i] .Close> sma[i] && stoch.K[i] > 70 && rsi[i] < 20 && stoch.K[i] > stoch.D[i])
 					{
-						result.Add((source[i], TradingAdvices.BUY));
+						Result.Add((source[i], TradingAdvices.BUY));
 					}
 					else if (source[i].Close < sma[i] && stoch.K[i] > 70 && rsi[i] > 80 && stoch.K[i] < stoch.D[i])
 					{
-						result.Add((source[i], TradingAdvices.SELL));
+						Result.Add((source[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((source[i], TradingAdvices.HOLD));
+						Result.Add((source[i], TradingAdvices.HOLD));
 					}
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public SmaStochRsiStrategy(SmaStochRsiStrategyOptions options) : base(options)

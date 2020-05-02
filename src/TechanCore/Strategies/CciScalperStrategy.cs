@@ -26,19 +26,19 @@ namespace TechanCore.Strategies
 			{
 				if (cci[i] < -100 && emaFast[i] > emaNormal[i] && emaFast[i] > emaSlow[i])
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else if (cci[i] > 100 && emaFast[i] < emaNormal[i] && emaFast[i] < emaSlow[i])
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public CciScalperStrategy(CciScalperStrategyOptions options) : base(options)

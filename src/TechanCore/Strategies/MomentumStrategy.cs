@@ -27,19 +27,19 @@ namespace TechanCore.Strategies
 			{
 				if (rsi[i] < 30 && mom[i] > 0 && smaFast[i] > smaSlow[i] && closes[i] > smaSlow[i] && closes[i] > smaFast[i])
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.BUY));
+					Result.Add((candles.ElementAt(i), TradingAdvices.BUY));
 				}
 				else if (rsi[i] > 70 && mom[i] < 0 && smaFast[i] < smaSlow[i] && closes[i] < smaSlow[i] && closes[i] < smaFast[i])
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.SELL));
+					Result.Add((candles.ElementAt(i), TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public MomentumStrategy(MomentumStrategyOptions options) : base(options)

@@ -25,26 +25,26 @@ namespace TechanCore.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else
 				{
 					if (sma6[i] > sma150[i] && sma6[i] > sma365[i] && sma25[i] > sma150[i] && sma25[i] > sma365[i] && (sma6[i - 1] < sma150[i] || sma6[i - 1] < sma365[i] || sma25[i - 1] < sma150[i] || sma25[i - 1] < sma365[i]))
 					{
-						result.Add((candles[i], TradingAdvices.BUY));
+						Result.Add((candles[i], TradingAdvices.BUY));
 					}
 					if (sma6[i] < sma150[i] && sma6[i] < sma365[i] && sma25[i] < sma150[i] && sma25[i] < sma365[i] && (sma6[i - 1] > sma150[i] || sma6[i - 1] > sma365[i] || sma25[i - 1] > sma150[i] || sma25[i - 1] > sma365[i]))
 					{
-						result.Add((candles[i], TradingAdvices.SELL));
+						Result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((candles[i], TradingAdvices.HOLD));
+						Result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public Base150Strategy(Base150StrategyOptions options) : base(options)

@@ -27,24 +27,24 @@ namespace TechanCore.Strategies
 
 					if (current > previous && previous > prior)
 					{
-						result.Add((candles[i], TradingAdvices.BUY));
+						Result.Add((candles[i], TradingAdvices.BUY));
 					}
 					else if (current < previous)
 					{
-						result.Add((candles[i], TradingAdvices.SELL));
+						Result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((candles[i], TradingAdvices.HOLD));
+						Result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public SimpleBearBullStrategy(EmptyStrategyOptions options) : base(options)

@@ -29,26 +29,26 @@ namespace TechanCore.Strategies
 			{
 				if (i < 1)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else if (smaFastHigh[i] > smaNormalHigh[i] 
 						&& rsi[i] > 65
 						&& Math.Abs(opens[i - 1] - closes[i - 1]) > 0 
 						&& Math.Abs(opens[i] - closes[i]) / Math.Abs(opens[i - 1] - closes[i - 1]) < 2)
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else if (smaFastHigh[i] < smaSlowLow[i] && rsi[i] < 35)
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public DoubleVolatilityStrategy(DoubleVolatilityStrategyOptions options) : base(options)

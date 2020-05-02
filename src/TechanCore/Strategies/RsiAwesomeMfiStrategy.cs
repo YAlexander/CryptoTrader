@@ -24,19 +24,19 @@ namespace TechanCore.Strategies
 			{
 				if (mfi[i] < 30 && rsi[i] < 45 && ao[i] > 0)
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else if (mfi[i] > 30 && rsi[i] > 45 && ao[i] < 0)
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public RsiAwesomeMfiStrategy(RsiAwesomeMfiStrategyOptions options) : base(options)

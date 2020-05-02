@@ -52,7 +52,7 @@ namespace TechanCore.Strategies
 			{
 				if (i < 1)
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
 				}
 				else
 				{
@@ -62,23 +62,23 @@ namespace TechanCore.Strategies
 						fastMa[i] > bb.MiddleBand[i] &&
 						fastMa[i - 1] < bb.MiddleBand[i])
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.BUY));
+						Result.Add((candles.ElementAt(i), TradingAdvices.BUY));
 					}
 					else if (closes[i] < bb.MiddleBand[i] && // Closed above the bollinger band
 						Math.Abs(ao[i]) == 2 &&
 						fastMa[i] < bb.MiddleBand[i] &&
 						fastMa[i - 1] > bb.MiddleBand[i])
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.SELL));
+						Result.Add((candles.ElementAt(i), TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+						Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
 					}
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public BollingerAwesomeMacdStrategy(BollingerAwesomeMacdStrategyOptions options) : base(options)

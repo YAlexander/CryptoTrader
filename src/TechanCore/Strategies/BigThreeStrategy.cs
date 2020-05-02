@@ -25,7 +25,7 @@ namespace TechanCore.Strategies
 			{
 				if (i < 2)
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
 				}
 				else
 				{
@@ -48,20 +48,20 @@ namespace TechanCore.Strategies
 
 					if (lastIsGreen && previousIsRed && beforeIsGreen && allAboveSma && sma20[i] > sma40[i] && sma20[i] > sma80[i])
 					{
-						result.Add((candles[i], TradingAdvices.BUY));
+						Result.Add((candles[i], TradingAdvices.BUY));
 					}
 					else if (hitsAnSma)
 					{
-						result.Add((candles[i], TradingAdvices.SELL));
+						Result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((candles[i], TradingAdvices.HOLD));
+						Result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public BigThreeStrategy(BigTreeStrategyOptions options) : base(options)

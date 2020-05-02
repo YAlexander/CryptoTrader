@@ -31,25 +31,25 @@ namespace TechanCore.Strategies
 
 				if (i == 0)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else if (startRsi - rsi[i] > 10)
 				{
 					startRsi = 0;
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else if (smaFast[i] > smaSlow[i] && smaFast[i - 1] < smaSlow[i - 1] && rsi[i] <= 65)
 				{
 					startRsi = rsi[i].Value;
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public RsiSmaCrossoverStrategy(RsiSmaCrossoverStrategyOptions options) : base(options)

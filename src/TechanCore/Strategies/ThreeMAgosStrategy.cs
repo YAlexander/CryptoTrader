@@ -44,23 +44,23 @@ namespace TechanCore.Strategies
 			{
 				if (i < 1)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else if (bars[i] == Bars.BLUE && bars[i - 1] == Bars.RED)
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else if (bars[i] == Bars.BLUE && bars[i - 1] == Bars.GREEN)
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public ThreeMAgosStrategy(ThreeMAgosStrategyOptions options) : base(options)

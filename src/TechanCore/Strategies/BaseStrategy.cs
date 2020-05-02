@@ -17,7 +17,7 @@ namespace TechanCore.Strategies
 		
 		public abstract int MinNumberOfCandles { get; }
 
-		protected List<(ICandle, TradingAdvices)> result { get; } = new List<(ICandle, TradingAdvices)>();
+		protected List<(ICandle, TradingAdvices)> Result { get; } = new List<(ICandle, TradingAdvices)>();
 
 		public T GetOptions { get; }
 

@@ -35,7 +35,7 @@ namespace TechanCore.Strategies
 					fractalPrice.Add(0);
 					fractalAverage.Add(0);
 					fractalTrend.Add(false);
-					result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
 				}
 				else
 				{
@@ -61,20 +61,20 @@ namespace TechanCore.Strategies
 
 					if (tradeExit)
 					{
-						result.Add((candles[i], TradingAdvices.SELL));
+						Result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else if (tradeEntry && ao[i] > 0)
 					{
-						result.Add((candles[i], TradingAdvices.BUY));
+						Result.Add((candles[i], TradingAdvices.BUY));
 					}
 					else
 					{
-						result.Add((candles[i], TradingAdvices.HOLD));
+						Result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public FractalsStrategy(FractalsStrategyOptions options) : base(options)

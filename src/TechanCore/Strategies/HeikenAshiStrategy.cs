@@ -29,7 +29,7 @@ namespace TechanCore.Strategies
 			{
 				if (heikenSmoothed[i] == null || heikenSmoothed[i - 1] == null)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else
 				{
@@ -37,7 +37,7 @@ namespace TechanCore.Strategies
 				}
 			}
 
-			return result;
+			return Result;
 		}
 	}
 }

@@ -29,19 +29,19 @@ namespace TechanCore.Strategies
 			{
 				if (crossOver[i])
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 				else if (crossUnder[i])
 				{
-					result.Add((candles[i], TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.SELL));
 				}
 				else
 				{
-					result.Add((candles[i], TradingAdvices.BUY));
+					Result.Add((candles[i], TradingAdvices.BUY));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public QuickSmaStrategy(QuickSmaStrategyOptions options) : base(options)

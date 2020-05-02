@@ -25,23 +25,23 @@ namespace TechanCore.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
 				}
 				else if (ema[i] > smaSlow[i] && ema[i - 1] < smaSlow[i - 1])
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.BUY)); // A cross of the EMA and long SMA is a buy signal.
+					Result.Add((candles.ElementAt(i), TradingAdvices.BUY)); // A cross of the EMA and long SMA is a buy signal.
 				}
 				else if (ema[i] < smaSlow[i] && ema[i - 1] > smaSlow[i - 1] || ema[i] < smaFast[i] && ema[i - 1] > smaFast[i - 1])
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.SELL)); // As soon as our EMA crosses below an SMA its a sell signal.
+					Result.Add((candles.ElementAt(i), TradingAdvices.SELL)); // As soon as our EMA crosses below an SMA its a sell signal.
 				}
 				else
 				{
-					result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public TripleMaStrategy(TripleMaStrategyOptions options) : base(options)

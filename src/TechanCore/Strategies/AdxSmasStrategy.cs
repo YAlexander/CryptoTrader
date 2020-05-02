@@ -24,7 +24,7 @@ namespace TechanCore.Strategies
 			{
 				if (i == 0)
 				{
-					result.Add((candles[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else
 				{
@@ -33,20 +33,20 @@ namespace TechanCore.Strategies
 
 					if (adx[i] > 25 && fastCross == 1)
 					{
-						result.Add((candles[i], TradingAdvices.BUY));
+						Result.Add((candles[i], TradingAdvices.BUY));
 					}
 					else if (adx[i] < 25 && slowCross == 1)
 					{
-						result.Add((candles[i], TradingAdvices.SELL));
+						Result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						result.Add((candles[i], TradingAdvices.HOLD));
+						Result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 			}
 
-			return result;
+			return Result;
 		}
 
 		public AdxSmasStrategy(AdxSmasStrategyOptions options) : base(options)
