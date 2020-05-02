@@ -50,3 +50,7 @@ src/Common/obj/
 src/Common/bin/
 src/Backoffice/Site.Core/obj/
 src/Backoffice/Site.Core/bin/
+src/Backend/Infrastructure/TelegramConnector/obj/
+src/Backend/Infrastructure/TelegramConnector/bin/
+src/Backend/Infrastructure/MailGunConnector/obj/
+src/Backend/Infrastructure/MailGunConnector/bin/
