@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 			MomentumStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] smaFast = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] smaSlow = candles.Sma(options.SlowSmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] mom = candles.Momentum(options.MomentumPeriod, CandleVariables.CLOSE).Result;

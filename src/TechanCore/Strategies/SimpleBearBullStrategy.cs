@@ -15,7 +15,6 @@ namespace TechanCore.Strategies
 		{
 			Validate(candles, null);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 			decimal[] closes = candles.Close();
 
 			for (int i = 0; i < candles.Length; i++)

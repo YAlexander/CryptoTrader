@@ -18,8 +18,6 @@ namespace TechanCore.Strategies
 			DoubleVolatilityStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] smaFastHigh = candles.Sma(options.FastSmaPeriod, CandleVariables.HIGH).Result;
 			decimal?[] smaNormalHigh = candles.Sma(options.NormalSmaPeriod, CandleVariables.HIGH).Result;
 			decimal?[] smaSlowLow = candles.Sma(options.SlowSmaPeriod, CandleVariables.LOW).Result;

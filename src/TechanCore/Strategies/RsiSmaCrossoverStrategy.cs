@@ -16,8 +16,6 @@ namespace TechanCore.Strategies
 			RsiSmaCrossoverStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] smaFast = candles.Sma(options.SmaFastPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] smaSlow = candles.Sma(options.SmaSlowPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;

@@ -18,8 +18,6 @@ namespace TechanCore.Strategies
 			FractalsStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			// Our lists to hold our values
 			List<decimal?> fractalPrice = new List<decimal?>();
 			List<decimal?> fractalAverage = new List<decimal?>();

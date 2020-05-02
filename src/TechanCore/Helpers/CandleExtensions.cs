@@ -91,6 +91,7 @@ namespace TechanCore.Helpers
 				}
 				else
 				{
+					// TODO: Eliminate nullable values below. If one of the values is null, the candle also equals null
 					ashiCandles[index].Time = source[index].Time;
 					ashiCandles[index].Volume = source[index].Volume;
 					ashiCandles[index].Trades = source[index].Trades;

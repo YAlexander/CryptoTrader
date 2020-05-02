@@ -19,8 +19,6 @@ namespace TechanCore.Strategies
 			MacdCrossStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			MacdIndicatorResult macd = candles.Macd(options.FastPeriod, options.SlowPeriod, options.SignalPeriod);
 			
 			for (int i = 0; i < candles.Length; i++)

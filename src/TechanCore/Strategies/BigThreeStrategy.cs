@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 			BigTreeStrategyOptions options = GetOptions;
 			Validate(candles, default);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] sma20 = candles.Sma(options.VeryFastSmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] sma40 = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] sma80 = candles.Sma(options.SlowSmaPeriod, CandleVariables.CLOSE).Result;

@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 			StochRsiMacdStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			MacdIndicatorResult macd = candles.Macd(options.MacdFastSmaPeriod, options.MacdSlowSmaPeriod, options.MacdSignalPeriod);
 			StochasticOscillatorResult stoch = candles.StochasticOscillator(options.StochPeriod, options.StochEmaPeriod);
 

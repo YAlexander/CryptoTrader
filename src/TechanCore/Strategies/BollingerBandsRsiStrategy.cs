@@ -18,8 +18,6 @@ namespace TechanCore.Strategies
 			BollingerBandsRsiStrategyOptions options = GetOptions;
 			Validate(candles, default);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			List<decimal> currentPrices = candles.Select(x => x.Close).ToList();
 			BollingerBandsResult bbands = candles.BollingerBands(options.BollingerPeriod, options.BollingerDeviationUp, options.BollingerDeviationDown);
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;

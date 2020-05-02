@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
+using TechanCore.Indicators.Results;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
@@ -18,10 +19,8 @@ namespace TechanCore.Strategies
 			BollingerAwesomeMacdStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			List<decimal> closes = candles.Select(x => x.Close).ToList();
-			var bb = candles.BollingerBands(options.BollingerPeriod, options.BollingerDeviationUp, options.BollingerDeviationDown);
+			BollingerBandsResult bb = candles.BollingerBands(options.BollingerPeriod, options.BollingerDeviationUp, options.BollingerDeviationDown);
 			decimal?[] fastMa = candles.Ema(options.EmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] hl1 = candles.Select(x => (x.High + x.Low) / 2).ToList().Sma(options.SmaFastPeriod).Result;
 			decimal?[] hl2 = candles.Select(x => (x.High + x.Low) / 2).ToList().Sma(options.SmaSlowPeriod).Result;

@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 			ThreeMAgosStrategyOptions options = GetOptions;
 			Validate(candles, options);
 			
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] sma = candles.Sma(options.SmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] ema = candles.Ema(options.EmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] wma = candles.Wma(options.WmaPeriod, CandleVariables.CLOSE).Result;

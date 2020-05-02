@@ -16,8 +16,6 @@ namespace TechanCore.Strategies
 			BreakoutMaOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] sma = candles.Sma(options.SmaPeriod,CandleVariables.CLOSE).Result;
 			decimal?[] ema = candles.Ema(options.EmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] adx = candles.Adx(options.AdxPeriod).Adx;

@@ -18,8 +18,6 @@ namespace TechanCore.Strategies
 			BullishEngulfingOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] rsi = candles.Rsi(11).Result;
 			decimal[] close = candles.Close();
 			decimal[] high = candles.High();

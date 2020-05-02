@@ -18,8 +18,6 @@ namespace TechanCore.Strategies
 			EmaAdxMacdOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] emaFast = candles.Ema(options.FastEmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] emaSlow = candles.Ema(options.SlowEmaPeriod, CandleVariables.CLOSE).Result;
 			AdxResult adx = candles.Adx(options.AdxEmaPeriod);

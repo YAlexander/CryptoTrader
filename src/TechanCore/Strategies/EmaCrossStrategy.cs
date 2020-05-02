@@ -16,8 +16,6 @@ namespace TechanCore.Strategies
 			EmaCrossStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] emaShort = candles.Ema(options.FastEmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] emaLong = candles.Ema(options.SlowEmaPeriod, CandleVariables.CLOSE).Result;
 

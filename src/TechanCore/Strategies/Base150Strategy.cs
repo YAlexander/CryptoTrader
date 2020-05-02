@@ -16,8 +16,6 @@ namespace TechanCore.Strategies
 			Base150StrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] sma6 = candles.Sma(options.VeryFastSmaPeriod, options.PriceToUse).Result;
 			decimal?[] sma25 = candles.Sma(options.FastSmaPeriod, options.PriceToUse).Result;
 			decimal?[] sma150 = candles.Sma(options.SlowSmaPeriod, options.PriceToUse).Result;

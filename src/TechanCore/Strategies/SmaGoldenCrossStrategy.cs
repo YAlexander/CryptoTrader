@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 		{
 			Validate(candles, null);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] sma50 = candles.Sma(50, CandleVariables.CLOSE).Result;
 			decimal?[] sma200 = candles.Sma(200, CandleVariables.CLOSE).Result;
 			bool[] crossUnder = sma50.Crossunder(sma200).ToArray();

@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 			AwesomeSmaStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] ao = candles.AwesomeOscillator(options.AwesomeFastPeriod, options.AwesomeSlowPeriod).Result;
 			decimal?[] smaShort = candles.Sma(options.SmaFastPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] smaLong = candles.Sma(options.SmaSlowPeriod, CandleVariables.CLOSE).Result;

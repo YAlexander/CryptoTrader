@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 			RsiMacdStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			MacdIndicatorResult macd = candles.Macd(options.MacdFastSmaPeriod, options.MacdSlowSmaPeriod, options.MacdSignalPeriod);
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
 

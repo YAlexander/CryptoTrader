@@ -16,8 +16,6 @@ namespace TechanCore.Strategies
 			RsiAwesomeMfiStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
 			decimal?[] mfi = candles.Mfi(options.MfiPeriod).Result;
 			decimal?[] ao = candles.AwesomeOscillator(options.AwesomeFastPeriod, options.AwesomeSlowPeriod).Result;

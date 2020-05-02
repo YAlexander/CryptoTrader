@@ -16,7 +16,6 @@ namespace TechanCore.Strategies
 		{
 			MacdSmaStrategyOptions options = GetOptions;
 			Validate(candles, options);
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
 
 			var macd = candles.Macd(options.MacdFastPeriod, options.MacdSlowPeriod, options.MacdSignalPeriod);
 			decimal?[] fastMa = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;

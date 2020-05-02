@@ -18,8 +18,6 @@ namespace TechanCore.Strategies
 			SmaStochRsiStrategyOptions options = GetOptions;
 			Validate(source, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			StochasticOscillatorResult stoch = source.StochasticOscillator(options.StochPeriod, options.StochEmaPeriod);
 			decimal?[] sma = source.Close().Sma(options.SmaPeriod).Result;
 			decimal?[] rsi = source.Rsi(options.RsiPeriod).Result;

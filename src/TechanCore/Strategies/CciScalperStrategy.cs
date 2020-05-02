@@ -17,8 +17,6 @@ namespace TechanCore.Strategies
 			CciScalperStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] cci = candles.Cci(options.CciPeriod).Result;
 			decimal?[] emaFast = candles.Ema(options.FastEmaPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] emaNormal = candles.Ema(options.NormalEmaPeriod, CandleVariables.CLOSE).Result;

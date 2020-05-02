@@ -16,8 +16,6 @@ namespace TechanCore.Strategies
 			CciRsiOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			decimal?[] cci = candles.Cci(options.CciPeriod).Result;
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
 

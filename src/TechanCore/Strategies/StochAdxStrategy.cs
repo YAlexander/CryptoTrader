@@ -19,8 +19,6 @@ namespace TechanCore.Strategies
 			StochAdxStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			List<(ICandle, TradingAdvices)> result = new List<(ICandle, TradingAdvices)>();
-
 			StochasticOscillatorResult stoch = candles.StochasticOscillator(options.StochPeriod, options.StochEmaPeriod);
 			AdxResult adx = candles.Adx(options.AdxPeriod);
 			decimal?[] bearBull = candles.BearAndBull().Result;
