@@ -12,7 +12,7 @@ namespace TechanCore.Strategies
 		
 		public override int MinNumberOfCandles { get; } = 200;
 
-		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
+		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts(ICandle[] candles, IOrdersBook ordersBook = null)
 		{
 			MacdSmaStrategyOptions options = GetOptions;
 			Validate(candles, options);

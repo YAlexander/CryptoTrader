@@ -20,110 +20,110 @@ using TechanCore.Helpers;
 
 namespace Core.OrleansInfrastructure.Grains
 {
-    [StatelessWorker]
-    [ImplicitStreamSubscription(nameof(Candle))]
-    public class TradingGrain: Grain, ITradingGrain
-    {
-        private IStreamProvider _streamProvider; 
-        
-        public override async Task OnActivateAsync()
-        {
-            _streamProvider = GetStreamProvider(Constants.MessageStreamProvider);
-            IAsyncStream<Candle> stream = _streamProvider.GetStream<Candle>(this.GetPrimaryKey(), nameof(Candle));
-            await stream.SubscribeAsync(OnNextAsync);
-        }
+	[StatelessWorker]
+	[ImplicitStreamSubscription(nameof(Candle))]
+	public class TradingGrain : Grain, ITradingGrain
+	{
+		private IStreamProvider _streamProvider;
 
-        private async Task OnNextAsync(Candle item, StreamSequenceToken token = null)
-        {
-            ITradingContext context = await BuildContext(item.Exchange, item.Asset1, item.Asset2);
+		public override async Task OnActivateAsync()
+		{
+			_streamProvider = GetStreamProvider(Constants.MessageStreamProvider);
+			IAsyncStream<Candle> stream = _streamProvider.GetStream<Candle>(this.GetPrimaryKey(), nameof(Candle));
+			await stream.SubscribeAsync(OnNextAsync);
+		}
 
-            if (context != null)
-            {
-                IAsyncStream<TradingContext> stream = _streamProvider.GetStream<TradingContext>(this.GetPrimaryKey(), nameof(TradingContext));
-                await stream.OnNextAsync((TradingContext)context);
-            }
-        }
+		private async Task OnNextAsync(Candle item, StreamSequenceToken token = null)
+		{
+			ITradingContext context = await BuildContext(item.Exchange, item.Asset1, item.Asset2);
 
-        public Task OnCompletedAsync()
-        {
-            return Task.CompletedTask;
-        }
+			if (context != null)
+			{
+				IAsyncStream<TradingContext> stream = _streamProvider.GetStream<TradingContext>(this.GetPrimaryKey(), nameof(TradingContext));
+				await stream.OnNextAsync((TradingContext)context);
+			}
+		}
 
-        public Task OnErrorAsync(Exception ex)
-        {
-            return Task.CompletedTask;
-        }
+		public Task OnCompletedAsync()
+		{
+			return Task.CompletedTask;
+		}
 
-        private async Task<ITradingContext> BuildContext(Exchanges exchange, Assets asset1, Assets asset2)
-        {
-            GrainKeyExtension keyExtension = new GrainKeyExtension();
-            keyExtension.Exchange = exchange;
-            keyExtension.Asset1 = asset1;
-            keyExtension.Asset2 = asset2;
+		public Task OnErrorAsync(Exception ex)
+		{
+			return Task.CompletedTask;
+		}
 
-            ITradingContext context = new TradingContext();
-            context.Exchange = exchange;
-            context.TradingPair = (asset1, asset2);
+		private async Task<ITradingContext> BuildContext(Exchanges exchange, Assets asset1, Assets asset2)
+		{
+			GrainKeyExtension keyExtension = new GrainKeyExtension();
+			keyExtension.Exchange = exchange;
+			keyExtension.Asset1 = asset1;
+			keyExtension.Asset2 = asset2;
 
-            IStrategyGrain strategyInfoGrain = GrainFactory.GetGrain<IStrategyGrain>((int)exchange, keyExtension.ToString());
-            IStrategyInfo strategyInfo = await strategyInfoGrain.Get();
+			ITradingContext context = new TradingContext();
+			context.Exchange = exchange;
+			context.TradingPair = (asset1, asset2);
 
-            context.TimeFrame = (Timeframes) strategyInfo.TimeFrame;
-            
-            int numberOfCandles = strategyInfo.TimeFrame * context.Strategy.MinNumberOfCandles;
+			IStrategyGrain strategyInfoGrain = GrainFactory.GetGrain<IStrategyGrain>((int)exchange, keyExtension.ToString());
+			IStrategyInfo strategyInfo = await strategyInfoGrain.Get();
 
-            ICandleProcessingGrain candlesProcessingGrain = GrainFactory.GetGrain<ICandleProcessingGrain>((int)exchange, keyExtension.ToString());
-            IEnumerable<ICandle> candles = await candlesProcessingGrain.Get(numberOfCandles);
+			context.TimeFrame = (Timeframes)strategyInfo.TimeFrame;
 
-            context.Candles = candles.GroupCandles((Timeframes) strategyInfo.TimeFrame);
+			int numberOfCandles = strategyInfo.TimeFrame * context.Strategy.MinNumberOfCandles;
 
-            (IStrategyOption options, IStrategyOption defaultOptions) options = OptionsHelper.Decode(strategyInfo);
-            context.Strategy = StrategiesHelper.Get(strategyInfo.StrategyClass, options.options); 
+			ICandleProcessingGrain candlesProcessingGrain = GrainFactory.GetGrain<ICandleProcessingGrain>((int)exchange, keyExtension.ToString());
+			IEnumerable<ICandle> candles = await candlesProcessingGrain.Get(numberOfCandles);
 
-            context.TradingAdvice = context.Strategy.Forecast(context.Candles);
+			context.Candles = candles.GroupCandles((Timeframes)strategyInfo.TimeFrame);
 
-            if (context.TradingAdvice == TradingAdvices.HOLD)
-            {
-                return null;
-            }
-            
-            keyExtension = context.ToExtendedKey();
-            keyExtension.Id ??= Guid.NewGuid(); 
+			(IStrategyOption options, IStrategyOption defaultOptions) options = OptionsHelper.Decode(strategyInfo);
+			context.Strategy = StrategiesHelper.Get(strategyInfo.StrategyClass, options.options);
 
-            IDealGrain dealGrain = GrainFactory.GetGrain<IDealGrain>((long)context.Exchange, keyExtension.ToString());
-			
-            if (context.Deal == null)
-            { 
-                Deal deal = new Deal(); 
-                deal.Id = keyExtension.Id.Value; 
-                deal.Status = DealStatus.OPEN; 
-                deal.Exchange = context.Exchange; 
-                deal.Asset1 = context.TradingPair.asset1; 
-                deal.Asset2 = context.TradingPair.asset2; 
-                deal.Position = context.TradingAdvice == TradingAdvices.BUY ? DealPositions.LONG : DealPositions.SHORT;
-                
-                await dealGrain.CreateOrUpdate(deal);
-            }
+			context.TradingAdvice = context.Strategy.Forecast(context.Candles);
 
-            context.Deal = await dealGrain.Get();
-            
-            IBalanceProcessingGrain balanceGrain = GrainFactory.GetGrain<IBalanceProcessingGrain>((long)exchange);
-            IEnumerable<IBalance> balances = await balanceGrain.Get();
+			if (context.TradingAdvice == TradingAdvices.HOLD)
+			{
+				return null;
+			}
 
-            context.Funds = balances.ToArray();
+			keyExtension = context.ToExtendedKey();
+			keyExtension.Id ??= Guid.NewGuid();
 
-            ITradeProcessingGrain tradesGrain = GrainFactory.GetGrain<ITradeProcessingGrain>((long)keyExtension.Exchange);
-            context.LastTrade = await tradesGrain.Get(keyExtension.Asset1, keyExtension.Asset2);
+			IDealGrain dealGrain = GrainFactory.GetGrain<IDealGrain>((long)context.Exchange, keyExtension.ToString());
 
-            IRiskStrategy riskStrategy = RiskHelper.Get(strategyInfo.RiskManagerName, strategyInfo.RiskManagerOptions);
-            context = riskStrategy.Process(context, strategyInfo);
+			if (context.Deal == null)
+			{
+				Deal deal = new Deal();
+				deal.Id = keyExtension.Id.Value;
+				deal.Status = DealStatus.OPEN;
+				deal.Exchange = context.Exchange;
+				deal.Asset1 = context.TradingPair.asset1;
+				deal.Asset2 = context.TradingPair.asset2;
+				deal.Position = context.TradingAdvice == TradingAdvices.BUY ? DealPositions.LONG : DealPositions.SHORT;
 
-            return context;
-        }
+				await dealGrain.CreateOrUpdate(deal);
+			}
 
-        public Task<ITradingContext> GetContext(Exchanges exchange, Assets asset1, Assets asset2)
-        {
-            return BuildContext(exchange, asset1, asset2);
-        }
-    }
+			context.Deal = await dealGrain.Get();
+
+			IBalanceProcessingGrain balanceGrain = GrainFactory.GetGrain<IBalanceProcessingGrain>((long)exchange);
+			IEnumerable<IBalance> balances = await balanceGrain.Get();
+
+			context.Funds = balances.ToArray();
+
+			ITradeProcessingGrain tradesGrain = GrainFactory.GetGrain<ITradeProcessingGrain>((long)keyExtension.Exchange);
+			context.LastTrade = await tradesGrain.Get(keyExtension.Asset1, keyExtension.Asset2);
+
+			IRiskStrategy riskStrategy = RiskHelper.Get(strategyInfo.RiskManagerName, strategyInfo.RiskManagerOptions);
+			context = riskStrategy.Process(context, strategyInfo);
+
+			return context;
+		}
+
+		public Task<ITradingContext> GetContext(Exchanges exchange, Assets asset1, Assets asset2)
+		{
+			return BuildContext(exchange, asset1, asset2);
+		}
+	}
 }

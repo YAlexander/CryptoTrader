@@ -21,13 +21,13 @@ namespace TechanCore.Strategies
 
 		public T GetOptions { get; }
 
-		public virtual TradingAdvices Forecast (ICandle[] candles)
+		public virtual TradingAdvices Forecast (ICandle[] candles, IOrdersBook ordersBook = null)
 		{
-			IEnumerable<(ICandle candle, TradingAdvices forecast)> forecasts = AllForecasts(candles);
+			IEnumerable<(ICandle candle, TradingAdvices forecast)> forecasts = AllForecasts(candles, ordersBook);
 			return forecasts.Last().forecast;
 		}
 
-		protected abstract IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles);
+		protected abstract IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles, IOrdersBook ordersBook = null);
 
 		protected void Validate(ICandle[] candles, T options)
 		{

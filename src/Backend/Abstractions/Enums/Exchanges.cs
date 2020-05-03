@@ -10,6 +10,9 @@ namespace Abstractions.Enums
 		BINANCE,
 
 		[EnumMember(Value = "BITMEX")]
-		BITMEX
+		BITMEX,
+
+		[EnumMember(Value = "QUANTFURY")]
+		QUANTFURY
 	}
 }

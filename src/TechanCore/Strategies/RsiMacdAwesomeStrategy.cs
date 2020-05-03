@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Indicators.Results;
@@ -13,7 +12,7 @@ namespace TechanCore.Strategies
 
 		public override int MinNumberOfCandles { get; } = 35;
 
-		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] candles)
+		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts(ICandle[] candles, IOrdersBook ordersBook = null)
 		{
 			RsiMacdAwesomeStrategyOptions options = GetOptions;
 			Validate(candles, options);

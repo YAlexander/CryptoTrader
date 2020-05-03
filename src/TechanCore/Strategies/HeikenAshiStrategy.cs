@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
-using TechanCore.Indicators.Results;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
@@ -16,9 +14,9 @@ namespace TechanCore.Strategies
 
 		public override string Name { get; } = "Heiken Ashi (HA) Strategy";
 
-		public override int MinNumberOfCandles { get; } = 25; 
+		public override int MinNumberOfCandles { get; } = 25;
 
-		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts(ICandle[] candles)
+		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts(ICandle[] candles, IOrdersBook ordersBook = null)
 		{
 			HeikenAshiStrategyOptions options = GetOptions;
 			Validate(candles, options);
@@ -33,7 +31,22 @@ namespace TechanCore.Strategies
 				}
 				else
 				{
-					// TODO: Implement logic
+					if (heikenSmoothed[i].Close > heikenSmoothed[i].Open &&
+						(heikenSmoothed[i].Close - heikenSmoothed[i].Open >
+						 heikenSmoothed[i - 1].Close - heikenSmoothed[i - 1].Open))
+					{
+						Result.Add((candles[i], TradingAdvices.BUY));
+					}
+					else if (heikenSmoothed[i].Close < heikenSmoothed[i].Open &&
+							 (heikenSmoothed[i].Close - heikenSmoothed[i].Open >
+							  heikenSmoothed[i - 1].Close - heikenSmoothed[i - 1].Open))
+					{
+						Result.Add((candles[i], TradingAdvices.SELL));
+					}
+					else
+					{
+						Result.Add((candles[i], TradingAdvices.HOLD));
+					}
 				}
 			}
 

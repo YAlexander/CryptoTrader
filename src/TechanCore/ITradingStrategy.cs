@@ -1,4 +1,5 @@
 using TechanCore.Enums;
+using TechanCore.Strategies;
 
 namespace TechanCore
 {
@@ -10,6 +11,6 @@ namespace TechanCore
 
 		T GetOptions { get; }
 		
-		TradingAdvices Forecast(ICandle[] candles);
+		TradingAdvices Forecast(ICandle[] candles, IOrdersBook ordersBook = null);
 	}
 }

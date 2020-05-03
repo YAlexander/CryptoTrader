@@ -17,6 +17,8 @@ namespace Abstractions.Entities
 		int TimeFrame { get; set; }
 		
 		bool IsDisabled { get; set; }
+
+		bool IsShortAllowed { get; set; }
 		
 		string RiskManagerName { get; set; }
 		string RiskManagerOptions { get; set; }

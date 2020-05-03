@@ -13,34 +13,34 @@ namespace TechanCore.Strategies
 
 		public override int MinNumberOfCandles { get; } = 150;
 
-		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts (ICandle[] source)
+		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts(ICandle[] candles, IOrdersBook ordersBook = null)
 		{
 			SmaStochRsiStrategyOptions options = GetOptions;
-			Validate(source, options);
+			Validate(candles, options);
 
-			StochasticOscillatorResult stoch = source.StochasticOscillator(options.StochPeriod, options.StochEmaPeriod);
-			decimal?[] sma = source.Close().Sma(options.SmaPeriod).Result;
-			decimal?[] rsi = source.Rsi(options.RsiPeriod).Result;
+			StochasticOscillatorResult stoch = candles.StochasticOscillator(options.StochPeriod, options.StochEmaPeriod);
+			decimal?[] sma = candles.Close().Sma(options.SmaPeriod).Result;
+			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
 
-			for (int i = 0; i < source.Length; i++)
+			for (int i = 0; i < candles.Length; i++)
 			{
 				if (i < 1)
 				{
-					Result.Add((source[i], TradingAdvices.HOLD));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else
 				{
-					if (source[i] .Close> sma[i] && stoch.K[i] > 70 && rsi[i] < 20 && stoch.K[i] > stoch.D[i])
+					if (candles[i] .Close> sma[i] && stoch.K[i] > 70 && rsi[i] < 20 && stoch.K[i] > stoch.D[i])
 					{
-						Result.Add((source[i], TradingAdvices.BUY));
+						Result.Add((candles[i], TradingAdvices.BUY));
 					}
-					else if (source[i].Close < sma[i] && stoch.K[i] > 70 && rsi[i] > 80 && stoch.K[i] < stoch.D[i])
+					else if (candles[i].Close < sma[i] && stoch.K[i] > 70 && rsi[i] > 80 && stoch.K[i] < stoch.D[i])
 					{
-						Result.Add((source[i], TradingAdvices.SELL));
+						Result.Add((candles[i], TradingAdvices.SELL));
 					}
 					else
 					{
-						Result.Add((source[i], TradingAdvices.HOLD));
+						Result.Add((candles[i], TradingAdvices.HOLD));
 					}
 				}
 			}

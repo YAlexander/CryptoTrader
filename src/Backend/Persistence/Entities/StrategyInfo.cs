@@ -22,5 +22,6 @@ namespace Persistence.Entities
 		
 		public string RiskManagerName { get; set; }
 		public string RiskManagerOptions { get; set; }
+		public bool IsShortAllowed { get; set; }
 	}
 }
