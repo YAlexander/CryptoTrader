@@ -33,6 +33,10 @@ html {
 	}
 }
 
+body {
+	color: #e5e5e5;
+}
+
 .border-top {
 	border-top: 1px solid #e5e5e5;
 }
@@ -345,4 +349,41 @@ button.position img {
 .orders-last-trade td {
 	color: #e5e5e5;
 	font-size: 9pt;
+}
+
+h2 {
+	color: #e5e5e5;
+	text-align: center;
+	width: 100%;
+	padding: 10px;
+	border-top: 1px solid #e5e5e5;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+#api-settings {
+	margin-top: 30px;
+}
+
+.card {
+	margin-top: 20px;
+	margin-bottom: 20px;
+	border: 1px solid rgb(38, 166, 154);
+}
+
+.card-header {
+	background-color: rgb(38, 166, 154);
+}
+
+.card-body {
+	background-color: #343a40;
+	border-radius: 0px;
+}
+
+#qantfurySettings {
+	color: #e5e5e5;
+}
+
+.trading-pair label{
+	font-size: 12pt;
+	padding-right: 30px;
 }

@@ -7,8 +7,36 @@
 	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
 	<link href="~/lib/fontawesome-free-5.13.0-web/css/all.css" rel="stylesheet">
 	<link rel="stylesheet" href="~/css/site.css" />
+	<style>
+		body {
+			background-color: #343a40;
+		}
+	</style>
 </head>
 <body>
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+		<a class="navbar-brand" href="#">CryptoTrader</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="navbarNav">
+			<ul class="navbar-nav">
+				<li class="nav-item active">
+					<a class="nav-link" href="#">DASHBOARD</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">SETTINGS</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">REPORTS</a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="#">SUPPORT</a>
+				</li>
+			</ul>
+		</div>
+	</nav>
+
 	<div class="container-fluid" id="app">
 		<main role="main">
 			@RenderBody()

@@ -1,0 +1,236 @@
+﻿@using System.Text.Json
+@model ExchangeSettingsModel;
+
+@{
+	Layout = "_LayoutService";
+	ViewData["Title"] = "Exchange settings";
+}
+
+<H2><span v-if="exchange === ''">EXCHANGE</span><span v-else>{{exchange.Value}}</span> CONFIGURATION</H2>
+
+<div>
+	<select v-model="exchange">
+		<option selected="selected" disabled="disabled" value="">- SELECT EXCHANGE -</option>
+		<option v-for="item in exchanges" v-bind:value="item">{{item.Value}}</option>
+	</select>
+</div>
+
+
+
+<div v-if="exchange != ''">
+	<div class="card">
+		<div class="card-header">
+			API SETTINGS
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-4">&nbsp;</div>
+				<div class="col-4">
+					<template v-if="exchange.Value == 'BINANCE'">
+						<div id="binanceSettings" class="form-group">
+							<div class="form-group">
+								<label>Key</label>
+								<input type="text" class="form-control" v-model="binanceSettings.key">
+							</div>
+							<div class="form-group">
+								<label>Secret</label>
+								<input type="text" class="form-control" v-model="binanceSettings.secret">
+							</div>
+						</div>
+					</template>
+
+					<template v-if="exchange.Value == 'BITMEX'">
+						<div class="form-group">
+							<label>Key</label>
+							<input type="text" class="form-control" v-model="bitmexSettings.key">
+						</div>
+						<div class="form-group">
+							<label>Secret</label>
+							<input type="text" class="form-control" v-model="bitmexSettings.secret">
+						</div>
+					</template>
+
+					<template v-if="exchange.Value == 'QUANTFURY'">
+						<div id="qantfurySettings" class="form-group">
+							Virtual exchage. No settings
+						</div>
+					</template>
+				</div>
+				<div class="col-4">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="card">
+		<div class="card-header">
+			TRADING PAIR SETTINGS
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<select v-model="asset1">
+					<option selected="selected" disabled="disabled" value="">- SELECT ASSET -</option>
+					<option v-for="item in assets" v-bind:value="item">{{item.Value}}</option>
+				</select>
+				<select v-model="asset2">
+					<option selected="selected" disabled="disabled" value="">- SELECT ASSET -</option>
+					<option v-for="item in assets" v-bind:value="item">{{item.Value}}</option>
+				</select>
+
+				<button v-on:click="addPair">ADD PAIR</button>
+				<br />
+			</div>
+
+			<div class="row">
+				<div class="col-4">&nbsp;</div>
+				<div class="col-4">
+					<template v-if="exchange.Value == 'BINANCE'">
+						<div id="binanceSettings" class="form-group">
+							<ul>
+								<li v-for="(item, index) in binanceSettings.pairs" :key="index" class="trading-pair">
+									<label>{{ item.asset1.Value }}/{{ item.asset2.Value }}</label>
+
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pairConfig"><i class="fa fa-edit"></i></button>
+									<button v-on:click="deletePair(index)" class="btn btn-primary"><i class="fa fa-trash"></i></button>
+								</li>
+							</ul>
+						</div>
+					</template>
+
+					<template v-if="exchange.Value == 'BITMEX'">
+						<div id="bitmexSettings" class="form-group">
+							<ul>
+								<li v-for="(item, index) in bitmexSettings.pairs" :key="index" class="trading-pair">
+									<label>{{ item.asset1.Value }}/{{ item.asset2.Value }}</label>
+
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pairConfig"><i class="fa fa-edit"></i></button>
+									<button v-on:click="deletePair(index)" class="btn btn-primary"><i class="fa fa-trash"></i></button>
+								</li>
+							</ul>
+						</div>
+					</template>
+
+					<template v-if="exchange.Value == 'QUANTFURY'">
+						<div id="quantfurySettings" class="form-group">
+							<ul>
+								<li v-for="(item, index) in quantfurySettings.pairs" :key="index" class="trading-pair">
+									<label>{{ item.asset1.Value }}/{{ item.asset2.Value }}</label>
+
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pairConfig"><i class="fa fa-edit"></i></button>
+									<button v-on:click="deletePair(index)" class="btn btn-primary"><i class="fa fa-trash"></i></button>
+								</li>
+							</ul>
+						</div>
+					</template>
+				</div>
+				<div class="col-4">&nbsp;</div>
+			</div>
+		</div>
+	</div>
+
+	<button type="button" class="btn btn-primary" v-on:click="save">Save</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="pairConfig" tabindex="-1" role="dialog" aria-labelledby="pairConfigLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+			<div class="modal-header">
+				<h5 class="modal-title" id="pairConfigLabel">Modal title</h5>
+				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+			</div>
+			<div class="modal-body">
+				...
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+				<button type="button" class="btn btn-primary">Save changes</button>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+@section Scripts {
+	<script type="text/javascript">
+		'use strict'
+
+		class TradingPair {
+			constructor(asset1, asset2, strategy) {
+				this.asset1 = asset1;
+				this.asset2 = asset2;
+				this.strategy = strategy;
+			}
+		}
+
+		class StrategySettings {
+			constructor(code) {
+				this.code = code;
+			}
+		}
+
+		var app = new Vue({
+			el: '#app',
+			data: {
+				exchanges: @Html.Raw(JsonSerializer.Serialize(Model.ExchangesDropdown)),
+				assets: @Html.Raw(JsonSerializer.Serialize(Model.AssetsDropdown)),
+				exchange: '',
+				asset1: '',
+				asset2: '',
+
+				binanceSettings: {
+					key: '',
+					secret: '',
+					pairs: []
+				},
+				bitmexSettings: {
+					key: '',
+					secret: '',
+					pairs: []
+				},
+				quantfurySettings: {
+					pairs: []
+				}
+			},
+			methods: {
+				addPair: function() {
+
+					if (this.asset1 == '' || this.asset2 == '') {
+						return;
+					}
+
+					var pair = new TradingPair(this.asset1, this.asset2, 'strategy');
+
+					if (this.exchange.Value === 'BINANCE') {
+						this.binanceSettings.pairs.push(pair);
+					} else if (this.exchange.Value === 'BITMEX') {
+						this.bitmexSettings.pairs.push(pair);
+					} else if (this.exchange.Value === 'QUANTFURY') {
+						this.quantfurySettings.pairs.push(pair);
+					}
+
+					this.asset1 = '';
+					this.asset2 = '';
+				},
+				editPair: function(elem) {
+				},
+				deletePair: function(elem) {
+					if (this.exchange.Value === 'BINANCE') {
+						this.binanceSettings.pairs.splice(elem, 1);
+					} else if (this.exchange.Value === 'BITMEX') {
+						this.bitmexSettings.pairs.splice(elem, 1);
+					} else if (this.exchange.Value === 'QUANTFURY') {
+						this.quantfurySettings.pairs.splice(elem, 1);
+					}
+
+					this.asset1 = '';
+					this.asset2 = '';
+				},
+				save: function(){
+				}
+			}
+		});
+	</script>
+}

@@ -17,7 +17,7 @@ namespace TechanCore.Strategies
 			throw new NotImplementedException();
 		}
 
-		public override TradingAdvices Forecast (ICandle[] candles)
+		public override TradingAdvices Forecast (ICandle[] candles, IOrdersBook booksOrder = null)
 		{
 			Validate(candles, null);
 
