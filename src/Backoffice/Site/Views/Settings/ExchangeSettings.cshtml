@@ -52,7 +52,7 @@
 
 					<template v-if="exchange.Value == 'QUANTFURY'">
 						<div id="qantfurySettings" class="form-group">
-							Virtual exchage. No settings
+							Manual trading only. No settings
 						</div>
 					</template>
 				</div>
@@ -89,7 +89,7 @@
 								<li v-for="(item, index) in binanceSettings.pairs" :key="index" class="trading-pair">
 									<label>{{ item.asset1.Value }}/{{ item.asset2.Value }}</label>
 
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pairConfig"><i class="fa fa-edit"></i></button>
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#strategyConfig"><i class="fas fa-route"></i></button>
 									<button v-on:click="deletePair(index)" class="btn btn-primary"><i class="fa fa-trash"></i></button>
 								</li>
 							</ul>
@@ -102,7 +102,7 @@
 								<li v-for="(item, index) in bitmexSettings.pairs" :key="index" class="trading-pair">
 									<label>{{ item.asset1.Value }}/{{ item.asset2.Value }}</label>
 
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pairConfig"><i class="fa fa-edit"></i></button>
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#strategyConfig"><i class="fas fa-route"></i></button>
 									<button v-on:click="deletePair(index)" class="btn btn-primary"><i class="fa fa-trash"></i></button>
 								</li>
 							</ul>
@@ -115,7 +115,7 @@
 								<li v-for="(item, index) in quantfurySettings.pairs" :key="index" class="trading-pair">
 									<label>{{ item.asset1.Value }}/{{ item.asset2.Value }}</label>
 
-									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#pairConfig"><i class="fa fa-edit"></i></button>
+									<button type="button" class="btn btn-primary" data-toggle="modal" data-target="#strategyConfig"><i class="fas fa-route"></i></button>
 									<button v-on:click="deletePair(index)" class="btn btn-primary"><i class="fa fa-trash"></i></button>
 								</li>
 							</ul>
@@ -130,12 +130,12 @@
 	<button type="button" class="btn btn-primary" v-on:click="save">Save</button>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="pairConfig" tabindex="-1" role="dialog" aria-labelledby="pairConfigLabel" aria-hidden="true">
+<!-- Modal Strategy config-->
+<div class="modal fade" id="strategyConfig" tabindex="-1" role="dialog" aria-labelledby="strategyConfigLabel" aria-hidden="true">
 	<div class="modal-dialog" role="document">
 		<div class="modal-content">
 			<div class="modal-header">
-				<h5 class="modal-title" id="pairConfigLabel">Modal title</h5>
+				<h5 class="modal-title" id="strategyConfigLabel">Modal title</h5>
 				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
@@ -154,83 +154,75 @@
 
 
 @section Scripts {
+
+	<script src="~/js/configItems.js"></script>
+
 	<script type="text/javascript">
-		'use strict'
+	'use strict'
 
-		class TradingPair {
-			constructor(asset1, asset2, strategy) {
-				this.asset1 = asset1;
-				this.asset2 = asset2;
-				this.strategy = strategy;
+	var app = new Vue({
+	el: '#app',
+	data: {
+	exchanges: @Html.Raw(JsonSerializer.Serialize(Model.ExchangesDropdown)),
+	assets: @Html.Raw(JsonSerializer.Serialize(Model.AssetsDropdown)),
+	exchange: '',
+	asset1: '',
+	asset2: '',
+
+	binanceSettings: {
+		key: '',
+		secret: '',
+		pairs: []
+	},
+	bitmexSettings: {
+		key: '',
+		secret: '',
+		pairs: []
+	},
+	quantfurySettings: {
+		pairs: []
+	}
+	},
+	methods: {
+		addPair: function() {
+
+			if (this.asset1 == '' || this.asset2 == '') {
+				return;
 			}
+
+			var pair = new TradingPair(this.asset1, this.asset2, 'strategy');
+
+			if (this.exchange.Value === 'BINANCE') {
+				this.binanceSettings.pairs.push(pair);
+			} else if (this.exchange.Value === 'BITMEX') {
+				this.bitmexSettings.pairs.push(pair);
+			} else if (this.exchange.Value === 'QUANTFURY') {
+				this.quantfurySettings.pairs.push(pair);
+			}
+
+			this.asset1 = '';
+			this.asset2 = '';
+		},
+		editPair: function(elem) {
+		},
+		deletePair: function(elem) {
+			if (this.exchange.Value === 'BINANCE') {
+				this.binanceSettings.pairs.splice(elem, 1);
+			} else if (this.exchange.Value === 'BITMEX') {
+				this.bitmexSettings.pairs.splice(elem, 1);
+			} else if (this.exchange.Value === 'QUANTFURY') {
+				this.quantfurySettings.pairs.splice(elem, 1);
+			}
+
+			this.asset1 = '';
+			this.asset2 = '';
+		},
+		save: function() {
 		}
+	}
+	});
 
-		class StrategySettings {
-			constructor(code) {
-				this.code = code;
-			}
-		}
 
-		var app = new Vue({
-			el: '#app',
-			data: {
-				exchanges: @Html.Raw(JsonSerializer.Serialize(Model.ExchangesDropdown)),
-				assets: @Html.Raw(JsonSerializer.Serialize(Model.AssetsDropdown)),
-				exchange: '',
-				asset1: '',
-				asset2: '',
 
-				binanceSettings: {
-					key: '',
-					secret: '',
-					pairs: []
-				},
-				bitmexSettings: {
-					key: '',
-					secret: '',
-					pairs: []
-				},
-				quantfurySettings: {
-					pairs: []
-				}
-			},
-			methods: {
-				addPair: function() {
-
-					if (this.asset1 == '' || this.asset2 == '') {
-						return;
-					}
-
-					var pair = new TradingPair(this.asset1, this.asset2, 'strategy');
-
-					if (this.exchange.Value === 'BINANCE') {
-						this.binanceSettings.pairs.push(pair);
-					} else if (this.exchange.Value === 'BITMEX') {
-						this.bitmexSettings.pairs.push(pair);
-					} else if (this.exchange.Value === 'QUANTFURY') {
-						this.quantfurySettings.pairs.push(pair);
-					}
-
-					this.asset1 = '';
-					this.asset2 = '';
-				},
-				editPair: function(elem) {
-				},
-				deletePair: function(elem) {
-					if (this.exchange.Value === 'BINANCE') {
-						this.binanceSettings.pairs.splice(elem, 1);
-					} else if (this.exchange.Value === 'BITMEX') {
-						this.bitmexSettings.pairs.splice(elem, 1);
-					} else if (this.exchange.Value === 'QUANTFURY') {
-						this.quantfurySettings.pairs.splice(elem, 1);
-					}
-
-					this.asset1 = '';
-					this.asset2 = '';
-				},
-				save: function(){
-				}
-			}
-		});
 	</script>
 }

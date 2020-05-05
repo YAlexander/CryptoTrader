@@ -115,8 +115,9 @@ namespace Core.OrleansInfrastructure.Grains
 			ITradeProcessingGrain tradesGrain = GrainFactory.GetGrain<ITradeProcessingGrain>((long)keyExtension.Exchange);
 			context.LastTrade = await tradesGrain.Get(keyExtension.Asset1, keyExtension.Asset2);
 
-			IRiskStrategy riskStrategy = RiskHelper.Get(strategyInfo.RiskManagerName, strategyInfo.RiskManagerOptions);
-			context = riskStrategy.Process(context, strategyInfo);
+			// TODO: Risk management should be the same for whole accounts of the exchange
+			//IRiskStrategy riskStrategy = RiskHelper.Get(strategyInfo.RiskManagerName, strategyInfo.RiskManagerOptions);
+			//context = riskStrategy.Process(context, strategyInfo);
 
 			return context;
 		}

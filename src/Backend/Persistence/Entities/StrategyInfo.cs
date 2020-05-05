@@ -18,10 +18,8 @@ namespace Persistence.Entities
 		
 		public int TimeFrame { get; set; }
 		
-		public bool IsDisabled { get; set; }
+		public bool IsEnabled { get; set; }
 		
-		public string RiskManagerName { get; set; }
-		public string RiskManagerOptions { get; set; }
 		public bool IsShortAllowed { get; set; }
 	}
 }

@@ -22,27 +22,21 @@ namespace Persistence.Helpers
 
 		private static readonly Dictionary<string, Func<string, string, (IStrategyOption options, IStrategyOption defaultOptions)>> Options = new Dictionary<string, Func<string, string, (IStrategyOption options, IStrategyOption defaultOptions)>>
 		{
-			[nameof(AdxEmasStrategy)] = (options, defaultOptions) =>
+			[nameof(AdxMasStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<AdxSmasStrategyOptions> helper = new JsonHelper<AdxSmasStrategyOptions>();
+				JsonHelper<AdxMasStrategyOptions> helper = new JsonHelper<AdxMasStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
-			
-			[nameof(AdxSmasStrategy)] = (options, defaultOptions) =>
-			{
-				JsonHelper<AdxSmasStrategyOptions> helper = new JsonHelper<AdxSmasStrategyOptions>();
-				return (helper.FromJson(options), helper.FromJson(defaultOptions));
-			},
-			
+						
 			[nameof(AwesomeMacdStrategy)] = (options, defaultOptions) =>
 			{
 				JsonHelper<AwesomeMacdStrategyOptions> helper = new JsonHelper<AwesomeMacdStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
-			[nameof(AwesomeSmaStrategy)] = (options, defaultOptions) =>
+			[nameof(AwesomeMaStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<AwesomeSmaStrategyOptions> helper = new JsonHelper<AwesomeSmaStrategyOptions>();
+				JsonHelper<AwesomeMaStrategyOptions> helper = new JsonHelper<AwesomeMaStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
@@ -84,9 +78,9 @@ namespace Persistence.Helpers
 
 			[nameof(BuyAndHoldStrategy)] = (options, defaultOptions) => (new EmptyStrategyOptions(), new EmptyStrategyOptions()),
 
-			[nameof(CciEmaStrategy)] = (options, defaultOptions) =>
+			[nameof(CciMaStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<CciEmaStrategyOptions> helper = new JsonHelper<CciEmaStrategyOptions>();
+				JsonHelper<CciMaStrategyOptions> helper = new JsonHelper<CciMaStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
@@ -108,15 +102,15 @@ namespace Persistence.Helpers
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
-			[nameof(EmaAdxMacdStrategy)] = (options, defaultOptions) =>
+			[nameof(MaAdxMacdStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<EmaAdxMacdOptions> helper = new JsonHelper<EmaAdxMacdOptions>();
+				JsonHelper<MaAdxMacdOptions> helper = new JsonHelper<MaAdxMacdOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
-			[nameof(EmaCrossStrategy)] = (options, defaultOptions) =>
+			[nameof(MaCrossStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<EmaCrossStrategyOptions> helper = new JsonHelper<EmaCrossStrategyOptions>();
+				JsonHelper<MaCrossStrategyOptions> helper = new JsonHelper<MaCrossStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 			
@@ -138,9 +132,9 @@ namespace Persistence.Helpers
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
-			[nameof(MacdSmaStrategy)] = (options, defaultOptions) =>
+			[nameof(MacdMaStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<MacdSmaStrategyOptions> helper = new JsonHelper<MacdSmaStrategyOptions>();
+				JsonHelper<MacdMaStrategyOptions> helper = new JsonHelper<MacdMaStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
@@ -182,7 +176,7 @@ namespace Persistence.Helpers
 
 			[nameof(RsiSmaCrossoverStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<RsiSmaCrossoverStrategyOptions> helper = new JsonHelper<RsiSmaCrossoverStrategyOptions>();
+				JsonHelper<RsiMaCrossoverStrategyOptions> helper = new JsonHelper<RsiMaCrossoverStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 
@@ -190,9 +184,9 @@ namespace Persistence.Helpers
 
 			[nameof(SmaGoldenCrossStrategy)] = (options, defaultOptions) => (new EmptyStrategyOptions(), new EmptyStrategyOptions()),
 
-			[nameof(SmaStochRsiStrategy)] = (options, defaultOptions) =>
+			[nameof(MaStochRsiStrategy)] = (options, defaultOptions) =>
 			{
-				JsonHelper<SmaStochRsiStrategyOptions> helper = new JsonHelper<SmaStochRsiStrategyOptions>();
+				JsonHelper<MaStochRsiStrategyOptions> helper = new JsonHelper<MaStochRsiStrategyOptions>();
 				return (helper.FromJson(options), helper.FromJson(defaultOptions));
 			},
 			

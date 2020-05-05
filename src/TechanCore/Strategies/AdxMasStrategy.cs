@@ -1,26 +1,22 @@
 using System.Collections.Generic;
-using System.Linq;
 using TechanCore.Enums;
 using TechanCore.Indicators.Extensions;
 using TechanCore.Strategies.Options;
 
 namespace TechanCore.Strategies
 {
-	public class MomentumStrategy : BaseStrategy<MomentumStrategyOptions>
+	public class AdxMasStrategy : BaseStrategy<AdxMasStrategyOptions>
 	{
-		public override string Name { get; } = "Momentum Strategy";
+		public override string Name { get; } = "ADX MA Strategy";
 
-		public override int MinNumberOfCandles { get; } = 30;
+		public override int MinNumberOfCandles { get; } = 14;
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts(ICandle[] candles, IOrdersBook ordersBook = null)
 		{
-			MomentumStrategyOptions options = GetOptions;
+			AdxMasStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			decimal?[] mom = candles.Momentum(options.MomentumPeriod, CandleVariables.CLOSE).Result;
-			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
-			decimal[] closes = candles.Select(x => x.Close).ToArray();
-
+			decimal?[] adx = candles.Adx(options.AdxPeriod).Adx;
 			decimal?[] maFast;
 			decimal?[] maSlow;
 
@@ -40,26 +36,36 @@ namespace TechanCore.Strategies
 				maSlow = candles.Sma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
 			}
 
-			for (int i = 0; i < candles.Count(); i++)
+			for (int i = 0; i < candles.Length; i++)
 			{
-				if (rsi[i] < 30 && mom[i] > 0 && maFast[i] > maSlow[i] && closes[i] > maSlow[i] && closes[i] > maFast[i])
+				if (i == 0)
 				{
-					Result.Add((candles.ElementAt(i), TradingAdvices.BUY));
-				}
-				else if (rsi[i] > 70 && mom[i] < 0 && maFast[i] < maSlow[i] && closes[i] < maSlow[i] && closes[i] < maFast[i])
-				{
-					Result.Add((candles.ElementAt(i), TradingAdvices.SELL));
+					Result.Add((candles[i], TradingAdvices.HOLD));
 				}
 				else
 				{
-					Result.Add((candles.ElementAt(i), TradingAdvices.HOLD));
+					int fastCross = maFast[i - 1] < maSlow[i] && maFast[i] > maSlow[i] ? 1 : 0;
+					int slowCross = maSlow[i - 1] < maFast[i] && maSlow[i] > maFast[i] ? 1 : 0;
+
+					if (adx[i] > 25 && fastCross == 1)
+					{
+						Result.Add((candles[i], TradingAdvices.BUY));
+					}
+					else if (adx[i] < 25 && slowCross == 1)
+					{
+						Result.Add((candles[i], TradingAdvices.SELL));
+					}
+					else
+					{
+						Result.Add((candles[i], TradingAdvices.HOLD));
+					}
 				}
 			}
 
 			return Result;
 		}
 
-		public MomentumStrategy(MomentumStrategyOptions options) : base(options)
+		public AdxMasStrategy(AdxMasStrategyOptions options) : base(options)
 		{
 		}
 	}
