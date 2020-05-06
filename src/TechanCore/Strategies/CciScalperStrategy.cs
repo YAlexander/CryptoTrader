@@ -18,29 +18,9 @@ namespace TechanCore.Strategies
 			Validate(candles, options);
 
 			decimal?[] cci = candles.Cci(options.CciPeriod).Result;
-
-			decimal?[] maFast;
-			decimal?[] maNormal;
-			decimal?[] maSlow;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				maFast = candles.Ema(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maNormal = candles.Ema(options.NormalMaPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Ema(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else if (options.MaType == MaTypes.WMA)
-			{
-				maFast = candles.Wma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maNormal = candles.Wma(options.NormalMaPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Wma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				maFast = candles.Sma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maNormal = candles.Sma(options.NormalMaPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Sma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
+			decimal?[] maFast = candles.Ma(options.MaType, options.FastMaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] maNormal = candles.Ma(options.MaType, options.NormalMaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] maSlow = candles.Ma(options.MaType, options.SlowMaPeriod, CandleVariables.CLOSE).Result;
 
 			for (int i = 0; i < candles.Count(); i++)
 			{

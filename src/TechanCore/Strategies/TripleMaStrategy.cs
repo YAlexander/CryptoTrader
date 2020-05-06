@@ -14,7 +14,7 @@ namespace TechanCore.Strategies
 
 		protected override IEnumerable<(ICandle, TradingAdvices)> AllForecasts(ICandle[] candles, IOrdersBook ordersBook = null)
 		{
-			TripleMaStrategyOptions options = GetOptions;			
+			TripleMaStrategyOptions options = GetOptions;
 			Validate(candles, options);
 			
 			decimal?[] smaFast = candles.Sma(options.FastSmaPeriod, CandleVariables.CLOSE).Result;

@@ -20,28 +20,9 @@ namespace TechanCore.Strategies
 
 			var macd = candles.Macd(options.MacdFastPeriod, options.MacdSlowPeriod, options.MacdSignalPeriod);
 
-			decimal?[] fastMa;
-			decimal?[] slowMa;
-			decimal?[] normalMa;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				fastMa = candles.Ema(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				slowMa = candles.Ema(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-				normalMa = candles.Ema(options.NormalMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else if (options.MaType == MaTypes.WMA)
-			{
-				fastMa = candles.Wma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				slowMa = candles.Wma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-				normalMa = candles.Wma(options.NormalMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				fastMa = candles.Sma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				slowMa = candles.Sma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-				normalMa = candles.Sma(options.NormalMaPeriod, CandleVariables.CLOSE).Result;
-			}
+			decimal?[] fastMa = candles.Ma(options.MaType, options.FastMaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] slowMa = candles.Ma(options.MaType, options.SlowMaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] normalMa = candles.Ma(options.MaType, options.NormalMaPeriod, CandleVariables.CLOSE).Result;
 
 			decimal[] closes = candles.Close();
 

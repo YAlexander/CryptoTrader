@@ -17,24 +17,8 @@ namespace TechanCore.Strategies
 			Validate(candles, options);
 
 			decimal?[] cci = candles.Cci(options.CciPeriod).Result;
-			decimal?[] maFast;
-			decimal?[] maSlow;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				maFast = candles.Ema(options.MaFast, CandleVariables.CLOSE).Result;
-				maSlow = candles.Ema(options.MaSlow, CandleVariables.CLOSE).Result;
-			}
-			else if (options.MaType == MaTypes.WMA)
-			{
-				maFast = candles.Wma(options.MaFast, CandleVariables.CLOSE).Result;
-				maSlow = candles.Wma(options.MaSlow, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				maFast = candles.Sma(options.MaFast, CandleVariables.CLOSE).Result;
-				maSlow = candles.Sma(options.MaSlow, CandleVariables.CLOSE).Result;
-			}
+			decimal?[] maFast = candles.Ma(options.MaType, options.MaFast, CandleVariables.CLOSE).Result;
+			decimal?[] maSlow = candles.Ma(options.MaType, options.MaSlow, CandleVariables.CLOSE).Result;
 
 			for (int i = 0; i < candles.Length; i++)
 			{

@@ -19,24 +19,8 @@ namespace TechanCore.Strategies
 
 			decimal?[] ao = candles.AwesomeOscillator(options.AwesomeFastPeriod, options.AwesomeSlowPeriod).Result;
 
-			decimal?[] maShort;
-			decimal?[] maLong;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				maShort = candles.Ema(options.MaFastPeriod, CandleVariables.CLOSE).Result;
-				maLong = candles.Ema(options.MaSlowPeriod, CandleVariables.CLOSE).Result;
-			}
-			else if (options.MaType == MaTypes.WMA)
-			{
-				maShort = candles.Wma(options.MaFastPeriod, CandleVariables.CLOSE).Result;
-				maLong = candles.Wma(options.MaSlowPeriod, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				maShort = candles.Sma(options.MaFastPeriod, CandleVariables.CLOSE).Result;
-				maLong = candles.Sma(options.MaSlowPeriod, CandleVariables.CLOSE).Result;
-			}
+			decimal?[] maShort = candles.Ma(options.MaType, options.MaFastPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] maLong = candles.Ma(options.MaType, options.MaSlowPeriod, CandleVariables.CLOSE).Result;
 
 			for (int i = 0; i < candles.Count(); i++)
 			{

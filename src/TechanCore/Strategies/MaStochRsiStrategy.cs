@@ -20,20 +20,7 @@ namespace TechanCore.Strategies
 
 			StochasticOscillatorResult stoch = candles.StochasticOscillator(options.StochPeriod, options.StochEmaPeriod);
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
-			decimal?[] ma;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				ma = candles.Ema(options.MaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else if (options.MaType == MaTypes.WMA)
-			{
-				ma = candles.Wma(options.MaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				ma = candles.Sma(options.MaPeriod, CandleVariables.CLOSE).Result;
-			}
+			decimal?[] ma = candles.Ma(options.MaType, options.MaPeriod, CandleVariables.CLOSE).Result;
 
 			for (int i = 0; i < candles.Length; i++)
 			{

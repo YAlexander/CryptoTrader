@@ -16,25 +16,9 @@ namespace TechanCore.Strategies
 			RsiMaCrossoverStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			decimal?[] maFast;
-			decimal?[] maSlow;
+			decimal?[] maFast = candles.Ma(options.MaType, options.MaFastPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] maSlow = candles.Ma(options.MaType, options.MaSlowPeriod, CandleVariables.CLOSE).Result;
 			decimal?[] rsi = candles.Rsi(options.RsiPeriod).Result;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				maFast = candles.Ema(options.MaFastPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Ema(options.MaSlowPeriod, CandleVariables.CLOSE).Result;
-			}
-			else if (options.MaType == MaTypes.WMA)
-			{
-				maFast = candles.Wma(options.MaFastPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Wma(options.MaSlowPeriod, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				maFast = candles.Sma(options.MaFastPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Sma(options.MaSlowPeriod, CandleVariables.CLOSE).Result;
-			}
 
 			decimal startRsi = 0m;
 

@@ -19,24 +19,8 @@ namespace TechanCore.Strategies
 			Validate(candles, options);
 
 			AdxResult adx = candles.Adx(options.AdxPeriod);
-			decimal?[] maFast;
-			decimal?[] maSlow;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				maFast = candles.Ema(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Ema(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else if(options.MaType == MaTypes.WMA)
-			{
-				maFast = candles.Wma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Wma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				maFast = candles.Sma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maSlow = candles.Sma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
+			decimal?[] maFast = candles.Ma(options.MaType, options.FastMaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] maSlow = candles.Ma(options.MaType, options.SlowMaPeriod, CandleVariables.CLOSE).Result;
 
 			MacdIndicatorResult macd = candles.Macd(options.MacdFastPeriod, options.MacdSlowPeriod, options.MacdSignalPeriod);
 

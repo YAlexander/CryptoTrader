@@ -16,24 +16,8 @@ namespace TechanCore.Strategies
 			MaCrossStrategyOptions options = GetOptions;
 			Validate(candles, options);
 
-			decimal?[] maShort;
-			decimal?[] maLong;
-
-			if (options.MaType == MaTypes.EMA)
-			{
-				maShort = candles.Ema(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maLong = candles.Ema(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else if (options.MaType == MaTypes.WMA)
-			{
-				maShort = candles.Wma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maLong = candles.Wma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
-			else
-			{
-				maShort = candles.Sma(options.FastMaPeriod, CandleVariables.CLOSE).Result;
-				maLong = candles.Sma(options.SlowMaPeriod, CandleVariables.CLOSE).Result;
-			}
+			decimal?[] maShort = candles.Ma(options.MaType, options.FastMaPeriod, CandleVariables.CLOSE).Result;
+			decimal?[] maLong = candles.Ma(options.MaType, options.SlowMaPeriod, CandleVariables.CLOSE).Result;
 
 			for (int i = 0; i < candles.Length; i++)
 			{
