@@ -33,8 +33,8 @@ namespace TechanCore.Helpers
 					ashiCandles[index].Trades = source[index].Trades;
 					ashiCandles[index].Open = (source[index - 1].Open + source[index - 1].Close) / 2;
 					ashiCandles[index].Close = (source[index].Open + source[index].Close + source[index].Low + source[index].High) / 4;
-					ashiCandles[index].High = new[] {source[index].Open, source[index].Close, source[index].High}.Max();
-					ashiCandles[index].Low = new[] {source[index].Open, source[index].Close, source[index].Low}.Min();
+					ashiCandles[index].High = new[] { source[index].Open, source[index].Close, source[index].High }.Max();
+					ashiCandles[index].Low = new[] { source[index].Open, source[index].Close, source[index].Low }.Min();
 				}
 			}
 
@@ -96,15 +96,15 @@ namespace TechanCore.Helpers
 					ashiCandles[index].Volume = source[index].Volume;
 					ashiCandles[index].Trades = source[index].Trades;
 					ashiCandles[index].Open = (open?[index - 1] ?? 0m + open?[index - 1] ?? 0) / 2;
-					ashiCandles[index].Close = (close?[index - 1] ??  0 + close?[index - 1] ??  0 + close?[index - 1] ?? 0 + close?[index - 1] ?? 0) / 4;
-					ashiCandles[index].High = new[] {high?[index - 1] ?? 0, high?[index - 1] ?? 0, high?[index - 1] ?? 0}.Max();
-					ashiCandles[index].Low =  new[] {low?[index - 1] ?? 0, low?[index - 1] ?? 0, low?[index - 1] ?? 0}.Min();
+					ashiCandles[index].Close = (close?[index - 1] ?? 0 + close?[index - 1] ?? 0 + close?[index - 1] ?? 0 + close?[index - 1] ?? 0) / 4;
+					ashiCandles[index].High = new[] { high?[index - 1] ?? 0, high?[index - 1] ?? 0, high?[index - 1] ?? 0 }.Max();
+					ashiCandles[index].Low = new[] { low?[index - 1] ?? 0, low?[index - 1] ?? 0, low?[index - 1] ?? 0 }.Min();
 				}
 			}
 
 			return ashiCandles;
 		}
-		
+
 		public static ICandle[] GroupCandles(this IEnumerable<ICandle> candles, Timeframes timeFrame)
 		{
 			TimeSpan interval = timeFrame switch
@@ -122,7 +122,7 @@ namespace TechanCore.Helpers
 			return candles.GroupBy(s => s.Time.Ticks / interval.Ticks)
 				.Select(g =>
 				{
-					return (ICandle) new CandleSimple()
+					return (ICandle)new Candle()
 					{
 						Time = new DateTime(g.Key * interval.Ticks),
 						Open = g.First().Open,

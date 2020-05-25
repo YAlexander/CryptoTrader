@@ -10,11 +10,11 @@ namespace Core.OrleansInfrastructure.Grains
 {
 	public class DealGrain : IDealGrain
 	{
-		private readonly IPersistentState<Deal> _deal;
+		private readonly IPersistentState<DealEntity> _deal;
 		
 		public DealGrain
 		(
-			[PersistentState(nameof(Deal), nameof(DealsStorageProvider))] IPersistentState<Deal> deal)
+			[PersistentState(nameof(DealEntity), nameof(DealsStorageProvider))] IPersistentState<DealEntity> deal)
 		{
 			_deal = deal;
 		}
@@ -26,7 +26,7 @@ namespace Core.OrleansInfrastructure.Grains
 
 		public async Task CreateOrUpdate (IDeal deal)
 		{
-			_deal.State = (Deal)deal;
+			_deal.State = (DealEntity)deal;
 			await _deal.WriteStateAsync();
 		}
 	}

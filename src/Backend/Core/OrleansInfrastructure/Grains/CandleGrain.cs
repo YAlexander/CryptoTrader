@@ -14,10 +14,10 @@ namespace Core.OrleansInfrastructure.Grains
 {
 	public class CandleGrain : Grain, ICandleGrain
 	{
-		private readonly IPersistentState<Candle> _candle;
+		private readonly IPersistentState<Persistence.Entities.CandleEntity> _candle;
 
 		public CandleGrain(
-			[PersistentState(nameof(Candle), nameof(CandleStorageProvider))] IPersistentState<Candle> candle)
+			[PersistentState(nameof(Candle), nameof(CandleStorageProvider))] IPersistentState<Persistence.Entities.CandleEntity> candle)
 		{
 			_candle = candle;
 		}
@@ -28,11 +28,11 @@ namespace Core.OrleansInfrastructure.Grains
 
 			if (_candle.State == null)
 			{
-				_candle.State = new Candle(candle, keyExt.ToExtendedKey());
+				_candle.State = new Persistence.Entities.CandleEntity(candle, keyExt.ToExtendedKey());
 				await _candle.WriteStateAsync();
 
 				IStreamProvider streamProvider = GetStreamProvider(Constants.MessageStreamProvider);
-				IAsyncStream<Candle> stream = streamProvider.GetStream<Candle>(Guid.NewGuid(), nameof(Candle));
+				IAsyncStream<Persistence.Entities.CandleEntity> stream = streamProvider.GetStream<Persistence.Entities.CandleEntity>(Guid.NewGuid(), nameof(Persistence.Entities.CandleEntity));
 				await stream.OnNextAsync(_candle.State);
 			}
 		}

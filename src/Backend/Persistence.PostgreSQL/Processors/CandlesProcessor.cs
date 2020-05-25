@@ -34,7 +34,7 @@ namespace Persistence.PostgreSQL.Processors
 			return await WithConnection((connection, transaction) => _candlesManager.Get(exchange, asset1, asset2, numberOfCandles, connection, transaction));
 		}
 
-		public async Task<ICandle> Create(Candle candle)
+		public async Task<ICandle> Create(Entities.CandleEntity candle)
 		{
 			return await WithConnection((connection, transaction) => _candlesManager.Create(candle, connection, transaction));
 		}

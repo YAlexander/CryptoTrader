@@ -7,7 +7,7 @@ using TechanCore.Enums;
 namespace Persistence.Entities
 {
 	[Serializable]
-	public class Candle : BaseEntity<long>, ICandle
+	public class CandleEntity : BaseEntity<long>, ICandle
 	{
 		public Exchanges Exchange { get; set; }
 		public Assets Asset1 { get; set; }
@@ -22,9 +22,9 @@ namespace Persistence.Entities
 		public decimal Volume { get; set; }
 		public decimal Trades { get; set; }
 
-		public Candle() { }
+		public CandleEntity() { }
 
-		public Candle(ICandle candle, GrainKeyExtension extension)
+		public CandleEntity(ICandle candle, GrainKeyExtension extension)
 		{
 			Exchange = extension.Exchange;
 			Asset1 = extension.Asset1;

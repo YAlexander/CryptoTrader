@@ -3,7 +3,7 @@ using Abstractions.Enums;
 
 namespace Persistence.Entities
 {
-	public class Balance : IBalance
+	public class BalanceEntity : IBalance
 	{
 		public Exchanges Exchange { get; set; }
 		public Assets Asset { get; set; }

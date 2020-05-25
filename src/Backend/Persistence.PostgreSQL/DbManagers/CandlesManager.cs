@@ -14,7 +14,7 @@ namespace Persistence.PostgreSQL.DbManagers
 {
 	public class CandlesManager : ICandlesManager
 	{
-		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<IEnumerable<Entities.CandleEntity>> Get(Exchanges exchange, Assets asset1, Assets asset2, int numberOfLastCandles, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			string query = $@"
 				select 
@@ -29,7 +29,7 @@ namespace Persistence.PostgreSQL.DbManagers
 				limit @numberOfCandles;
 			";
 
-			return connection.QueryAsync<Candle>(string.Format(query, exchange), new
+			return connection.QueryAsync<Entities.CandleEntity>(string.Format(query, exchange), new
 			{
 				asset1,
 				asset2,
@@ -37,7 +37,7 @@ namespace Persistence.PostgreSQL.DbManagers
 			}, transaction);
 		}
 
-		public Task<Candle> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime? time, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<Entities.CandleEntity> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime? time, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			string timeCondition = time.HasValue ? " and time = @time " : String.Empty;
 			string query = $@"
@@ -53,7 +53,7 @@ namespace Persistence.PostgreSQL.DbManagers
 				order by time desc limit 1;
 			";
 
-			return connection.QueryFirstAsync<Candle>(query, new
+			return connection.QueryFirstAsync<Entities.CandleEntity>(query, new
 			{
 				asset1,
 				asset2,
@@ -61,7 +61,7 @@ namespace Persistence.PostgreSQL.DbManagers
 			}, transaction);
 		}
 
-		public Task<IEnumerable<Candle>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime @from, DateTime to, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<IEnumerable<Entities.CandleEntity>> Get(Exchanges exchange, Assets asset1, Assets asset2, DateTime @from, DateTime to, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			string query = $@"
 				select 
@@ -78,7 +78,7 @@ namespace Persistence.PostgreSQL.DbManagers
 				limit @numberOfCandles;
 			";
 
-			return connection.QueryAsync<Candle>(query, new
+			return connection.QueryAsync<Entities.CandleEntity>(query, new
 			{
 				asset1,
 				asset2,
@@ -87,7 +87,7 @@ namespace Persistence.PostgreSQL.DbManagers
 			}, transaction);
 		}
 
-		public Task<Candle> Create(Candle candle, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<Entities.CandleEntity> Create(Entities.CandleEntity candle, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			string query = $@"
 				insert into {candle.Exchange}.Candles 
@@ -135,7 +135,7 @@ namespace Persistence.PostgreSQL.DbManagers
 						returning *;
 				";
 
-			return connection.QueryFirstAsync<Candle>(query,
+			return connection.QueryFirstAsync<Entities.CandleEntity>(query,
 				new
 						{
 							created = DateTime.Now,
@@ -153,7 +153,7 @@ namespace Persistence.PostgreSQL.DbManagers
 						}, transaction);
 		}
 
-		public Task<Candle> Update(Candle obj, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<Entities.CandleEntity> Update(Entities.CandleEntity obj, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			throw new NotImplementedException();
 		}

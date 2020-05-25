@@ -43,10 +43,10 @@ namespace Silo
 					{
 						await client.ConnectAsync();
 
-						ISubscription subscription = await client.SubAsync(nameof(Order), stream => stream.SubscribeSafe(msg =>
+						ISubscription subscription = await client.SubAsync(nameof(OrderEntity), stream => stream.SubscribeSafe(msg =>
 						{
 							string payload = msg.GetPayloadAsString();
-							Order order = JsonSerializer.Deserialize<Order>(payload[1..]);
+							OrderEntity order = JsonSerializer.Deserialize<OrderEntity>(payload[1..]);
 
 							GrainKeyExtension key = order.ToExtendedKey();
 

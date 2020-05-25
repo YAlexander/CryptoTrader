@@ -6,7 +6,7 @@ using Abstractions.Enums;
 namespace Persistence.Entities
 {
 	[Serializable]
-	public class Order : BaseEntity<Guid>, IOrder
+	public class OrderEntity : BaseEntity<Guid>, IOrder
 	{
 		public long? ParentOrderId { get; set; }
 		public Guid? DealId { get; set; }

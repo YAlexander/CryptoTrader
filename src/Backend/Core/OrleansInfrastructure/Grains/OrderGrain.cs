@@ -11,10 +11,10 @@ namespace Core.OrleansInfrastructure.Grains
 {
 	public class OrderGrain : Grain, IOrderGrain
 	{
-		private readonly IPersistentState<Order> _order;
+		private readonly IPersistentState<OrderEntity> _order;
 
 		public OrderGrain(
-			[PersistentState(nameof(Order), nameof(OrdersStorageProvider))] IPersistentState<Order> order
+			[PersistentState(nameof(OrderEntity), nameof(OrdersStorageProvider))] IPersistentState<OrderEntity> order
 		)
 		{
 			_order = order;
@@ -27,7 +27,7 @@ namespace Core.OrleansInfrastructure.Grains
 
 		public async Task Update(IOrder order)
 		{
-			_order.State = (Order)order;
+			_order.State = (OrderEntity)order;
 			await _order.WriteStateAsync();
 		}
 	}

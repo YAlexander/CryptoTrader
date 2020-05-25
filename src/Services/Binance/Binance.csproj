@@ -7,10 +7,10 @@
 
     <ItemGroup>
         <PackageReference Include="Binance.Net" Version="5.1.0-alpha9" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.3.20215.2" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0-preview.3.20215.2" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0-preview.3.20215.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.3.20215.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.4.20251.6" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0-preview.4.20251.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0-preview.4.20251.2" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.4.20251.6" />
         <PackageReference Include="MyNatsClient" Version="0.14.1" />
         <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.14.1" />
         <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />

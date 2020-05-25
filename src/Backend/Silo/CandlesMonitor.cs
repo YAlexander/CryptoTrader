@@ -41,10 +41,10 @@ namespace Silo
 						{
 							await client.ConnectAsync();
 
-							ISubscription subscription = await client.SubAsync(nameof(Candle), stream => stream.SubscribeSafe(async msg =>
+							ISubscription subscription = await client.SubAsync(nameof(Persistence.Entities.CandleEntity), stream => stream.SubscribeSafe(async msg =>
 							{
 								string payload = msg.GetPayloadAsString();
-								Candle candle = JsonSerializer.Deserialize<Candle>(payload[1..]);
+								Persistence.Entities.CandleEntity candle = JsonSerializer.Deserialize<Persistence.Entities.CandleEntity>(payload[1..]);
 
 								GrainKeyExtension key = candle.ToExtendedKey();
 

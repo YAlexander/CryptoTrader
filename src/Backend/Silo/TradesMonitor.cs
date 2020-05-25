@@ -41,10 +41,10 @@ namespace Silo
 					{
 						await client.ConnectAsync();
 
-						ISubscription subscription = await client.SubAsync(nameof(Trade), stream => stream.SubscribeSafe(msg =>
+						ISubscription subscription = await client.SubAsync(nameof(TradeEntity), stream => stream.SubscribeSafe(msg =>
 						{
 							string payload = msg.GetPayloadAsString();
-							Trade trade = JsonSerializer.Deserialize<Trade>(payload[1..]);
+							TradeEntity trade = JsonSerializer.Deserialize<TradeEntity>(payload[1..]);
 							
 							ITradeProcessingGrain grain = _orleansClient.GetGrain<ITradeProcessingGrain>((long)trade.Exchange);
 							grain.Process(trade);

@@ -67,8 +67,8 @@ namespace Binance
 								{
 									await natsClient.ConnectAsync();
 
-									Candle candle = data.Data.Map(pair);
-									await natsClient.PubAsJsonAsync(nameof(Candle), candle);
+									CandleEntity candle = data.Data.Map(pair);
+									await natsClient.PubAsJsonAsync(nameof(CandleEntity), candle);
 									_logger.LogTrace($"Received candle {candle.Exchange}, {candle.Asset1}/{candle.Asset2}, {candle.TimeFrame}");
 
 									natsClient.Disconnect();

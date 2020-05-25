@@ -32,7 +32,7 @@ namespace Core.OrleansInfrastructure.Grains.StorageProviders
 
 		public async Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
 		{
-			await _candlesProcessor.Create((Candle) grainState.State);
+			await _candlesProcessor.Create((CandleEntity) grainState.State);
 		}
 
 		public Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)

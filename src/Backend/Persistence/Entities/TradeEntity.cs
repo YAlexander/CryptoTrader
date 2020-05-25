@@ -5,7 +5,7 @@ using Abstractions.Enums;
 
 namespace Persistence.Entities
 {
-	public class Trade : BaseEntity<long>, ITrade
+	public class TradeEntity : BaseEntity<long>, ITrade
 	{
 		public Exchanges Exchange { get; set; }
 		public Assets Asset1 { get; set; }

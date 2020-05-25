@@ -14,7 +14,7 @@ namespace Tests
 {
     public class Tests
     {
-        private List<Candle> candles = new List<Candle>();
+        private List<CandleEntity> candles = new List<CandleEntity>();
         
         [SetUp]
         public void Setup()
@@ -24,7 +24,7 @@ namespace Tests
                 while (!file.EndOfStream)
                 {
                     string[] line = file.ReadLine().Split(",");
-                    var candle = new Candle();
+                    var candle = new CandleEntity();
                     candle.Exchange = Exchanges.BINANCE;
                     candle.Asset1 = Assets.BTC;
                     candle.Asset2 = Assets.USDT;

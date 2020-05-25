@@ -9,14 +9,14 @@ namespace Persistence.PostgreSQL.DbManagers
 {
 	public class DealsManager : IDealsManager
 	{
-		public Task<Deal> Get(Exchanges exchange, Assets asset1, Assets asset2, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<DealEntity> Get(Exchanges exchange, Assets asset1, Assets asset2, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			DealStatus status = DealStatus.OPEN;
 			string query = $@"
 				select * from {exchange}.Deals where asset1 = @asset1 and asset2 = @asset2 and dealStatus = @dealStatus
 			";
 
-			return connection.QueryFirstOrDefaultAsync<Deal>(query, 
+			return connection.QueryFirstOrDefaultAsync<DealEntity>(query, 
 				new
 				{
 					asset1 = asset1,
@@ -25,7 +25,7 @@ namespace Persistence.PostgreSQL.DbManagers
 				}, transaction);
 		}
 
-		public Task<Deal> Update(Deal deal, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<DealEntity> Update(DealEntity deal, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			throw new System.NotImplementedException();
 		}

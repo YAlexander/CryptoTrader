@@ -65,8 +65,8 @@ namespace Binance
 							{
 								await natsClient.ConnectAsync();
 
-								Trade trade = data.Map(pair);
-								await natsClient.PubAsJsonAsync(nameof(Trade), trade);
+								TradeEntity trade = data.Map(pair);
+								await natsClient.PubAsJsonAsync(nameof(TradeEntity), trade);
 								_logger.LogTrace($"Received Trade {trade.Exchange}, {trade.Asset1}/{trade.Asset2}");
 
 								natsClient.Disconnect();

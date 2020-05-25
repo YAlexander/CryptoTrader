@@ -8,7 +8,6 @@ using Abstractions.Enums;
 using Abstractions.Grains;
 using Common;
 using Core.BusinessLogic;
-using Core.Helpers;
 using Orleans;
 using Orleans.Concurrency;
 using Orleans.Streams;
@@ -21,7 +20,7 @@ using TechanCore.Helpers;
 namespace Core.OrleansInfrastructure.Grains
 {
 	[StatelessWorker]
-	[ImplicitStreamSubscription(nameof(Candle))]
+	[ImplicitStreamSubscription(nameof(CandleEntity))]
 	public class TradingGrain : Grain, ITradingGrain
 	{
 		private IStreamProvider _streamProvider;
@@ -29,11 +28,11 @@ namespace Core.OrleansInfrastructure.Grains
 		public override async Task OnActivateAsync()
 		{
 			_streamProvider = GetStreamProvider(Constants.MessageStreamProvider);
-			IAsyncStream<Candle> stream = _streamProvider.GetStream<Candle>(this.GetPrimaryKey(), nameof(Candle));
+			IAsyncStream<Persistence.Entities.CandleEntity> stream = _streamProvider.GetStream<CandleEntity>(this.GetPrimaryKey(), nameof(Persistence.Entities.CandleEntity));
 			await stream.SubscribeAsync(OnNextAsync);
 		}
 
-		private async Task OnNextAsync(Candle item, StreamSequenceToken token = null)
+		private async Task OnNextAsync(CandleEntity item, StreamSequenceToken token = null)
 		{
 			ITradingContext context = await BuildContext(item.Exchange, item.Asset1, item.Asset2);
 
@@ -94,7 +93,7 @@ namespace Core.OrleansInfrastructure.Grains
 
 			if (context.Deal == null)
 			{
-				Deal deal = new Deal();
+				DealEntity deal = new DealEntity();
 				deal.Id = keyExtension.Id.Value;
 				deal.Status = DealStatus.OPEN;
 				deal.Exchange = context.Exchange;

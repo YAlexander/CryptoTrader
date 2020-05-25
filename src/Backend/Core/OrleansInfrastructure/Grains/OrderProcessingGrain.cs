@@ -26,7 +26,7 @@ namespace Core.OrleansInfrastructure.Grains
 		private async Task OnNextAsync(TradingContext context, StreamSequenceToken token = null)
 		{
 			// TODO: Process order
-			IOrder order = new Order();
+			IOrder order = new OrderEntity();
 			order.Id = Guid.NewGuid();
 
 			GrainKeyExtension key = order.ToExtendedKey();

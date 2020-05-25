@@ -8,17 +8,17 @@ namespace Persistence.PostgreSQL.DbManagers
 {
 	public class OrdersManager : IOrdersManager
 	{
-		public Task<Order> Create(Order order, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<OrderEntity> Create(OrderEntity order, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public Task<Order> Update(Order order, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<OrderEntity> Update(OrderEntity order, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			throw new System.NotImplementedException();
 		}
 
-		public Task<IEnumerable<Order>> GetDealOrders(long dealId, IDbConnection connection, IDbTransaction transaction = null)
+		public Task<IEnumerable<OrderEntity>> GetDealOrders(long dealId, IDbConnection connection, IDbTransaction transaction = null)
 		{
 			throw new System.NotImplementedException();
 		}

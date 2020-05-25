@@ -13,7 +13,7 @@ namespace Persistence.Helpers
             return JsonSerializer.Deserialize<GrainKeyExtension>(key);
         }
 
-        public static GrainKeyExtension ToExtendedKey(this Candle candle)
+        public static GrainKeyExtension ToExtendedKey(this CandleEntity candle)
         {
             return new GrainKeyExtension
             {
@@ -24,7 +24,7 @@ namespace Persistence.Helpers
             };
         }
         
-        public static GrainKeyExtension ToExtendedKey(this Order order)
+        public static GrainKeyExtension ToExtendedKey(this OrderEntity order)
         {
             return new GrainKeyExtension
             {

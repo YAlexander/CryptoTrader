@@ -11,7 +11,7 @@
     <ItemGroup>
       <PackageReference Include="itext7" Version="7.1.11" />
       <PackageReference Include="itext7.pdfhtml" Version="3.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0-preview.3.20215.2" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0-preview.4.20251.6" />
       <PackageReference Include="ZXing.Net" Version="0.16.5" />
     </ItemGroup>
 

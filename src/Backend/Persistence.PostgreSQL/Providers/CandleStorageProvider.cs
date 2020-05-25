@@ -28,7 +28,7 @@ namespace Persistence.PostgreSQL.Providers
 
 		public async Task WriteStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)
 		{
-			await WithConnection((connection, transaction) => _candlesManager.Create((Candle) grainState.State, connection, transaction));
+			await WithConnection((connection, transaction) => _candlesManager.Create((CandleEntity) grainState.State, connection, transaction));
 		}
 
 		public Task ClearStateAsync(string grainType, GrainReference grainReference, IGrainState grainState)

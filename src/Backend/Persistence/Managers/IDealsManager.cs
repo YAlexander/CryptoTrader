@@ -7,7 +7,7 @@ namespace Persistence.Managers
 {
 	public interface IDealsManager : IDatabaseManager
 	{
-		Task<Deal> Get(Exchanges exchange, Assets asset1, Assets asset2, IDbConnection connection, IDbTransaction transaction = null);
-		Task<Deal> Update(Deal deal, IDbConnection connection, IDbTransaction transaction = null);
+		Task<DealEntity> Get(Exchanges exchange, Assets asset1, Assets asset2, IDbConnection connection, IDbTransaction transaction = null);
+		Task<DealEntity> Update(DealEntity deal, IDbConnection connection, IDbTransaction transaction = null);
 	}
 }

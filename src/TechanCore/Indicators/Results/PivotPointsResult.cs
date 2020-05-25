@@ -7,5 +7,15 @@ namespace TechanCore.Indicators.Results
 		public decimal R2 { get; set; }
 		public decimal S1 { get; set; }
 		public decimal S2 { get; set; }
+
+		public decimal R3 { get; set; }
+		public decimal S3 { get; set; }
+
+		public decimal R4 { get; set; }
+		public decimal S4 { get; set; }
+
+		public decimal R5 { get; set; }
+		public decimal S5 { get; set; }
+
 	}
 }

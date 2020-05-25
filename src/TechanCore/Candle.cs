@@ -3,7 +3,7 @@ using TechanCore.Enums;
 
 namespace TechanCore
 {
-	public class CandleSimple : ICandle
+	public class Candle : ICandle
 	{
 		public DateTime Time { get; set; }
 		public Timeframes TimeFrame { get; set; }
