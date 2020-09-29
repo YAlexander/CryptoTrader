@@ -59,7 +59,7 @@ namespace Binance
 				{
 					using (BinanceSocketClient client = new BinanceSocketClient())
 					{
-						CallResult<UpdateSubscription> successKline = client.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
+						CallResult<UpdateSubscription> successKline = client.Spot.SubscribeToKlineUpdates(pair.ToPair(), pair.Timeframe.Map(), async (data) =>
 						{ 
 							if (data.Data.Final)
 							{

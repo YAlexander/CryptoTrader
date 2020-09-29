@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,7 +10,7 @@
 
     <ItemGroup>
       <PackageReference Include="Dapper" Version="2.0.35" />
-      <PackageReference Include="Npgsql" Version="5.0.0-ci.20200518T130239" />
+      <PackageReference Include="Npgsql" Version="5.0.0-ci.20200929T090704" />
     </ItemGroup>
 
 </Project>

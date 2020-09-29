@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp5.0</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -9,9 +9,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="itext7" Version="7.1.11" />
-      <PackageReference Include="itext7.pdfhtml" Version="3.0.0" />
-      <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0-preview.4.20251.6" />
+      <PackageReference Include="itext7" Version="7.1.12" />
+      <PackageReference Include="itext7.pdfhtml" Version="3.0.1" />
+      <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0-rc.1.20451.14" />
       <PackageReference Include="ZXing.Net" Version="0.16.5" />
     </ItemGroup>
 

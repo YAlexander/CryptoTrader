@@ -1,6 +1,7 @@
 ﻿using System;
 using Abstractions.Enums;
 using Binance.Net.Enums;
+using Binance.Net.Interfaces;
 using Binance.Net.Objects.Spot.MarketStream;
 using Persistence.Entities;
 using TechanCore.Enums;
@@ -83,7 +84,7 @@ namespace Binance.Helpers
 			return trade;
 		}
 		
-		public static CandleEntity Map (this BinanceStreamKline binanceCandle, ExchangeSettings pair)
+		public static CandleEntity Map (this IBinanceStreamKline binanceCandle, ExchangeSettings pair)
 		{
 			CandleEntity candle = new CandleEntity();
 			candle.Exchange = pair.Exchange;
@@ -91,12 +92,12 @@ namespace Binance.Helpers
 			candle.Asset2 = pair.Asset2;
 
 			candle.Time = binanceCandle.CloseTime;
-			candle.TimeFrame = binanceCandle.Interval.Map();
+			candle.TimeFrame = pair.Timeframe;
 			candle.High = binanceCandle.High;
 			candle.Low = binanceCandle.Low;
 			candle.Open = binanceCandle.Open;
 			candle.Close = binanceCandle.Close;
-			candle.Volume = binanceCandle.Volume;
+			candle.Volume = binanceCandle.QuoteVolume;
 			candle.Trades = binanceCandle.TradeCount;
 
 			return candle;

@@ -1,18 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk.Worker">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
         <UserSecretsId>dotnet-Binance-79492936-0CD2-4C72-8C44-824DF967C622</UserSecretsId>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Binance.Net" Version="5.1.0-alpha9" />
-        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-preview.4.20251.6" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0-preview.4.20251.2" />
-        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0-preview.4.20251.2" />
-        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-preview.4.20251.6" />
-        <PackageReference Include="MyNatsClient" Version="0.14.1" />
-        <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.14.1" />
+        <PackageReference Include="Binance.Net" Version="6.0.2" />
+        <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0-rc.1.20451.14" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.Systemd" Version="5.0.0-rc.1.20451.7" />
+        <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" Version="5.0.0-rc.1.20451.7" />
+        <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="5.0.0-rc.1.20451.14" />
+        <PackageReference Include="MyNatsClient" Version="0.16.1" />
+        <PackageReference Include="MyNatsClient.Encodings.Json" Version="0.16.1" />
         <PackageReference Include="MyNatsClient.Rx" Version="0.13.0" />
     </ItemGroup>
 
